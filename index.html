@@ -2,9 +2,13 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Presentation Generator Tool for Syntec Construction PCL.">
+    <meta name="author" content="Pongpipatt.">
     <title>Presentation Generator by CCT Department</title>
     
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     
@@ -18,15 +22,19 @@
             --primary: #1a73e8; --primary-light: #e8f0fe;
             --text-main: #202124; --text-sub: #5f6368;
             --border: #dadce0; --success: #34a853; --danger: #ea4335;
+            --warning: #fbbc04;
             --shadow-card: 0 4px 12px rgba(60,64,67,0.15);
+            --shadow-hover: 0 8px 18px rgba(60,64,67,0.2);
         }
         * { box-sizing: border-box; }
         body { font-family: 'Sarabun', 'Roboto', sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: var(--text-main); padding: 20px; }
 
         /* --- UI COMPONENTS --- */
-        .app-card { background: white; width: 100%; max-width: 500px; border-radius: 12px; box-shadow: var(--shadow-card); overflow: hidden; position: relative; z-index: 1; margin-bottom: 20px; }
+        .app-card { background: white; width: 100%; max-width: 500px; border-radius: 16px; box-shadow: var(--shadow-card); overflow: hidden; position: relative; z-index: 1; margin-bottom: 20px; transition: transform 0.3s; }
+        /* .app-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); } */
+        
         .header { background: var(--primary); padding: 24px 32px; color: white; position: relative; overflow: hidden; }
-        .header h1 { margin: 0; font-size: 22px; font-weight: 500; position: relative; z-index: 1; }
+        .header h1 { margin: 0; font-size: 22px; font-weight: 600; position: relative; z-index: 1; letter-spacing: 0.5px; }
         .header p { margin: 6px 0 0; opacity: 0.9; font-size: 14px; position: relative; z-index: 1; font-weight: 300; }
         .header::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); animation: rotateBg 25s linear infinite; }
         @keyframes rotateBg { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -35,51 +43,70 @@
 
         .input-group { margin-bottom: 24px; }
         .label-title { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-main); margin-bottom: 12px; font-size: 15px; }
-        .file-drop-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; background: #fff; position: relative; transition: all 0.2s; }
-        .file-drop-zone:hover { border-color: var(--primary); background: #f4f8ff; }
-        .file-drop-zone.has-file { border-style: solid; border-color: var(--success); background: #e6f4ea; }
+        
+        /* Drag & Drop Enhancement */
+        .file-drop-zone { 
+            border: 2px dashed var(--border); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; background: #fff; position: relative; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .file-drop-zone:hover { border-color: var(--primary); background: #f8fbff; }
+        .file-drop-zone.drag-over { border-color: var(--primary); background: var(--primary-light); transform: scale(1.02); }
+        .file-drop-zone.has-file { border-style: solid; border-color: var(--success); background: #f0f9f4; }
+        
         .file-drop-zone input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-        .zone-content { pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .zone-icon { font-size: 32px; color: var(--text-sub); }
+        .zone-content { pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .zone-icon { font-size: 36px; color: var(--text-sub); transition: color 0.3s; }
         .file-drop-zone.has-file .zone-icon { color: var(--success); }
-        .zone-text { font-size: 13px; color: var(--text-sub); }
+        .zone-text { font-size: 13px; color: var(--text-sub); font-weight: 500; }
 
         .btn-group { display: flex; gap: 12px; margin-top: 24px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.3px; transition: all 0.2s; }
-        .btn-main { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(26, 115, 232, 0.2); }
-        .btn-main:hover { background: #1557b0; transform: translateY(-1px); }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.3px; transition: all 0.2s; }
+        .btn-main { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(26, 115, 232, 0.25); }
+        .btn-main:hover { background: #1557b0; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(26, 115, 232, 0.35); }
         .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-main); }
         .btn-outline:hover { background: #f8f9fa; border-color: #bdc1c6; }
         .btn:disabled { background: #f1f3f4; border-color: transparent; color: #bdc1c6; cursor: not-allowed; transform: none; box-shadow: none; }
-        .btn-small { padding: 6px 12px; font-size: 13px; flex: initial; border-radius: 4px; }
+        .btn-small { padding: 6px 16px; font-size: 13px; flex: initial; border-radius: 6px; }
 
-        /* --- FOOTER (NEW) --- */
-        .app-footer {
-            text-align: center; font-size: 12px; color: var(--text-sub); margin-top: 10px;
-            line-height: 1.6; opacity: 0.8;
-        }
-        .app-footer strong { font-weight: 600; color: var(--text-main); }
+        /* --- FOOTER --- */
+        .app-footer { text-align: center; font-size: 11px; color: #9aa0a6; margin-top: 20px; line-height: 1.6; }
+        .app-footer strong { font-weight: 600; color: #5f6368; }
 
         /* --- MODAL --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-out; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-out; }
         .modal-overlay.show { opacity: 1; }
-        .modal-card { background: white; width: 95%; max-width: 900px; max-height: 90vh; border-radius: 8px; box-shadow: 0 24px 38px rgba(0,0,0,0.14); display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.2s ease-out; }
+        .modal-card { background: white; width: 95%; max-width: 900px; max-height: 90vh; border-radius: 12px; box-shadow: 0 24px 48px rgba(0,0,0,0.18); display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.2s ease-out; }
         .modal-overlay.show .modal-card { transform: scale(1); }
-        .modal-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 8px 8px 0 0; }
-        .modal-header h2 { margin: 0; font-size: 18px; color: var(--text-main); font-weight: 500; }
-        .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-sub); border-radius: 50%; padding: 4px; display: flex; }
+        .modal-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 12px 12px 0 0; }
+        .modal-header h2 { margin: 0; font-size: 18px; color: var(--text-main); font-weight: 600; }
+        .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-sub); border-radius: 50%; padding: 4px; display: flex; transition: background 0.2s; }
+        .close-btn:hover { background: #f1f3f4; color: var(--danger); }
         .modal-body { padding: 0; overflow-y: auto; background: #fff; flex: 1; }
-        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: #fff; border-radius: 0 0 8px 8px; }
+        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: #fff; border-radius: 0 0 12px 12px; }
+
+        /* --- TOAST NOTIFICATION (NEW) --- */
+        .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { 
+            background: #323232; color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px;
+            opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.error { background: #ea4335; }
+        .toast.success { background: #34a853; }
 
         /* --- DATA LIST --- */
         .dm-container { padding: 20px 0; background: #fff; }
         .dm-group { margin: 0 24px 20px 24px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; transition: box-shadow 0.2s; }
+        .dm-group:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-color: #bdc1c6; }
         .dm-header-row { background: #f8f9fa; padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+        .dm-icon-l1 { color: var(--primary); font-size: 24px; }
         .dm-list-row { padding: 10px 16px 10px 52px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f1f3f4; background: white; }
-        .mat-input { width: 100%; border: none; border-bottom: 2px solid transparent; background: transparent; font-family: inherit; font-size: 15px; padding: 6px 0; color: var(--text-main); transition: border-color 0.2s, background 0.2s; }
-        .mat-input:focus { outline: none; border-bottom-color: var(--primary); background: rgba(26, 115, 232, 0.04); }
+        .dm-list-row:last-child { border-bottom: none; }
+        .dm-icon-l2 { color: var(--text-sub); font-size: 20px; }
+        .mat-input { width: 100%; border: none; border-bottom: 2px solid transparent; background: transparent; font-family: inherit; font-size: 15px; padding: 6px 0; color: var(--text-main); transition: all 0.2s; }
+        .mat-input:focus { outline: none; border-bottom-color: var(--primary); background: rgba(26, 115, 232, 0.04); padding-left: 8px; border-radius: 4px 4px 0 0; }
 
-        /* --- LAYOUT EDITOR --- */
+        /* --- EDITOR --- */
         .editor-toolbar { padding: 12px 24px; display: flex; gap: 12px; align-items: center; background: #f8f9fa; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
         .editor-container {
             position: relative; margin: 24px auto; background-color: white; box-shadow: 0 0 0 1px #e0e0e0;
@@ -87,37 +114,40 @@
         }
         .editor-container.show-grid::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: 20px 20px;
-            background-image: linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+            background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
             pointer-events: none; z-index: 0;
         }
         .draggable-box {
             position: absolute; border: 2px dashed var(--primary); background: rgba(26, 115, 232, 0.05); cursor: move;
             display: flex; justify-content: center; align-items: center; font-weight: 500; color: var(--primary); font-size: 14px; transform: translateZ(0); z-index: 10;
         }
-        .draggable-box:hover { background: rgba(26, 115, 232, 0.15); z-index: 100; border-style: solid; }
-        .draggable-box.custom-text { border-color: #333; color: #000; background: rgba(255, 255, 255, 0.5); }
+        .draggable-box:hover { background: rgba(26, 115, 232, 0.15); z-index: 100; border-style: solid; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .draggable-box.custom-text { border-color: #333; color: #000; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(2px); }
         .box-inner-text { width: 100%; height: 100%; display: flex; align-items: center; padding: 0 12px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .resize-handle { width: 16px; height: 16px; background: var(--primary); position: absolute; bottom: 0; right: 0; cursor: nwse-resize; border-radius: 4px 0 0 0; display: none; }
         .draggable-box:hover .resize-handle { display: block; }
-        .box-controls { position: absolute; top: -42px; left: 0; background: #202124; border-radius: 4px; padding: 4px; display: none; gap: 4px; z-index: 200; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        .box-controls { position: absolute; top: -42px; left: 0; background: #202124; border-radius: 4px; padding: 4px; display: none; gap: 4px; z-index: 200; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
         .draggable-box:hover .box-controls { display: flex; animation: fadeIn 0.15s; }
-        .ctrl-btn { color: #e8eaed; background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 4px; display: flex; }
+        .ctrl-btn { color: #e8eaed; background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 4px; display: flex; transition: background 0.1s; }
+        .ctrl-btn:hover { background: rgba(255,255,255,0.2); }
         .ctrl-btn.active { background: var(--primary); color: white; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
 
         /* --- LOADING --- */
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .spinner { width: 48px; height: 48px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-text { font-size: 18px; font-weight: 600; color: var(--text-main); }
-        .loading-sub { font-size: 14px; color: var(--text-sub); margin-top: 5px; }
+        .loading-sub { font-size: 14px; color: var(--text-sub); margin-top: 8px; }
 
         /* --- PREVIEW --- */
-        .slide-preview { width: 100%; height: 0; padding-bottom: 75%; background: white; border: 1px solid #e0e0e0; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .slide-preview { width: 100%; height: 0; padding-bottom: 75%; background: white; border: 1px solid #e0e0e0; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .slide-preview img, .slide-preview div { position: absolute; }
     </style>
 </head>
 <body>
+
+    <div class="toast-container" id="toastContainer"></div>
 
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
@@ -128,7 +158,7 @@
     <div class="app-card">
         <div class="header">
             <h1>Presentation Generator</h1>
-            <p>ระบบสร้างรายงาน PowerPoint</p>
+            <p>Developed by CCT Department</p>
         </div>
 
         <div class="body-content">
@@ -138,7 +168,7 @@
                     <input type="file" id="bgFile" accept=".jpg, .jpeg, .png" onchange="handleBgSelect()">
                     <div class="zone-content">
                         <span class="material-icons-round zone-icon" id="icon-bg">cloud_upload</span>
-                        <div class="zone-text" id="text-bg">คลิกเลือกไฟล์ Template (.jpg/.png)</div>
+                        <div class="zone-text" id="text-bg">ลากไฟล์รูปภาพมาวาง หรือคลิกเพื่อเลือก (.jpg/.png)</div>
                     </div>
                 </div>
             </div>
@@ -175,7 +205,7 @@
     </div>
 
     <div class="app-footer">
-        We recommend using <strong>Microsoft Edge</strong> or <strong>Google Chrome</strong> at this time.<br>
+        We recommend using <strong>Microsoft Edge</strong> or <strong>Google Chrome</strong>.<br>
         © Pongpipatt. - CCT Department Syntec Construction PCL.
     </div>
 
@@ -183,7 +213,7 @@
         <div class="modal-card">
             <div class="modal-header"><h2>📝 แก้ไขชื่อ</h2><button class="close-btn" onclick="closeModal('modalData')"><span class="material-icons-round">close</span></button></div>
             <div class="modal-body"><div id="dataListContainer" class="dm-container"></div></div>
-            <div class="modal-footer"><button class="btn btn-main btn-small" onclick="closeModal('modalData')">บันทึก</button></div>
+            <div class="modal-footer"><button class="btn btn-main btn-small" onclick="closeModal('modalData'); showToast('บันทึกข้อมูลเรียบร้อย', 'success');">บันทึก</button></div>
         </div>
     </div>
 
@@ -201,8 +231,8 @@
                     </select>
                     
                     <select id="imgFitMode" onchange="updateImageFit()" style="padding:6px; border-radius:4px; border:1px solid #dadce0;">
-                        <option value="contain">🖼️ รูป: สัดส่วนจริง</option>
-                        <option value="cover">⬛ รูป: เต็มช่อง (Crop)</option>
+                        <option value="contain">รูป: สัดส่วนจริง</option>
+                        <option value="cover">รูป: เต็มช่อง (Crop)</option>
                     </select>
 
                     <label style="display:flex; align-items:center; gap:6px; font-size:14px; margin-left:10px; cursor:pointer;">
@@ -246,13 +276,13 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer"><button class="btn btn-main btn-small" onclick="closeModal('modalLayout')">บันทึก Layout</button></div>
+            <div class="modal-footer"><button class="btn btn-main btn-small" onclick="closeModal('modalLayout'); showToast('บันทึก Layout เรียบร้อย', 'success');">บันทึก Layout</button></div>
         </div>
     </div>
 
     <div class="modal-overlay" id="modalPreview">
         <div class="modal-card" style="max-width:800px;">
-            <div class="modal-header"><h2>👁️ PDF Preview</h2><button class="close-btn" onclick="closeModal('modalPreview')"><span class="material-icons-round">close</span></button></div>
+            <div class="modal-header"><h2>👁️ ดูตัวอย่าง (Preview)</h2><button class="close-btn" onclick="closeModal('modalPreview')"><span class="material-icons-round">close</span></button></div>
             <div class="modal-body" style="background:#f8f9fa; padding: 24px;"><div id="previewContainer"></div></div>
             <div class="modal-footer">
                 <button class="btn btn-outline btn-small" onclick="saveAsPDF()"><span class="material-icons-round" style="font-size:16px; margin-right:4px; color:#ea4335;">picture_as_pdf</span> Save as PDF</button>
@@ -266,12 +296,37 @@
         let BG_DATA = null;
         let LAYOUT_CONFIG = {
             ratio: "4:3", widthInches: 10, heightInches: 7.5,
-            imageFit: "contain", // contain | cover
+            imageFit: "contain",
             elements: { 'box-img1': { visible: true }, 'box-img2': { visible: true }, 'box-txt1': { visible: true, align: 'left' }, 'box-txt2': { visible: true, align: 'left' } },
             custom: []
         };
         const SNAP_SIZE = 20;
 
+        // --- DRAG DROP VISUALS ---
+        ['zone-bg', 'zone-folder'].forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('dragover', (e) => { e.preventDefault(); el.classList.add('drag-over'); });
+            el.addEventListener('dragleave', (e) => { el.classList.remove('drag-over'); });
+            el.addEventListener('drop', (e) => { el.classList.remove('drag-over'); });
+        });
+
+        // --- TOAST SYSTEM ---
+        function showToast(msg, type = 'normal') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            let icon = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : 'info');
+            toast.innerHTML = `<span class="material-icons-round">${icon}</span> <span>${msg}</span>`;
+            container.appendChild(toast);
+            
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- CORE FUNCTIONS ---
         function toggleGrid() { const c = document.getElementById('editorCanvas'); if(document.getElementById('checkGrid').checked) c.classList.add('show-grid'); else c.classList.remove('show-grid'); }
         function updateImageFit() { LAYOUT_CONFIG.imageFit = document.getElementById('imgFitMode').value; }
 
@@ -308,7 +363,7 @@
             setTimeout(async () => {
                 try {
                     const slides = document.querySelectorAll('.slide-preview');
-                    if(slides.length === 0) { alert("ไม่มีสไลด์"); hideLoading(); return; }
+                    if(slides.length === 0) { showToast("ไม่พบข้อมูลสไลด์", "error"); hideLoading(); return; }
                     const doc = new jsPDF({ orientation: 'landscape', unit: 'px', format: [slides[0].offsetWidth, slides[0].offsetHeight] });
                     for (let i = 0; i < slides.length; i++) {
                         updateLoading("กำลังแปลงหน้า PDF...", `หน้า ${i+1} จาก ${slides.length}`);
@@ -316,8 +371,8 @@
                         if (i > 0) doc.addPage();
                         doc.addImage(canvas.toDataURL('image/jpeg', 0.8), 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
                     }
-                    doc.save('Presentation_Auto.pdf'); hideLoading();
-                } catch (e) { alert("Error: " + e.message); hideLoading(); }
+                    doc.save('Presentation_Auto.pdf'); hideLoading(); showToast("สร้างไฟล์ PDF สำเร็จ!", "success");
+                } catch (e) { showToast("เกิดข้อผิดพลาด: " + e.message, "error"); hideLoading(); }
             }, 100);
         }
 
@@ -345,17 +400,17 @@
         function setAlign(id, align, btn) { const box = document.getElementById(id); box.querySelector('.box-inner-text').style.justifyContent = (align==='left'?'flex-start':(align==='right'?'flex-end':'center')); box.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(id.startsWith('custom-')) { const i = LAYOUT_CONFIG.custom.find(x => x.id === id); if(i) i.align = align; } else { if (!LAYOUT_CONFIG.elements[id]) LAYOUT_CONFIG.elements[id] = {}; LAYOUT_CONFIG.elements[id].align = align; } }
         function deleteBox(id) { document.getElementById(id).style.display = 'none'; LAYOUT_CONFIG.elements[id].visible = false; }
         function restoreHidden() { ['box-txt1', 'box-txt2'].forEach(id => { document.getElementById(id).style.display = 'flex'; LAYOUT_CONFIG.elements[id].visible = true; }); }
-        function resetLayout() { document.querySelectorAll('.custom-text').forEach(e => e.remove()); LAYOUT_CONFIG.custom = []; restoreHidden(); const defs = { 'box-img1': "top:29%; left:4%; width:44%; height:42%;", 'box-img2': "top:29%; left:52%; width:44%; height:42%;", 'box-txt1': "top:80%; left:16%; width:70%; height:6%;", 'box-txt2': "top:86%; left:16%; width:70%; height:6%;" }; for(let id in defs) document.getElementById(id).style.cssText = defs[id]; ['box-txt1', 'box-txt2'].forEach(id => { document.getElementById(id).querySelector('.box-inner-text').style.justifyContent = 'flex-start'; LAYOUT_CONFIG.elements[id].align = 'left'; }); captureLayout(); }
+        function resetLayout() { document.querySelectorAll('.custom-text').forEach(e => e.remove()); LAYOUT_CONFIG.custom = []; restoreHidden(); const defs = { 'box-img1': "top:29%; left:4%; width:44%; height:42%;", 'box-img2': "top:29%; left:52%; width:44%; height:42%;", 'box-txt1': "top:80%; left:16%; width:70%; height:6%;", 'box-txt2': "top:86%; left:16%; width:70%; height:6%;" }; for(let id in defs) document.getElementById(id).style.cssText = defs[id]; ['box-txt1', 'box-txt2'].forEach(id => { document.getElementById(id).querySelector('.box-inner-text').style.justifyContent = 'flex-start'; LAYOUT_CONFIG.elements[id].align = 'left'; }); captureLayout(); showToast("รีเซ็ต Layout แล้ว"); }
         function updateEditorRatio() { const s = document.getElementById('aspectRatio'); const c = document.getElementById('editorCanvas'); const r = s.value; c.style.height = (r === "16:9") ? '450px' : '600px'; if (r === "16:9") { LAYOUT_CONFIG.widthInches = 10; LAYOUT_CONFIG.heightInches = 5.625; } else { LAYOUT_CONFIG.widthInches = 10; LAYOUT_CONFIG.heightInches = 7.5; } LAYOUT_CONFIG.ratio = r; }
 
         function renderDataList() { const l = document.getElementById('dataListContainer'); l.innerHTML = ''; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); Object.keys(APP_DATA).sort(nSort).forEach(f1 => { const g = document.createElement('div'); g.className = 'dm-group'; g.innerHTML = `<div class="dm-header-row"><span class="material-icons-round dm-icon-l1">folder</span><input type="text" class="mat-input l1" value="${f1}" onchange="renameKey(APP_DATA, '${f1}', this.value)"></div>`; Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { const r = document.createElement('div'); r.className = 'dm-list-row'; r.innerHTML = `<span class="material-icons-round dm-icon-l2">subdirectory_arrow_right</span><input type="text" class="mat-input" value="${f2}" onchange="renameKey(APP_DATA['${f1}'], '${f2}', this.value)">`; g.appendChild(r); }); l.appendChild(g); }); }
-        function renameKey(o, oldK, newK) { if (oldK === newK || !newK) return; if (o[newK]) { alert('ชื่อซ้ำ'); renderDataList(); return; } Object.defineProperty(o, newK, Object.getOwnPropertyDescriptor(o, oldK)); delete o[oldK]; renderDataList(); }
-        function handleBgSelect() { const i = document.getElementById('bgFile'); if(i.files[0]) { const r = new FileReader(); r.onload=e=>{BG_DATA=e.target.result; document.getElementById('zone-bg').classList.add('has-file'); document.getElementById('text-bg').innerText=i.files[0].name; document.getElementById('editorCanvas').style.backgroundImage=`url(${BG_DATA})`;}; r.readAsDataURL(i.files[0]); } }
-        async function handleFolderSelect() { const i = document.getElementById('photoFolder'); const f = Array.from(i.files); if(f.length===0) return; APP_DATA={}; for(let file of f) { if(!file.name.match(/\.(jpg|jpeg|png)$/i)) continue; let p=file.webkitRelativePath.split('/'); if(p.length>=3) { let f1=p[p.length-3], f2=p[p.length-2]; if(!APP_DATA[f1]) APP_DATA[f1]={}; if(!APP_DATA[f1][f2]) APP_DATA[f1][f2]=[]; APP_DATA[f1][f2].push({fileObj:file, name:file.name}); }} document.getElementById('zone-folder').classList.add('has-file'); document.getElementById('text-folder').innerText=`พร้อมใช้งาน (${f.length} ไฟล์)`; document.getElementById('btnEditData').disabled=false; document.getElementById('btnPreview').disabled=false; document.getElementById('btnGen').disabled=false; }
+        function renameKey(o, oldK, newK) { if (oldK === newK || !newK) return; if (o[newK]) { showToast('ชื่อซ้ำ กรุณาใช้ชื่ออื่น', 'error'); renderDataList(); return; } Object.defineProperty(o, newK, Object.getOwnPropertyDescriptor(o, oldK)); delete o[oldK]; renderDataList(); }
+        function handleBgSelect() { const i = document.getElementById('bgFile'); if(i.files[0]) { const r = new FileReader(); r.onload=e=>{BG_DATA=e.target.result; document.getElementById('zone-bg').classList.add('has-file'); document.getElementById('text-bg').innerText=i.files[0].name; document.getElementById('editorCanvas').style.backgroundImage=`url(${BG_DATA})`; showToast("อัปโหลดพื้นหลังสำเร็จ", "success");}; r.readAsDataURL(i.files[0]); } }
+        async function handleFolderSelect() { const i = document.getElementById('photoFolder'); const f = Array.from(i.files); if(f.length===0) return; APP_DATA={}; for(let file of f) { if(!file.name.match(/\.(jpg|jpeg|png)$/i)) continue; let p=file.webkitRelativePath.split('/'); if(p.length>=3) { let f1=p[p.length-3], f2=p[p.length-2]; if(!APP_DATA[f1]) APP_DATA[f1]={}; if(!APP_DATA[f1][f2]) APP_DATA[f1][f2]=[]; APP_DATA[f1][f2].push({fileObj:file, name:file.name}); }} document.getElementById('zone-folder').classList.add('has-file'); document.getElementById('text-folder').innerText=`พร้อมใช้งาน (${f.length} ไฟล์)`; document.getElementById('btnEditData').disabled=false; document.getElementById('btnPreview').disabled=false; document.getElementById('btnGen').disabled=false; showToast(`โหลดรูปภาพ ${f.length} ไฟล์สำเร็จ`, "success"); }
         
         function renderPreviewHTML(cid) { const c = document.getElementById(cid); c.innerHTML = ''; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom, isWide = LAYOUT_CONFIG.ratio === "16:9"; Object.keys(APP_DATA).sort(nSort).forEach(f1 => { let f1Txt = f1.replace(/^\d+[._-]?/, ''); Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = document.createElement('div'); slide.className = 'slide-preview'; slide.style.paddingBottom = isWide ? "56.25%" : "75%"; if (BG_DATA) slide.innerHTML += `<img src="${BG_DATA}" style="width:100%; height:100%; object-fit:cover; z-index:0;">`; const pct = (v) => (v * 100) + '%'; const fit = LAYOUT_CONFIG.imageFit || 'contain'; const imgStyle = `width:100%; height:100%; object-fit:${fit}; z-index:1;`; if(L['box-img1'].visible !== false) { let img1 = URL.createObjectURL(images[i].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img1'].y)}; left:${pct(L['box-img1'].x)}; width:${pct(L['box-img1'].w)}; height:${pct(L['box-img1'].h)};"><img src="${img1}" style="${imgStyle}"></div>`; } if(i+1 < images.length && L['box-img2'].visible !== false) { let img2 = URL.createObjectURL(images[i+1].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img2'].y)}; left:${pct(L['box-img2'].x)}; width:${pct(L['box-img2'].w)}; height:${pct(L['box-img2'].h)};"><img src="${img2}" style="${imgStyle}"></div>`; } if(L['box-txt1'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt1'].y)}; left:${pct(L['box-txt1'].x)}; width:${pct(L['box-txt1'].w)}; text-align:${L['box-txt1'].align||'left'}; font-size:18px; font-weight:bold; z-index:2;">${f1Txt}</div>`; if(L['box-txt2'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt2'].y)}; left:${pct(L['box-txt2'].x)}; width:${pct(L['box-txt2'].w)}; text-align:${L['box-txt2'].align||'left'}; font-size:18px; font-weight:bold; z-index:2;">${f2Txt}</div>`; C.forEach(c => { slide.innerHTML += `<div style="top:${pct(c.y)}; left:${pct(c.x)}; width:${pct(c.w)}; text-align:${c.align||'left'}; font-size:18px; font-weight:bold; z-index:2; color:#000;">${c.text}</div>`; }); c.appendChild(slide); } }); }); }
         
-        async function generatePPT() { showLoading("กำลังสร้าง PowerPoint...", "กรุณารอสักครู่"); setTimeout(async () => { try { let pres = new PptxGenJS(); pres.layout = (LAYOUT_CONFIG.ratio === "16:9") ? 'LAYOUT_16x9' : 'LAYOUT_4x3'; const W = LAYOUT_CONFIG.widthInches, H = LAYOUT_CONFIG.heightInches; const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); const fit = LAYOUT_CONFIG.imageFit === 'cover' ? 'cover' : 'contain'; for (let f1 of Object.keys(APP_DATA).sort(nSort)) { let f1Txt = f1.replace(/^\d+[._-]?/, ''); for (let f2 of Object.keys(APP_DATA[f1]).sort(nSort)) { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = pres.addSlide(); if (BG_DATA) slide.background = { data: BG_DATA }; if(L['box-img1'].visible !== false) { let d = await fileToDataURL(images[i].fileObj); slide.addImage({ data: d, x: L['box-img1'].x*W, y: L['box-img1'].y*H, w: L['box-img1'].w*W, h: L['box-img1'].h*H, sizing: { type: fit, w: L['box-img1'].w*W, h: L['box-img1'].h*H } }); } if(i+1 < images.length && L['box-img2'].visible !== false) { let d = await fileToDataURL(images[i+1].fileObj); slide.addImage({ data: d, x: L['box-img2'].x*W, y: L['box-img2'].y*H, w: L['box-img2'].w*W, h: L['box-img2'].h*H, sizing: { type: fit, w: L['box-img2'].w*W, h: L['box-img2'].h*H } }); } if(L['box-txt1'].visible !== false) slide.addText(f1Txt, { x: L['box-txt1'].x*W, y: L['box-txt1'].y*H, w: L['box-txt1'].w*W, h: L['box-txt1'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt1'].align || 'left' }); if(L['box-txt2'].visible !== false) slide.addText(f2Txt, { x: L['box-txt2'].x*W, y: L['box-txt2'].y*H, w: L['box-txt2'].w*W, h: L['box-txt2'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt2'].align || 'left' }); C.forEach(c => { slide.addText(c.text, { x: c.x*W, y: c.y*H, w: c.w*W, h: c.h*H, fontSize: 18, fontFace: "Leelawadee", align: c.align || 'left', color: "000000" }); }); } } } await pres.writeFile({ fileName: "Presentation_V7.1.pptx" }); hideLoading(); } catch (err) { alert(err); hideLoading(); } }, 100); }
+        async function generatePPT() { showLoading("กำลังสร้าง PowerPoint...", "กรุณารอสักครู่"); setTimeout(async () => { try { let pres = new PptxGenJS(); pres.layout = (LAYOUT_CONFIG.ratio === "16:9") ? 'LAYOUT_16x9' : 'LAYOUT_4x3'; const W = LAYOUT_CONFIG.widthInches, H = LAYOUT_CONFIG.heightInches; const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); const fit = LAYOUT_CONFIG.imageFit === 'cover' ? 'cover' : 'contain'; for (let f1 of Object.keys(APP_DATA).sort(nSort)) { let f1Txt = f1.replace(/^\d+[._-]?/, ''); for (let f2 of Object.keys(APP_DATA[f1]).sort(nSort)) { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = pres.addSlide(); if (BG_DATA) slide.background = { data: BG_DATA }; if(L['box-img1'].visible !== false) { let d = await fileToDataURL(images[i].fileObj); slide.addImage({ data: d, x: L['box-img1'].x*W, y: L['box-img1'].y*H, w: L['box-img1'].w*W, h: L['box-img1'].h*H, sizing: { type: fit, w: L['box-img1'].w*W, h: L['box-img1'].h*H } }); } if(i+1 < images.length && L['box-img2'].visible !== false) { let d = await fileToDataURL(images[i+1].fileObj); slide.addImage({ data: d, x: L['box-img2'].x*W, y: L['box-img2'].y*H, w: L['box-img2'].w*W, h: L['box-img2'].h*H, sizing: { type: fit, w: L['box-img2'].w*W, h: L['box-img2'].h*H } }); } if(L['box-txt1'].visible !== false) slide.addText(f1Txt, { x: L['box-txt1'].x*W, y: L['box-txt1'].y*H, w: L['box-txt1'].w*W, h: L['box-txt1'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt1'].align || 'left' }); if(L['box-txt2'].visible !== false) slide.addText(f2Txt, { x: L['box-txt2'].x*W, y: L['box-txt2'].y*H, w: L['box-txt2'].w*W, h: L['box-txt2'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt2'].align || 'left' }); C.forEach(c => { slide.addText(c.text, { x: c.x*W, y: c.y*H, w: c.w*W, h: c.h*H, fontSize: 18, fontFace: "Leelawadee", align: c.align || 'left', color: "000000" }); }); } } } await pres.writeFile({ fileName: "Presentation_V7.2.pptx" }); hideLoading(); showToast("สร้าง PowerPoint สำเร็จ!", "success"); } catch (err) { showToast("Error: "+err, "error"); hideLoading(); } }, 100); }
 
         function openLayoutModal() { initDraggables(); openModal('modalLayout'); }
         function openDataModal() { renderDataList(); openModal('modalData'); }
