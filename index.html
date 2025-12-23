@@ -21,10 +21,10 @@
             --shadow-card: 0 4px 12px rgba(60,64,67,0.15);
         }
         * { box-sizing: border-box; }
-        body { font-family: 'Sarabun', 'Roboto', sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: var(--text-main); }
+        body { font-family: 'Sarabun', 'Roboto', sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: var(--text-main); padding: 20px; }
 
-        /* --- UI --- */
-        .app-card { background: white; width: 100%; max-width: 500px; border-radius: 12px; box-shadow: var(--shadow-card); overflow: hidden; position: relative; z-index: 1; }
+        /* --- UI COMPONENTS --- */
+        .app-card { background: white; width: 100%; max-width: 500px; border-radius: 12px; box-shadow: var(--shadow-card); overflow: hidden; position: relative; z-index: 1; margin-bottom: 20px; }
         .header { background: var(--primary); padding: 24px 32px; color: white; position: relative; overflow: hidden; }
         .header h1 { margin: 0; font-size: 22px; font-weight: 500; position: relative; z-index: 1; }
         .header p { margin: 6px 0 0; opacity: 0.9; font-size: 14px; position: relative; z-index: 1; font-weight: 300; }
@@ -32,6 +32,7 @@
         @keyframes rotateBg { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         .body-content { padding: 32px; }
+
         .input-group { margin-bottom: 24px; }
         .label-title { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-main); margin-bottom: 12px; font-size: 15px; }
         .file-drop-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; background: #fff; position: relative; transition: all 0.2s; }
@@ -52,6 +53,13 @@
         .btn:disabled { background: #f1f3f4; border-color: transparent; color: #bdc1c6; cursor: not-allowed; transform: none; box-shadow: none; }
         .btn-small { padding: 6px 12px; font-size: 13px; flex: initial; border-radius: 4px; }
 
+        /* --- FOOTER (NEW) --- */
+        .app-footer {
+            text-align: center; font-size: 12px; color: var(--text-sub); margin-top: 10px;
+            line-height: 1.6; opacity: 0.8;
+        }
+        .app-footer strong { font-weight: 600; color: var(--text-main); }
+
         /* --- MODAL --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-out; }
         .modal-overlay.show { opacity: 1; }
@@ -66,67 +74,39 @@
         /* --- DATA LIST --- */
         .dm-container { padding: 20px 0; background: #fff; }
         .dm-group { margin: 0 24px 20px 24px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; transition: box-shadow 0.2s; }
-        .dm-group:hover { box-shadow: var(--shadow-sm); border-color: #bdc1c6; }
         .dm-header-row { background: #f8f9fa; padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
-        .dm-icon-l1 { color: var(--primary); font-size: 24px; }
         .dm-list-row { padding: 10px 16px 10px 52px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f1f3f4; background: white; }
-        .dm-list-row:last-child { border-bottom: none; }
-        .dm-icon-l2 { color: var(--text-sub); font-size: 20px; }
         .mat-input { width: 100%; border: none; border-bottom: 2px solid transparent; background: transparent; font-family: inherit; font-size: 15px; padding: 6px 0; color: var(--text-main); transition: border-color 0.2s, background 0.2s; }
-        .mat-input.l1 { font-weight: 600; font-size: 16px; color: var(--primary); }
-        .mat-input:focus { outline: none; border-bottom-color: var(--primary); background: rgba(26, 115, 232, 0.04); padding-left: 8px; border-radius: 4px 4px 0 0; }
-        .mat-input:hover { border-bottom-color: var(--border); }
+        .mat-input:focus { outline: none; border-bottom-color: var(--primary); background: rgba(26, 115, 232, 0.04); }
 
-        /* --- LAYOUT EDITOR & GRID SYSTEM --- */
-        .editor-toolbar { padding: 12px 24px; display: flex; gap: 12px; align-items: center; background: #f8f9fa; border-bottom: 1px solid var(--border); }
+        /* --- LAYOUT EDITOR --- */
+        .editor-toolbar { padding: 12px 24px; display: flex; gap: 12px; align-items: center; background: #f8f9fa; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
         .editor-container {
-            position: relative; margin: 24px auto;
-            background-color: white; box-shadow: 0 0 0 1px #e0e0e0;
-            background-size: cover; background-position: center;
-            width: 800px; height: 600px; overflow: hidden; user-select: none;
-            /* Default no grid */
+            position: relative; margin: 24px auto; background-color: white; box-shadow: 0 0 0 1px #e0e0e0;
+            background-size: cover; background-position: center; width: 800px; height: 600px; overflow: hidden; user-select: none;
         }
-        
-        /* GRID PATTERN */
         .editor-container.show-grid::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-size: 20px 20px;
-            background-image: 
-                linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: 20px 20px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
             pointer-events: none; z-index: 0;
         }
-
         .draggable-box {
-            position: absolute; border: 2px dashed var(--primary); background: rgba(26, 115, 232, 0.05);
-            cursor: move; display: flex; justify-content: center; align-items: center;
-            font-weight: 500; color: var(--primary); font-size: 14px;
-            transform: translateZ(0); z-index: 10;
+            position: absolute; border: 2px dashed var(--primary); background: rgba(26, 115, 232, 0.05); cursor: move;
+            display: flex; justify-content: center; align-items: center; font-weight: 500; color: var(--primary); font-size: 14px; transform: translateZ(0); z-index: 10;
         }
         .draggable-box:hover { background: rgba(26, 115, 232, 0.15); z-index: 100; border-style: solid; }
-        
         .draggable-box.custom-text { border-color: #333; color: #000; background: rgba(255, 255, 255, 0.5); }
-        .draggable-box.custom-text:hover { background: rgba(255, 255, 255, 0.8); }
-
         .box-inner-text { width: 100%; height: 100%; display: flex; align-items: center; padding: 0 12px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .resize-handle { width: 16px; height: 16px; background: var(--primary); position: absolute; bottom: 0; right: 0; cursor: nwse-resize; border-radius: 4px 0 0 0; display: none; }
-        .draggable-box.custom-text .resize-handle { background: #333; }
         .draggable-box:hover .resize-handle { display: block; }
-
         .box-controls { position: absolute; top: -42px; left: 0; background: #202124; border-radius: 4px; padding: 4px; display: none; gap: 4px; z-index: 200; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
         .draggable-box:hover .box-controls { display: flex; animation: fadeIn 0.15s; }
         .ctrl-btn { color: #e8eaed; background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 4px; display: flex; }
-        .ctrl-btn:hover { background: rgba(255,255,255,0.1); }
         .ctrl-btn.active { background: var(--primary); color: white; }
-        .ctrl-btn.btn-del:hover { background: var(--danger); }
         @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
 
-        /* --- LOADING OVERLAY --- */
-        .loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95); z-index: 2000;
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-        }
+        /* --- LOADING --- */
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
         .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-text { font-size: 18px; font-weight: 600; color: var(--text-main); }
@@ -147,8 +127,8 @@
 
     <div class="app-card">
         <div class="header">
-            <h1>ระบบสร้างรายงาน PowerPoint</h1>
-            <p>Developed by CCT Department</p>
+            <h1>Presentation Generator</h1>
+            <p>ระบบสร้างรายงาน PowerPoint</p>
         </div>
 
         <div class="body-content">
@@ -158,7 +138,7 @@
                     <input type="file" id="bgFile" accept=".jpg, .jpeg, .png" onchange="handleBgSelect()">
                     <div class="zone-content">
                         <span class="material-icons-round zone-icon" id="icon-bg">cloud_upload</span>
-                        <div class="zone-text" id="text-bg">คลิกเลือกไฟล์ Template Slide (.jpg/.png)</div>
+                        <div class="zone-text" id="text-bg">คลิกเลือกไฟล์ Template (.jpg/.png)</div>
                     </div>
                 </div>
             </div>
@@ -194,6 +174,11 @@
         </div>
     </div>
 
+    <div class="app-footer">
+        We recommend using <strong>Microsoft Edge</strong> or <strong>Google Chrome</strong> at this time.<br>
+        © Pongpipatt. - CCT Department Syntec Construction PCL.
+    </div>
+
     <div class="modal-overlay" id="modalData">
         <div class="modal-card">
             <div class="modal-header"><h2>📝 แก้ไขชื่อ</h2><button class="close-btn" onclick="closeModal('modalData')"><span class="material-icons-round">close</span></button></div>
@@ -211,10 +196,15 @@
             <div class="modal-body" style="background:#f8f9fa;">
                 <div class="editor-toolbar">
                     <select id="aspectRatio" onchange="updateEditorRatio()" style="padding:6px; border-radius:4px; border:1px solid #dadce0;">
-                        <option value="4:3">4:3</option>
-                        <option value="16:9">16:9</option>
+                        <option value="4:3">Size 4:3</option>
+                        <option value="16:9">Size 16:9</option>
                     </select>
                     
+                    <select id="imgFitMode" onchange="updateImageFit()" style="padding:6px; border-radius:4px; border:1px solid #dadce0;">
+                        <option value="contain">🖼️ รูป: สัดส่วนจริง</option>
+                        <option value="cover">⬛ รูป: เต็มช่อง (Crop)</option>
+                    </select>
+
                     <label style="display:flex; align-items:center; gap:6px; font-size:14px; margin-left:10px; cursor:pointer;">
                         <input type="checkbox" id="checkGrid" onchange="toggleGrid()" checked>
                         <span>Snap Grid</span>
@@ -262,170 +252,83 @@
 
     <div class="modal-overlay" id="modalPreview">
         <div class="modal-card" style="max-width:800px;">
-            <div class="modal-header">
-                <h2>👁️ PDF Preview</h2>
-                <button class="close-btn" onclick="closeModal('modalPreview')"><span class="material-icons-round">close</span></button>
-            </div>
-            <div class="modal-body" style="background:#f8f9fa; padding: 24px;">
-                <div id="previewContainer"></div>
-            </div>
+            <div class="modal-header"><h2>👁️ PDF Preview</h2><button class="close-btn" onclick="closeModal('modalPreview')"><span class="material-icons-round">close</span></button></div>
+            <div class="modal-body" style="background:#f8f9fa; padding: 24px;"><div id="previewContainer"></div></div>
             <div class="modal-footer">
-                <button class="btn btn-outline btn-small" onclick="saveAsPDF()">
-                    <span class="material-icons-round" style="font-size:16px; margin-right:4px; color:#ea4335;">picture_as_pdf</span> 
-                    Save as PDF
-                </button>
+                <button class="btn btn-outline btn-small" onclick="saveAsPDF()"><span class="material-icons-round" style="font-size:16px; margin-right:4px; color:#ea4335;">picture_as_pdf</span> Save as PDF</button>
                 <button class="btn btn-main btn-small" onclick="closeModal('modalPreview')">ปิด</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- CONFIG ---
         let APP_DATA = {};
         let BG_DATA = null;
         let LAYOUT_CONFIG = {
             ratio: "4:3", widthInches: 10, heightInches: 7.5,
+            imageFit: "contain", // contain | cover
             elements: { 'box-img1': { visible: true }, 'box-img2': { visible: true }, 'box-txt1': { visible: true, align: 'left' }, 'box-txt2': { visible: true, align: 'left' } },
             custom: []
         };
-        const SNAP_SIZE = 20; // 20px Grid Size
+        const SNAP_SIZE = 20;
 
-        // --- GRID LOGIC ---
-        function toggleGrid() {
-            const chk = document.getElementById('checkGrid');
-            const canvas = document.getElementById('editorCanvas');
-            if(chk.checked) canvas.classList.add('show-grid');
-            else canvas.classList.remove('show-grid');
-        }
+        function toggleGrid() { const c = document.getElementById('editorCanvas'); if(document.getElementById('checkGrid').checked) c.classList.add('show-grid'); else c.classList.remove('show-grid'); }
+        function updateImageFit() { LAYOUT_CONFIG.imageFit = document.getElementById('imgFitMode').value; }
 
-        // --- DRAG & DROP (WITH SNAP) ---
         function initDraggables() { document.querySelectorAll('.draggable-box').forEach(elm => bindDragEvents(elm)); }
-        
         function bindDragEvents(elm) {
-            let isDragging = false, isResizing = false;
-            let startX, startY, startLeft, startTop, startW, startH;
+            let isDragging = false, isResizing = false, startX, startY, startLeft, startTop, startW, startH;
             const handle = elm.querySelector('.resize-handle');
-            const snapEnabled = () => document.getElementById('checkGrid').checked;
-
-            // Snap Helper
-            const snap = (val) => Math.round(val / SNAP_SIZE) * SNAP_SIZE;
+            const snap = (val) => document.getElementById('checkGrid').checked ? Math.round(val/SNAP_SIZE)*SNAP_SIZE : val;
 
             if(handle) {
-                handle.onmousedown = (e) => {
-                    isResizing = true; startX = e.clientX; startY = e.clientY; 
-                    startW = elm.offsetWidth; startH = elm.offsetHeight;
-                    e.stopPropagation(); e.preventDefault();
-                };
+                handle.onmousedown = (e) => { isResizing = true; startX = e.clientX; startY = e.clientY; startW = elm.offsetWidth; startH = elm.offsetHeight; e.stopPropagation(); e.preventDefault(); };
             }
-
             elm.onmousedown = (e) => {
                 if(e.target.closest('.ctrl-btn') || e.target.closest('.resize-handle')) return;
                 if(elm.classList.contains('custom-text') && e.detail === 2) { editCustomText(elm); return; }
-                isDragging = true; startX = e.clientX; startY = e.clientY;
-                startLeft = elm.offsetLeft; startTop = elm.offsetTop;
-                e.preventDefault();
+                isDragging = true; startX = e.clientX; startY = e.clientY; startLeft = elm.offsetLeft; startTop = elm.offsetTop; e.preventDefault();
             };
-
             const onMove = (e) => {
                 if(!isDragging && !isResizing) return;
                 requestAnimationFrame(() => {
-                    const dx = e.clientX - startX;
-                    const dy = e.clientY - startY;
-                    
-                    if(isDragging) {
-                        let newLeft = startLeft + dx;
-                        let newTop = startTop + dy;
-                        
-                        if(snapEnabled()) {
-                            newLeft = snap(newLeft);
-                            newTop = snap(newTop);
-                        }
-                        elm.style.left = newLeft + 'px';
-                        elm.style.top = newTop + 'px';
-                    } 
-                    else if(isResizing) {
-                        let newW = startW + dx;
-                        let newH = startH + dy;
-                        if(snapEnabled()) {
-                            newW = snap(newW);
-                            newH = snap(newH);
-                        }
-                        elm.style.width = newW + 'px';
-                        elm.style.height = newH + 'px';
-                    }
+                    const dx = e.clientX - startX, dy = e.clientY - startY;
+                    if(isDragging) { elm.style.left = snap(startLeft + dx) + 'px'; elm.style.top = snap(startTop + dy) + 'px'; }
+                    else if(isResizing) { elm.style.width = snap(startW + dx) + 'px'; elm.style.height = snap(startH + dy) + 'px'; }
                 });
             };
-
             const onUp = () => { if(isDragging || isResizing) { isDragging = false; isResizing = false; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); captureLayout(); } };
-
             if(handle) handle.addEventListener('mousedown', () => { window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp); });
             elm.addEventListener('mousedown', (e) => { if(!e.target.closest('.ctrl-btn') && !e.target.closest('.resize-handle')) { window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp); } });
         }
 
-        // --- TRUE PDF EXPORT ---
         async function saveAsPDF() {
             const { jsPDF } = window.jspdf;
-            
-            // Show Loading
-            showLoading("กำลังสร้างไฟล์ PDF...", "อาจใช้เวลาสักครู่ตามจำนวนรูปภาพ");
-            
+            showLoading("กำลังสร้างไฟล์ PDF...", "กำลังประมวลผลรูปภาพ");
             setTimeout(async () => {
                 try {
-                    const container = document.getElementById('previewContainer');
-                    const slides = container.querySelectorAll('.slide-preview');
-                    
-                    if(slides.length === 0) { alert("ไม่มีสไลด์ให้ Export"); hideLoading(); return; }
-
-                    const doc = new jsPDF({
-                        orientation: 'landscape',
-                        unit: 'px',
-                        format: [slides[0].offsetWidth, slides[0].offsetHeight] // Match slide size
-                    });
-
+                    const slides = document.querySelectorAll('.slide-preview');
+                    if(slides.length === 0) { alert("ไม่มีสไลด์"); hideLoading(); return; }
+                    const doc = new jsPDF({ orientation: 'landscape', unit: 'px', format: [slides[0].offsetWidth, slides[0].offsetHeight] });
                     for (let i = 0; i < slides.length; i++) {
                         updateLoading("กำลังแปลงหน้า PDF...", `หน้า ${i+1} จาก ${slides.length}`);
-                        
-                        // Capture Slide as Image
                         const canvas = await html2canvas(slides[i], { scale: 2, useCORS: true });
-                        const imgData = canvas.toDataURL('image/jpeg', 0.8);
-
-                        const pdfW = doc.internal.pageSize.getWidth();
-                        const pdfH = doc.internal.pageSize.getHeight();
-
                         if (i > 0) doc.addPage();
-                        doc.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH);
+                        doc.addImage(canvas.toDataURL('image/jpeg', 0.8), 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
                     }
-
-                    doc.save('Presentation_Auto.pdf');
-                    hideLoading();
-
-                } catch (error) {
-                    console.error(error);
-                    alert("เกิดข้อผิดพลาดในการสร้าง PDF: " + error.message);
-                    hideLoading();
-                }
+                    doc.save('Presentation_Auto.pdf'); hideLoading();
+                } catch (e) { alert("Error: " + e.message); hideLoading(); }
             }, 100);
         }
 
-        // --- LOADING HELPERS ---
-        function showLoading(title, sub) {
-            document.getElementById('loadingTitle').innerText = title;
-            document.getElementById('loadingSub').innerText = sub;
-            document.getElementById('loadingOverlay').style.display = 'flex';
-        }
-        function updateLoading(title, sub) {
-            document.getElementById('loadingTitle').innerText = title;
-            document.getElementById('loadingSub').innerText = sub;
-        }
+        function showLoading(t, s) { document.getElementById('loadingTitle').innerText = t; document.getElementById('loadingSub').innerText = s; document.getElementById('loadingOverlay').style.display = 'flex'; }
+        function updateLoading(t, s) { document.getElementById('loadingTitle').innerText = t; document.getElementById('loadingSub').innerText = s; }
         function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
 
-
-        // --- CUSTOM TEXT ---
         function addCustomTextBox() {
             const id = 'custom-' + Date.now();
             const canvas = document.getElementById('editorCanvas');
-            const div = document.createElement('div');
-            div.id = id; div.className = 'draggable-box custom-text';
+            const div = document.createElement('div'); div.id = id; div.className = 'draggable-box custom-text';
             div.style.cssText = "top:50%; left:50%; width:30%; height:8%;";
             div.innerHTML = `<div class="box-inner-text" style="justify-content:center;">ข้อความใหม่ (คลิกแก้)</div><div class="resize-handle"></div><div class="box-controls"><button class="ctrl-btn active" onclick="setAlign('${id}', 'center', this)"><span class="material-icons-round" style="font-size:18px">format_align_center</span></button><button class="ctrl-btn" onclick="setAlign('${id}', 'left', this)"><span class="material-icons-round" style="font-size:18px">format_align_left</span></button><button class="ctrl-btn" onclick="setAlign('${id}', 'right', this)"><span class="material-icons-round" style="font-size:18px">format_align_right</span></button><div style="width:1px; background:#555; margin:0 4px;"></div><button class="ctrl-btn btn-del" onclick="removeCustomBox('${id}')"><span class="material-icons-round" style="font-size:18px">delete</span></button></div>`;
             canvas.appendChild(div); bindDragEvents(div);
@@ -434,7 +337,6 @@
         function removeCustomBox(id) { document.getElementById(id).remove(); LAYOUT_CONFIG.custom = LAYOUT_CONFIG.custom.filter(x => x.id !== id); }
         function editCustomText(elm) { const t = prompt("แก้ไขข้อความ:", elm.querySelector('.box-inner-text').innerText); if(t!==null) { elm.querySelector('.box-inner-text').innerText = t; captureLayout(); } }
 
-        // --- LAYOUT CAPTURE & UTILS ---
         function captureLayout() {
             const canvas = document.getElementById('editorCanvas'); const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
             ['box-img1', 'box-img2', 'box-txt1', 'box-txt2'].forEach(id => { const el = document.getElementById(id); if (!LAYOUT_CONFIG.elements[id]) LAYOUT_CONFIG.elements[id] = {}; Object.assign(LAYOUT_CONFIG.elements[id], { x: el.offsetLeft/cw, y: el.offsetTop/ch, w: el.offsetWidth/cw, h: el.offsetHeight/ch, visible: (el.style.display !== 'none') }); });
@@ -446,15 +348,14 @@
         function resetLayout() { document.querySelectorAll('.custom-text').forEach(e => e.remove()); LAYOUT_CONFIG.custom = []; restoreHidden(); const defs = { 'box-img1': "top:29%; left:4%; width:44%; height:42%;", 'box-img2': "top:29%; left:52%; width:44%; height:42%;", 'box-txt1': "top:80%; left:16%; width:70%; height:6%;", 'box-txt2': "top:86%; left:16%; width:70%; height:6%;" }; for(let id in defs) document.getElementById(id).style.cssText = defs[id]; ['box-txt1', 'box-txt2'].forEach(id => { document.getElementById(id).querySelector('.box-inner-text').style.justifyContent = 'flex-start'; LAYOUT_CONFIG.elements[id].align = 'left'; }); captureLayout(); }
         function updateEditorRatio() { const s = document.getElementById('aspectRatio'); const c = document.getElementById('editorCanvas'); const r = s.value; c.style.height = (r === "16:9") ? '450px' : '600px'; if (r === "16:9") { LAYOUT_CONFIG.widthInches = 10; LAYOUT_CONFIG.heightInches = 5.625; } else { LAYOUT_CONFIG.widthInches = 10; LAYOUT_CONFIG.heightInches = 7.5; } LAYOUT_CONFIG.ratio = r; }
 
-        // --- CORE & PPT ---
         function renderDataList() { const l = document.getElementById('dataListContainer'); l.innerHTML = ''; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); Object.keys(APP_DATA).sort(nSort).forEach(f1 => { const g = document.createElement('div'); g.className = 'dm-group'; g.innerHTML = `<div class="dm-header-row"><span class="material-icons-round dm-icon-l1">folder</span><input type="text" class="mat-input l1" value="${f1}" onchange="renameKey(APP_DATA, '${f1}', this.value)"></div>`; Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { const r = document.createElement('div'); r.className = 'dm-list-row'; r.innerHTML = `<span class="material-icons-round dm-icon-l2">subdirectory_arrow_right</span><input type="text" class="mat-input" value="${f2}" onchange="renameKey(APP_DATA['${f1}'], '${f2}', this.value)">`; g.appendChild(r); }); l.appendChild(g); }); }
         function renameKey(o, oldK, newK) { if (oldK === newK || !newK) return; if (o[newK]) { alert('ชื่อซ้ำ'); renderDataList(); return; } Object.defineProperty(o, newK, Object.getOwnPropertyDescriptor(o, oldK)); delete o[oldK]; renderDataList(); }
         function handleBgSelect() { const i = document.getElementById('bgFile'); if(i.files[0]) { const r = new FileReader(); r.onload=e=>{BG_DATA=e.target.result; document.getElementById('zone-bg').classList.add('has-file'); document.getElementById('text-bg').innerText=i.files[0].name; document.getElementById('editorCanvas').style.backgroundImage=`url(${BG_DATA})`;}; r.readAsDataURL(i.files[0]); } }
         async function handleFolderSelect() { const i = document.getElementById('photoFolder'); const f = Array.from(i.files); if(f.length===0) return; APP_DATA={}; for(let file of f) { if(!file.name.match(/\.(jpg|jpeg|png)$/i)) continue; let p=file.webkitRelativePath.split('/'); if(p.length>=3) { let f1=p[p.length-3], f2=p[p.length-2]; if(!APP_DATA[f1]) APP_DATA[f1]={}; if(!APP_DATA[f1][f2]) APP_DATA[f1][f2]=[]; APP_DATA[f1][f2].push({fileObj:file, name:file.name}); }} document.getElementById('zone-folder').classList.add('has-file'); document.getElementById('text-folder').innerText=`พร้อมใช้งาน (${f.length} ไฟล์)`; document.getElementById('btnEditData').disabled=false; document.getElementById('btnPreview').disabled=false; document.getElementById('btnGen').disabled=false; }
         
-        function renderPreviewHTML(cid) { const c = document.getElementById(cid); c.innerHTML = ''; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom, isWide = LAYOUT_CONFIG.ratio === "16:9"; Object.keys(APP_DATA).sort(nSort).forEach(f1 => { let f1Txt = f1.replace(/^\d+[._-]?/, ''); Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = document.createElement('div'); slide.className = 'slide-preview'; slide.style.paddingBottom = isWide ? "56.25%" : "75%"; if (BG_DATA) slide.innerHTML += `<img src="${BG_DATA}" style="width:100%; height:100%; object-fit:cover; z-index:0;">`; const pct = (v) => (v * 100) + '%'; if(L['box-img1'].visible !== false) { let img1 = URL.createObjectURL(images[i].fileObj); slide.innerHTML += `<img src="${img1}" style="top:${pct(L['box-img1'].y)}; left:${pct(L['box-img1'].x)}; width:${pct(L['box-img1'].w)}; height:${pct(L['box-img1'].h)}; z-index:1;">`; } if(i+1 < images.length && L['box-img2'].visible !== false) { let img2 = URL.createObjectURL(images[i+1].fileObj); slide.innerHTML += `<img src="${img2}" style="top:${pct(L['box-img2'].y)}; left:${pct(L['box-img2'].x)}; width:${pct(L['box-img2'].w)}; height:${pct(L['box-img2'].h)}; z-index:1;">`; } if(L['box-txt1'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt1'].y)}; left:${pct(L['box-txt1'].x)}; width:${pct(L['box-txt1'].w)}; text-align:${L['box-txt1'].align||'left'}; font-size:18px; font-weight:bold; z-index:2;">${f1Txt}</div>`; if(L['box-txt2'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt2'].y)}; left:${pct(L['box-txt2'].x)}; width:${pct(L['box-txt2'].w)}; text-align:${L['box-txt2'].align||'left'}; font-size:18px; font-weight:bold; z-index:2;">${f2Txt}</div>`; C.forEach(c => { slide.innerHTML += `<div style="top:${pct(c.y)}; left:${pct(c.x)}; width:${pct(c.w)}; text-align:${c.align||'left'}; font-size:18px; font-weight:bold; z-index:2; color:#000;">${c.text}</div>`; }); c.appendChild(slide); } }); }); }
+        function renderPreviewHTML(cid) { const c = document.getElementById(cid); c.innerHTML = ''; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom, isWide = LAYOUT_CONFIG.ratio === "16:9"; Object.keys(APP_DATA).sort(nSort).forEach(f1 => { let f1Txt = f1.replace(/^\d+[._-]?/, ''); Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = document.createElement('div'); slide.className = 'slide-preview'; slide.style.paddingBottom = isWide ? "56.25%" : "75%"; if (BG_DATA) slide.innerHTML += `<img src="${BG_DATA}" style="width:100%; height:100%; object-fit:cover; z-index:0;">`; const pct = (v) => (v * 100) + '%'; const fit = LAYOUT_CONFIG.imageFit || 'contain'; const imgStyle = `width:100%; height:100%; object-fit:${fit}; z-index:1;`; if(L['box-img1'].visible !== false) { let img1 = URL.createObjectURL(images[i].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img1'].y)}; left:${pct(L['box-img1'].x)}; width:${pct(L['box-img1'].w)}; height:${pct(L['box-img1'].h)};"><img src="${img1}" style="${imgStyle}"></div>`; } if(i+1 < images.length && L['box-img2'].visible !== false) { let img2 = URL.createObjectURL(images[i+1].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img2'].y)}; left:${pct(L['box-img2'].x)}; width:${pct(L['box-img2'].w)}; height:${pct(L['box-img2'].h)};"><img src="${img2}" style="${imgStyle}"></div>`; } if(L['box-txt1'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt1'].y)}; left:${pct(L['box-txt1'].x)}; width:${pct(L['box-txt1'].w)}; text-align:${L['box-txt1'].align||'left'}; font-size:18px; font-weight:bold; z-index:2;">${f1Txt}</div>`; if(L['box-txt2'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt2'].y)}; left:${pct(L['box-txt2'].x)}; width:${pct(L['box-txt2'].w)}; text-align:${L['box-txt2'].align||'left'}; font-size:18px; font-weight:bold; z-index:2;">${f2Txt}</div>`; C.forEach(c => { slide.innerHTML += `<div style="top:${pct(c.y)}; left:${pct(c.x)}; width:${pct(c.w)}; text-align:${c.align||'left'}; font-size:18px; font-weight:bold; z-index:2; color:#000;">${c.text}</div>`; }); c.appendChild(slide); } }); }); }
         
-        async function generatePPT() { showLoading("กำลังสร้าง PowerPoint...", "กรุณารอสักครู่"); setTimeout(async () => { try { let pres = new PptxGenJS(); pres.layout = (LAYOUT_CONFIG.ratio === "16:9") ? 'LAYOUT_16x9' : 'LAYOUT_4x3'; const W = LAYOUT_CONFIG.widthInches, H = LAYOUT_CONFIG.heightInches; const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); for (let f1 of Object.keys(APP_DATA).sort(nSort)) { let f1Txt = f1.replace(/^\d+[._-]?/, ''); for (let f2 of Object.keys(APP_DATA[f1]).sort(nSort)) { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = pres.addSlide(); if (BG_DATA) slide.background = { data: BG_DATA }; if(L['box-img1'].visible !== false) { let d = await fileToDataURL(images[i].fileObj); slide.addImage({ data: d, x: L['box-img1'].x*W, y: L['box-img1'].y*H, w: L['box-img1'].w*W, h: L['box-img1'].h*H }); } if(i+1 < images.length && L['box-img2'].visible !== false) { let d = await fileToDataURL(images[i+1].fileObj); slide.addImage({ data: d, x: L['box-img2'].x*W, y: L['box-img2'].y*H, w: L['box-img2'].w*W, h: L['box-img2'].h*H }); } if(L['box-txt1'].visible !== false) slide.addText(f1Txt, { x: L['box-txt1'].x*W, y: L['box-txt1'].y*H, w: L['box-txt1'].w*W, h: L['box-txt1'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt1'].align || 'left' }); if(L['box-txt2'].visible !== false) slide.addText(f2Txt, { x: L['box-txt2'].x*W, y: L['box-txt2'].y*H, w: L['box-txt2'].w*W, h: L['box-txt2'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt2'].align || 'left' }); C.forEach(c => { slide.addText(c.text, { x: c.x*W, y: c.y*H, w: c.w*W, h: c.h*H, fontSize: 18, fontFace: "Leelawadee", align: c.align || 'left', color: "000000" }); }); } } } await pres.writeFile({ fileName: "Presentation_V7.pptx" }); hideLoading(); } catch (err) { alert(err); hideLoading(); } }, 100); }
+        async function generatePPT() { showLoading("กำลังสร้าง PowerPoint...", "กรุณารอสักครู่"); setTimeout(async () => { try { let pres = new PptxGenJS(); pres.layout = (LAYOUT_CONFIG.ratio === "16:9") ? 'LAYOUT_16x9' : 'LAYOUT_4x3'; const W = LAYOUT_CONFIG.widthInches, H = LAYOUT_CONFIG.heightInches; const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); const fit = LAYOUT_CONFIG.imageFit === 'cover' ? 'cover' : 'contain'; for (let f1 of Object.keys(APP_DATA).sort(nSort)) { let f1Txt = f1.replace(/^\d+[._-]?/, ''); for (let f2 of Object.keys(APP_DATA[f1]).sort(nSort)) { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = pres.addSlide(); if (BG_DATA) slide.background = { data: BG_DATA }; if(L['box-img1'].visible !== false) { let d = await fileToDataURL(images[i].fileObj); slide.addImage({ data: d, x: L['box-img1'].x*W, y: L['box-img1'].y*H, w: L['box-img1'].w*W, h: L['box-img1'].h*H, sizing: { type: fit, w: L['box-img1'].w*W, h: L['box-img1'].h*H } }); } if(i+1 < images.length && L['box-img2'].visible !== false) { let d = await fileToDataURL(images[i+1].fileObj); slide.addImage({ data: d, x: L['box-img2'].x*W, y: L['box-img2'].y*H, w: L['box-img2'].w*W, h: L['box-img2'].h*H, sizing: { type: fit, w: L['box-img2'].w*W, h: L['box-img2'].h*H } }); } if(L['box-txt1'].visible !== false) slide.addText(f1Txt, { x: L['box-txt1'].x*W, y: L['box-txt1'].y*H, w: L['box-txt1'].w*W, h: L['box-txt1'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt1'].align || 'left' }); if(L['box-txt2'].visible !== false) slide.addText(f2Txt, { x: L['box-txt2'].x*W, y: L['box-txt2'].y*H, w: L['box-txt2'].w*W, h: L['box-txt2'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt2'].align || 'left' }); C.forEach(c => { slide.addText(c.text, { x: c.x*W, y: c.y*H, w: c.w*W, h: c.h*H, fontSize: 18, fontFace: "Leelawadee", align: c.align || 'left', color: "000000" }); }); } } } await pres.writeFile({ fileName: "Presentation_V7.1.pptx" }); hideLoading(); } catch (err) { alert(err); hideLoading(); } }, 100); }
 
         function openLayoutModal() { initDraggables(); openModal('modalLayout'); }
         function openDataModal() { renderDataList(); openModal('modalData'); }
