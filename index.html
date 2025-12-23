@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Presentation V7 (Grid & True PDF)</title>
+    <title>Presentation Generator by CCT Department</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -147,18 +147,18 @@
 
     <div class="app-card">
         <div class="header">
-            <h1>Auto Presentation</h1>
-            <p>ระบบสร้างรายงาน PowerPoint V7.0</p>
+            <h1>ระบบสร้างรายงาน PowerPoint</h1>
+            <p>Developed by CCT Department</p>
         </div>
 
         <div class="body-content">
             <div class="input-group">
-                <div class="label-title"><span class="material-icons-round" style="color: #fbbc04;">image</span> 1. รูปพื้นหลัง</div>
+                <div class="label-title"><span class="material-icons-round" style="color: #fbbc04;">image</span> 1. Template Slide</div>
                 <div class="file-drop-zone" id="zone-bg">
                     <input type="file" id="bgFile" accept=".jpg, .jpeg, .png" onchange="handleBgSelect()">
                     <div class="zone-content">
                         <span class="material-icons-round zone-icon" id="icon-bg">cloud_upload</span>
-                        <div class="zone-text" id="text-bg">คลิกเลือกรูปพื้นหลัง (.jpg/.png)</div>
+                        <div class="zone-text" id="text-bg">คลิกเลือกไฟล์ Template Slide (.jpg/.png)</div>
                     </div>
                 </div>
             </div>
@@ -188,7 +188,7 @@
                     <span class="material-icons-round">bolt</span> สร้าง PowerPoint
                 </button>
                 <button class="btn btn-outline" id="btnPreview" onclick="openPreviewModal()" disabled>
-                    <span class="material-icons-round" style="color:#ea4335">visibility</span> ดูตัวอย่าง
+                    <span class="material-icons-round" style="color:#ea4335">visibility</span> PDF Preview
                 </button>
             </div>
         </div>
@@ -263,7 +263,7 @@
     <div class="modal-overlay" id="modalPreview">
         <div class="modal-card" style="max-width:800px;">
             <div class="modal-header">
-                <h2>👁️ ดูตัวอย่าง (Preview)</h2>
+                <h2>👁️ PDF Preview</h2>
                 <button class="close-btn" onclick="closeModal('modalPreview')"><span class="material-icons-round">close</span></button>
             </div>
             <div class="modal-body" style="background:#f8f9fa; padding: 24px;">
