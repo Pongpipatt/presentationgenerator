@@ -31,7 +31,6 @@
 
         /* --- UI COMPONENTS --- */
         .app-card { background: white; width: 100%; max-width: 500px; border-radius: 16px; box-shadow: var(--shadow-card); overflow: hidden; position: relative; z-index: 1; margin-bottom: 20px; transition: transform 0.3s; }
-        /* .app-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); } */
         
         .header { background: var(--primary); padding: 24px 32px; color: white; position: relative; overflow: hidden; }
         .header h1 { margin: 0; font-size: 22px; font-weight: 600; position: relative; z-index: 1; letter-spacing: 0.5px; }
@@ -83,7 +82,7 @@
         .modal-body { padding: 0; overflow-y: auto; background: #fff; flex: 1; }
         .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: #fff; border-radius: 0 0 12px 12px; }
 
-        /* --- TOAST NOTIFICATION (NEW) --- */
+        /* --- TOAST NOTIFICATION --- */
         .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .toast { 
             background: #323232; color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; 
@@ -135,19 +134,12 @@
 
         /* --- LOADING --- */
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .spinner { width: 48px; height: 48px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* กำหนดขนาดของ Icon หรือ Logo ที่นำมาใส่ใหม่ */
         .custom-loader-icon {
-            width: 150px;        /* ปรับขนาดความกว้างตามต้องการ */
-            height: auto;       /* ให้สูงตามสัดส่วน */
-            margin-bottom: 24px; /* เว้นระยะห่างจากตัวหนังสือ */
-            
-            /* (Optional) ถ้าเป็นภาพนิ่ง อยากให้มันขยับดุ๊กดิ๊ก (Pulse) ให้เปิดใช้บรรทัดล่างนี้ */
+            width: 150px; 
+            height: auto; 
+            margin-bottom: 24px;
             animation: pulse 1.5s infinite ease-in-out; 
         }
-        
-        /* (Optional) เอฟเฟกต์ขยับดุ๊กดิ๊ก */
         @keyframes pulse {
             0% { transform: scale(0.95); opacity: 0.8; }
             50% { transform: scale(1.05); opacity: 1; }
@@ -167,7 +159,6 @@
 
     <div class="loading-overlay" id="loadingOverlay">
         <img src="logo.png" class="custom-loader-icon"> 
-        
         <div class="loading-text" id="loadingTitle">กำลังประมวลผล...</div>
         <div class="loading-sub" id="loadingSub">กรุณารอสักครู่</div>
     </div>
@@ -260,15 +251,15 @@
                     <div style="width:1px; height:20px; background:#ddd; margin:0 8px;"></div>
                     <button class="btn btn-outline btn-small" onclick="addCustomTextBox()"><span class="material-icons-round" style="font-size:16px; color:#333;">add_circle</span> เพิ่มข้อความ</button>
                     <div style="flex:1;"></div>
-                    <button class="btn btn-outline btn-small" onclick="restoreHidden()">กู้คืน</button>
                     <button class="btn btn-outline btn-small" onclick="resetLayout()">รีเซ็ต</button>
                 </div>
                 
                 <div style="padding: 0 24px;">
                     <div id="editorCanvas" class="editor-container show-grid">
-                        <div id="box-img1" class="draggable-box" style="top:29%; left:4%; width:44%; height:42%;">IMG 1 <div class="resize-handle"></div></div>
+                        <div id="box-img1" class="draggable-box" style="top:29%; left:3%; width:44%; height:42%;">IMG 1 <div class="resize-handle"></div></div>
                         <div id="box-img2" class="draggable-box" style="top:29%; left:52%; width:44%; height:42%;">IMG 2 <div class="resize-handle"></div></div>
-                        <div id="box-txt1" class="draggable-box" style="top:80%; left:16%; width:70%; height:6%; border-color:#ea4335; color:#ea4335;">
+                        
+                        <div id="box-txt1" class="draggable-box" style="top:81%; left:16%; width:70%; height:6%; border-color:#ea4335; color:#ea4335;">
                             <div class="box-inner-text" style="justify-content: flex-start;">Header</div>
                             <div class="resize-handle" style="background:#ea4335;"></div>
                             <div class="box-controls">
@@ -276,10 +267,11 @@
                                 <button class="ctrl-btn" onclick="setAlign('box-txt1', 'center', this)"><span class="material-icons-round" style="font-size:16px">format_align_center</span></button>
                                 <button class="ctrl-btn" onclick="setAlign('box-txt1', 'right', this)"><span class="material-icons-round" style="font-size:16px">format_align_right</span></button>
                                 <div style="width:1px; background:#555; margin:0 4px;"></div>
-                                <button class="ctrl-btn btn-del" onclick="deleteBox('box-txt1')"><span class="material-icons-round" style="font-size:16px">delete</span></button>
+                                <button class="ctrl-btn btn-del" onclick="deleteBox('box-txt1')"><span class="material-icons-round" style="font-size:18px">delete</span></button>
                             </div>
                         </div>
-                        <div id="box-txt2" class="draggable-box" style="top:86%; left:16%; width:70%; height:6%; border-color:#ea4335; color:#ea4335;">
+
+                        <div id="box-txt2" class="draggable-box" style="top:87%; left:16%; width:70%; height:6%; border-color:#ea4335; color:#ea4335;">
                             <div class="box-inner-text" style="justify-content: flex-start;">Sub-Header</div>
                             <div class="resize-handle" style="background:#ea4335;"></div>
                             <div class="box-controls">
@@ -287,7 +279,7 @@
                                 <button class="ctrl-btn" onclick="setAlign('box-txt2', 'center', this)"><span class="material-icons-round" style="font-size:16px">format_align_center</span></button>
                                 <button class="ctrl-btn" onclick="setAlign('box-txt2', 'right', this)"><span class="material-icons-round" style="font-size:16px">format_align_right</span></button>
                                 <div style="width:1px; background:#555; margin:0 4px;"></div>
-                                <button class="ctrl-btn btn-del" onclick="deleteBox('box-txt2')"><span class="material-icons-round" style="font-size:16px">delete</span></button>
+                                <button class="ctrl-btn btn-del" onclick="deleteBox('box-txt2')"><span class="material-icons-round" style="font-size:18px">delete</span></button>
                             </div>
                         </div>
                     </div>
@@ -311,10 +303,17 @@
     <script>
         let APP_DATA = {};
         let BG_DATA = null;
+
+        // ✅ จุดแก้ที่ 2: ปรับค่าเริ่มต้น (y: 0.81 และ 0.87)
         let LAYOUT_CONFIG = {
             ratio: "4:3", widthInches: 10, heightInches: 7.5,
             imageFit: "contain",
-            elements: { 'box-img1': { visible: true }, 'box-img2': { visible: true }, 'box-txt1': { visible: true, align: 'left' }, 'box-txt2': { visible: true, align: 'left' } },
+            elements: { 
+                'box-img1': { visible: true, x: 0.03, y: 0.29, w: 0.44, h: 0.42 }, 
+                'box-img2': { visible: true, x: 0.52, y: 0.29, w: 0.44, h: 0.42 }, 
+                'box-txt1': { visible: true, x: 0.16, y: 0.81, w: 0.70, h: 0.06, align: 'left' }, 
+                'box-txt2': { visible: true, x: 0.16, y: 0.87, w: 0.70, h: 0.06, align: 'left' } 
+            },
             custom: []
         };
         const SNAP_SIZE = 20;
@@ -348,6 +347,7 @@
         function updateImageFit() { LAYOUT_CONFIG.imageFit = document.getElementById('imgFitMode').value; }
 
         function initDraggables() { document.querySelectorAll('.draggable-box').forEach(elm => bindDragEvents(elm)); }
+        
         function bindDragEvents(elm) {
             let isDragging = false, isResizing = false, startX, startY, startLeft, startTop, startW, startH;
             const handle = elm.querySelector('.resize-handle');
@@ -361,14 +361,38 @@
                 if(elm.classList.contains('custom-text') && e.detail === 2) { editCustomText(elm); return; }
                 isDragging = true; startX = e.clientX; startY = e.clientY; startLeft = elm.offsetLeft; startTop = elm.offsetTop; e.preventDefault();
             };
+            
             const onMove = (e) => {
                 if(!isDragging && !isResizing) return;
                 requestAnimationFrame(() => {
                     const dx = e.clientX - startX, dy = e.clientY - startY;
-                    if(isDragging) { elm.style.left = snap(startLeft + dx) + 'px'; elm.style.top = snap(startTop + dy) + 'px'; }
-                    else if(isResizing) { elm.style.width = snap(startW + dx) + 'px'; elm.style.height = snap(startH + dy) + 'px'; }
+                    const container = elm.offsetParent;
+                    
+                    if(isDragging) { 
+                        let newL = snap(startLeft + dx);
+                        let newT = snap(startTop + dy);
+                        const maxL = container.clientWidth - elm.offsetWidth;
+                        const maxT = container.clientHeight - elm.offsetHeight;
+                        if (newL < 0) newL = 0;
+                        if (newL > maxL) newL = maxL;
+                        if (newT < 0) newT = 0;
+                        if (newT > maxT) newT = maxT;
+                        elm.style.left = newL + 'px'; 
+                        elm.style.top = newT + 'px'; 
+                    }
+                    else if(isResizing) { 
+                        let newW = snap(startW + dx);
+                        let newH = snap(startH + dy);
+                        if (newW < 20) newW = 20;
+                        if (newH < 20) newH = 20;
+                        if (elm.offsetLeft + newW > container.clientWidth) newW = container.clientWidth - elm.offsetLeft;
+                        if (elm.offsetTop + newH > container.clientHeight) newH = container.clientHeight - elm.offsetTop;
+                        elm.style.width = newW + 'px'; 
+                        elm.style.height = newH + 'px'; 
+                    }
                 });
             };
+            
             const onUp = () => { if(isDragging || isResizing) { isDragging = false; isResizing = false; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); captureLayout(); } };
             if(handle) handle.addEventListener('mousedown', () => { window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp); });
             elm.addEventListener('mousedown', (e) => { if(!e.target.closest('.ctrl-btn') && !e.target.closest('.resize-handle')) { window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp); } });
@@ -410,14 +434,43 @@
         function editCustomText(elm) { const t = prompt("แก้ไขข้อความ:", elm.querySelector('.box-inner-text').innerText); if(t!==null) { elm.querySelector('.box-inner-text').innerText = t; captureLayout(); } }
 
         function captureLayout() {
-            const canvas = document.getElementById('editorCanvas'); const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+            const canvas = document.getElementById('editorCanvas'); 
+            if (canvas.offsetParent === null) return;
+
+            const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
             ['box-img1', 'box-img2', 'box-txt1', 'box-txt2'].forEach(id => { const el = document.getElementById(id); if (!LAYOUT_CONFIG.elements[id]) LAYOUT_CONFIG.elements[id] = {}; Object.assign(LAYOUT_CONFIG.elements[id], { x: el.offsetLeft/cw, y: el.offsetTop/ch, w: el.offsetWidth/cw, h: el.offsetHeight/ch, visible: (el.style.display !== 'none') }); });
             LAYOUT_CONFIG.custom.forEach((c, idx) => { const el = document.getElementById(c.id); if(el) { LAYOUT_CONFIG.custom[idx].x = el.offsetLeft/cw; LAYOUT_CONFIG.custom[idx].y = el.offsetTop/ch; LAYOUT_CONFIG.custom[idx].w = el.offsetWidth/cw; LAYOUT_CONFIG.custom[idx].h = el.offsetHeight/ch; LAYOUT_CONFIG.custom[idx].text = el.querySelector('.box-inner-text').innerText; } });
         }
+        
         function setAlign(id, align, btn) { const box = document.getElementById(id); box.querySelector('.box-inner-text').style.justifyContent = (align==='left'?'flex-start':(align==='right'?'flex-end':'center')); box.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(id.startsWith('custom-')) { const i = LAYOUT_CONFIG.custom.find(x => x.id === id); if(i) i.align = align; } else { if (!LAYOUT_CONFIG.elements[id]) LAYOUT_CONFIG.elements[id] = {}; LAYOUT_CONFIG.elements[id].align = align; } }
         function deleteBox(id) { document.getElementById(id).style.display = 'none'; LAYOUT_CONFIG.elements[id].visible = false; }
-        function restoreHidden() { ['box-txt1', 'box-txt2'].forEach(id => { document.getElementById(id).style.display = 'flex'; LAYOUT_CONFIG.elements[id].visible = true; }); }
-        function resetLayout() { document.querySelectorAll('.custom-text').forEach(e => e.remove()); LAYOUT_CONFIG.custom = []; restoreHidden(); const defs = { 'box-img1': "top:29%; left:4%; width:44%; height:42%;", 'box-img2': "top:29%; left:52%; width:44%; height:42%;", 'box-txt1': "top:80%; left:16%; width:70%; height:6%;", 'box-txt2': "top:86%; left:16%; width:70%; height:6%;" }; for(let id in defs) document.getElementById(id).style.cssText = defs[id]; ['box-txt1', 'box-txt2'].forEach(id => { document.getElementById(id).querySelector('.box-inner-text').style.justifyContent = 'flex-start'; LAYOUT_CONFIG.elements[id].align = 'left'; }); captureLayout(); showToast("รีเซ็ต Layout แล้ว"); }
+        
+        function resetLayout() { 
+            document.querySelectorAll('.custom-text').forEach(e => e.remove()); 
+            LAYOUT_CONFIG.custom = []; 
+            ['box-txt1', 'box-txt2'].forEach(id => { 
+                document.getElementById(id).style.display = 'flex'; 
+                LAYOUT_CONFIG.elements[id].visible = true;
+            });
+
+            // ✅ จุดแก้ที่ 3: ปรับค่าในฟังก์ชันรีเซ็ต (81% และ 87%)
+            const defs = { 
+                'box-img1': "top:29%; left:3%; width:44%; height:42%;", 
+                'box-img2': "top:29%; left:52%; width:44%; height:42%;", 
+                'box-txt1': "top:81%; left:16%; width:70%; height:6%;", 
+                'box-txt2': "top:87%; left:16%; width:70%; height:6%;" 
+            }; 
+            for(let id in defs) document.getElementById(id).style.cssText = defs[id]; 
+            ['box-txt1', 'box-txt2'].forEach(id => { document.getElementById(id).querySelector('.box-inner-text').style.justifyContent = 'flex-start'; LAYOUT_CONFIG.elements[id].align = 'left'; }); 
+            
+            LAYOUT_CONFIG.elements['box-img1'] = { visible:true, x:0.03, y:0.29, w:0.44, h:0.42 };
+            LAYOUT_CONFIG.elements['box-img2'] = { visible:true, x:0.52, y:0.29, w:0.44, h:0.42 };
+            LAYOUT_CONFIG.elements['box-txt1'] = { visible:true, x:0.16, y:0.81, w:0.70, h:0.06, align:'left' };
+            LAYOUT_CONFIG.elements['box-txt2'] = { visible:true, x:0.16, y:0.87, w:0.70, h:0.06, align:'left' };
+
+            showToast("รีเซ็ต Layout แล้ว"); 
+        }
+
         function updateEditorRatio() { const s = document.getElementById('aspectRatio'); const c = document.getElementById('editorCanvas'); const r = s.value; c.style.height = (r === "16:9") ? '450px' : '600px'; if (r === "16:9") { LAYOUT_CONFIG.widthInches = 10; LAYOUT_CONFIG.heightInches = 5.625; } else { LAYOUT_CONFIG.widthInches = 10; LAYOUT_CONFIG.heightInches = 7.5; } LAYOUT_CONFIG.ratio = r; }
 
         function renderDataList() { const l = document.getElementById('dataListContainer'); l.innerHTML = ''; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); Object.keys(APP_DATA).sort(nSort).forEach(f1 => { const g = document.createElement('div'); g.className = 'dm-group'; g.innerHTML = `<div class="dm-header-row"><span class="material-icons-round dm-icon-l1">folder</span><input type="text" class="mat-input l1" value="${f1}" onchange="renameKey(APP_DATA, '${f1}', this.value)"></div>`; Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { const r = document.createElement('div'); r.className = 'dm-list-row'; r.innerHTML = `<span class="material-icons-round dm-icon-l2">subdirectory_arrow_right</span><input type="text" class="mat-input" value="${f2}" onchange="renameKey(APP_DATA['${f1}'], '${f2}', this.value)">`; g.appendChild(r); }); l.appendChild(g); }); }
@@ -425,11 +478,66 @@
         function handleBgSelect() { const i = document.getElementById('bgFile'); if(i.files[0]) { const r = new FileReader(); r.onload=e=>{BG_DATA=e.target.result; document.getElementById('zone-bg').classList.add('has-file'); document.getElementById('text-bg').innerText=i.files[0].name; document.getElementById('editorCanvas').style.backgroundImage=`url(${BG_DATA})`; showToast("อัปโหลดพื้นหลังสำเร็จ", "success");}; r.readAsDataURL(i.files[0]); } }
         async function handleFolderSelect() { const i = document.getElementById('photoFolder'); const f = Array.from(i.files); if(f.length===0) return; APP_DATA={}; for(let file of f) { if(!file.name.match(/\.(jpg|jpeg|png)$/i)) continue; let p=file.webkitRelativePath.split('/'); if(p.length>=3) { let f1=p[p.length-3], f2=p[p.length-2]; if(!APP_DATA[f1]) APP_DATA[f1]={}; if(!APP_DATA[f1][f2]) APP_DATA[f1][f2]=[]; APP_DATA[f1][f2].push({fileObj:file, name:file.name}); }} document.getElementById('zone-folder').classList.add('has-file'); document.getElementById('text-folder').innerText=`พร้อมใช้งาน (${f.length} ไฟล์)`; document.getElementById('btnEditData').disabled=false; document.getElementById('btnPreview').disabled=false; document.getElementById('btnGen').disabled=false; showToast(`โหลดรูปภาพ ${f.length} ไฟล์สำเร็จ`, "success"); }
         
-        function renderPreviewHTML(cid) { const c = document.getElementById(cid); c.innerHTML = ''; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom, isWide = LAYOUT_CONFIG.ratio === "16:9"; Object.keys(APP_DATA).sort(nSort).forEach(f1 => { let f1Txt = f1.replace(/^\d+[._-]?/, ''); Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = document.createElement('div'); slide.className = 'slide-preview'; slide.style.paddingBottom = isWide ? "56.25%" : "75%"; if (BG_DATA) slide.innerHTML += `<img src="${BG_DATA}" style="width:100%; height:100%; object-fit:cover; z-index:0;">`; const pct = (v) => (v * 100) + '%'; const fit = LAYOUT_CONFIG.imageFit || 'contain'; const imgStyle = `width:100%; height:100%; object-fit:${fit}; z-index:1;`; if(L['box-img1'].visible !== false) { let img1 = URL.createObjectURL(images[i].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img1'].y)}; left:${pct(L['box-img1'].x)}; width:${pct(L['box-img1'].w)}; height:${pct(L['box-img1'].h)};"><img src="${img1}" style="${imgStyle}"></div>`; } if(i+1 < images.length && L['box-img2'].visible !== false) { let img2 = URL.createObjectURL(images[i+1].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img2'].y)}; left:${pct(L['box-img2'].x)}; width:${pct(L['box-img2'].w)}; height:${pct(L['box-img2'].h)};"><img src="${img2}" style="${imgStyle}"></div>`; } if(L['box-txt1'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt1'].y)}; left:${pct(L['box-txt1'].x)}; width:${pct(L['box-txt1'].w)}; text-align:${L['box-txt1'].align||'left'}; font-size:18px; font-weight:bold; z-index:2;">${f1Txt}</div>`; if(L['box-txt2'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt2'].y)}; left:${pct(L['box-txt2'].x)}; width:${pct(L['box-txt2'].w)}; text-align:${L['box-txt2'].align||'left'}; font-size:18px; font-weight:bold; z-index:2;">${f2Txt}</div>`; C.forEach(c => { slide.innerHTML += `<div style="top:${pct(c.y)}; left:${pct(c.x)}; width:${pct(c.w)}; text-align:${c.align||'left'}; font-size:18px; font-weight:bold; z-index:2; color:#000;">${c.text}</div>`; }); c.appendChild(slide); } }); }); }
+        function renderPreviewHTML(cid) { 
+            const c = document.getElementById(cid); c.innerHTML = ''; 
+            const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); 
+            const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom, isWide = LAYOUT_CONFIG.ratio === "16:9"; 
+            Object.keys(APP_DATA).sort(nSort).forEach(f1 => { 
+                let f1Txt = f1.replace(/^\d+[._-]?/, ''); 
+                Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { 
+                    let f2Txt = f2.replace(/^\d+[._-]?/, ''); 
+                    let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); 
+                    for (let i = 0; i < images.length; i += 2) { 
+                        let slide = document.createElement('div'); 
+                        slide.className = 'slide-preview'; 
+                        slide.style.paddingBottom = isWide ? "56.25%" : "75%"; 
+                        if (BG_DATA) slide.innerHTML += `<img src="${BG_DATA}" style="width:100%; height:100%; object-fit:cover; z-index:0;">`; 
+                        const pct = (v) => (v * 100) + '%'; const fit = LAYOUT_CONFIG.imageFit || 'contain'; const imgStyle = `width:100%; height:100%; object-fit:${fit}; z-index:1;`; 
+                        if(L['box-img1'].visible !== false) { let img1 = URL.createObjectURL(images[i].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img1'].y)}; left:${pct(L['box-img1'].x)}; width:${pct(L['box-img1'].w)}; height:${pct(L['box-img1'].h)};"><img src="${img1}" style="${imgStyle}"></div>`; } 
+                        if(i+1 < images.length && L['box-img2'].visible !== false) { let img2 = URL.createObjectURL(images[i+1].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img2'].y)}; left:${pct(L['box-img2'].x)}; width:${pct(L['box-img2'].w)}; height:${pct(L['box-img2'].h)};"><img src="${img2}" style="${imgStyle}"></div>`; } 
+                        if(L['box-txt1'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt1'].y)}; left:${pct(L['box-txt1'].x)}; width:${pct(L['box-txt1'].w)}; text-align:${L['box-txt1'].align||'left'}; font-size:16px; font-weight:bold; z-index:2;">${f1Txt}</div>`; 
+                        if(L['box-txt2'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt2'].y)}; left:${pct(L['box-txt2'].x)}; width:${pct(L['box-txt2'].w)}; text-align:${L['box-txt2'].align||'left'}; font-size:16px; font-weight:bold; z-index:2;">${f2Txt}</div>`; 
+                        C.forEach(c => { slide.innerHTML += `<div style="top:${pct(c.y)}; left:${pct(c.x)}; width:${pct(c.w)}; text-align:${c.align||'left'}; font-size:16px; font-weight:bold; z-index:2; color:#000;">${c.text}</div>`; }); 
+                        c.appendChild(slide); 
+                    } 
+                }); 
+            }); 
+        }
         
-        async function generatePPT() { showLoading("กำลังสร้าง PowerPoint...", "กรุณารอสักครู่"); setTimeout(async () => { try { let pres = new PptxGenJS(); pres.layout = (LAYOUT_CONFIG.ratio === "16:9") ? 'LAYOUT_16x9' : 'LAYOUT_4x3'; const W = LAYOUT_CONFIG.widthInches, H = LAYOUT_CONFIG.heightInches; const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); const fit = LAYOUT_CONFIG.imageFit === 'cover' ? 'cover' : 'contain'; for (let f1 of Object.keys(APP_DATA).sort(nSort)) { let f1Txt = f1.replace(/^\d+[._-]?/, ''); for (let f2 of Object.keys(APP_DATA[f1]).sort(nSort)) { let f2Txt = f2.replace(/^\d+[._-]?/, ''); let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); for (let i = 0; i < images.length; i += 2) { let slide = pres.addSlide(); if (BG_DATA) slide.background = { data: BG_DATA }; if(L['box-img1'].visible !== false) { let d = await fileToDataURL(images[i].fileObj); slide.addImage({ data: d, x: L['box-img1'].x*W, y: L['box-img1'].y*H, w: L['box-img1'].w*W, h: L['box-img1'].h*H, sizing: { type: fit, w: L['box-img1'].w*W, h: L['box-img1'].h*H } }); } if(i+1 < images.length && L['box-img2'].visible !== false) { let d = await fileToDataURL(images[i+1].fileObj); slide.addImage({ data: d, x: L['box-img2'].x*W, y: L['box-img2'].y*H, w: L['box-img2'].w*W, h: L['box-img2'].h*H, sizing: { type: fit, w: L['box-img2'].w*W, h: L['box-img2'].h*H } }); } if(L['box-txt1'].visible !== false) slide.addText(f1Txt, { x: L['box-txt1'].x*W, y: L['box-txt1'].y*H, w: L['box-txt1'].w*W, h: L['box-txt1'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt1'].align || 'left' }); if(L['box-txt2'].visible !== false) slide.addText(f2Txt, { x: L['box-txt2'].x*W, y: L['box-txt2'].y*H, w: L['box-txt2'].w*W, h: L['box-txt2'].h*H, fontSize: 18, fontFace: "Leelawadee", align: L['box-txt2'].align || 'left' }); C.forEach(c => { slide.addText(c.text, { x: c.x*W, y: c.y*H, w: c.w*W, h: c.h*H, fontSize: 18, fontFace: "Leelawadee", align: c.align || 'left', color: "000000" }); }); } } } await pres.writeFile({ fileName: "Presentation_V7.2.pptx" }); hideLoading(); showToast("สร้าง PowerPoint สำเร็จ!", "success"); } catch (err) { showToast("Error: "+err, "error"); hideLoading(); } }, 100); }
+        async function generatePPT() { 
+            showLoading("กำลังสร้าง PowerPoint...", "กรุณารอสักครู่"); 
+            setTimeout(async () => { 
+                try { 
+                    let pres = new PptxGenJS(); pres.layout = (LAYOUT_CONFIG.ratio === "16:9") ? 'LAYOUT_16x9' : 'LAYOUT_4x3'; 
+                    const W = LAYOUT_CONFIG.widthInches, H = LAYOUT_CONFIG.heightInches; 
+                    const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom; 
+                    const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); 
+                    const fit = LAYOUT_CONFIG.imageFit === 'cover' ? 'cover' : 'contain'; 
+                    for (let f1 of Object.keys(APP_DATA).sort(nSort)) { 
+                        let f1Txt = f1.replace(/^\d+[._-]?/, ''); 
+                        for (let f2 of Object.keys(APP_DATA[f1]).sort(nSort)) { 
+                            let f2Txt = f2.replace(/^\d+[._-]?/, ''); 
+                            let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); 
+                            for (let i = 0; i < images.length; i += 2) { 
+                                let slide = pres.addSlide(); if (BG_DATA) slide.background = { data: BG_DATA }; 
+                                if(L['box-img1'].visible !== false) { let d = await fileToDataURL(images[i].fileObj); slide.addImage({ data: d, x: L['box-img1'].x*W, y: L['box-img1'].y*H, w: L['box-img1'].w*W, h: L['box-img1'].h*H, sizing: { type: fit, w: L['box-img1'].w*W, h: L['box-img1'].h*H } }); } 
+                                if(i+1 < images.length && L['box-img2'].visible !== false) { let d = await fileToDataURL(images[i+1].fileObj); slide.addImage({ data: d, x: L['box-img2'].x*W, y: L['box-img2'].y*H, w: L['box-img2'].w*W, h: L['box-img2'].h*H, sizing: { type: fit, w: L['box-img2'].w*W, h: L['box-img2'].h*H } }); } 
+                                if(L['box-txt1'].visible !== false) slide.addText(f1Txt, { x: L['box-txt1'].x*W, y: L['box-txt1'].y*H, w: L['box-txt1'].w*W, h: L['box-txt1'].h*H, fontSize: 16, fontFace: "Leelawadee", align: L['box-txt1'].align || 'left' }); 
+                                if(L['box-txt2'].visible !== false) slide.addText(f2Txt, { x: L['box-txt2'].x*W, y: L['box-txt2'].y*H, w: L['box-txt2'].w*W, h: L['box-txt2'].h*H, fontSize: 16, fontFace: "Leelawadee", align: L['box-txt2'].align || 'left' }); 
+                                C.forEach(c => { slide.addText(c.text, { x: c.x*W, y: c.y*H, w: c.w*W, h: c.h*H, fontSize: 16, fontFace: "Leelawadee", align: c.align || 'left', color: "000000" }); }); 
+                            } 
+                        } 
+                    } 
+                    await pres.writeFile({ fileName: "Presentation_V7.2.pptx" }); hideLoading(); showToast("สร้าง PowerPoint สำเร็จ!", "success"); 
+                } catch (err) { showToast("Error: "+err, "error"); hideLoading(); } 
+            }, 100); 
+        }
 
-        function openLayoutModal() { initDraggables(); openModal('modalLayout'); }
+        function openLayoutModal() { 
+            initDraggables(); 
+            openModal('modalLayout'); 
+            setTimeout(() => captureLayout(), 200);
+        }
         function openDataModal() { renderDataList(); openModal('modalData'); }
         function openPreviewModal() { renderPreviewHTML('previewContainer'); openModal('modalPreview'); }
         function openModal(id) { const m = document.getElementById(id); m.style.display = 'flex'; setTimeout(()=>m.classList.add('show'),10); }
@@ -440,10 +548,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
