@@ -150,7 +150,7 @@
         /* (Optional) เอฟเฟกต์ขยับดุ๊กดิ๊ก */
         @keyframes pulse {
             0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 1; }
             100% { transform: scale(0.95); opacity: 0.8; }
         }
         .loading-text { font-size: 18px; font-weight: 600; color: var(--text-main); }
@@ -266,15 +266,15 @@
                 
                 <div style="padding: 0 24px;">
                     <div id="editorCanvas" class="editor-container show-grid">
-                        <div id="box-img1" class="draggable-box" style="top:29%; left:4%; width:44%; height:42%;">IMG 1 <div class="resize-handle"></div></div>
+                        <div id="box-img1" class="draggable-box" style="top:29%; left:3%; width:44%; height:42%;">IMG 1 <div class="resize-handle"></div></div>
                         <div id="box-img2" class="draggable-box" style="top:29%; left:52%; width:44%; height:42%;">IMG 2 <div class="resize-handle"></div></div>
                         <div id="box-txt1" class="draggable-box" style="top:80%; left:16%; width:70%; height:6%; border-color:#ea4335; color:#ea4335;">
                             <div class="box-inner-text" style="justify-content: flex-start;">Header</div>
                             <div class="resize-handle" style="background:#ea4335;"></div>
                             <div class="box-controls">
-                                <button class="ctrl-btn active" onclick="setAlign('box-txt1', 'left', this)"><span class="material-icons-round" style="font-size:18px">format_align_left</span></button>
-                                <button class="ctrl-btn" onclick="setAlign('box-txt1', 'center', this)"><span class="material-icons-round" style="font-size:18px">format_align_center</span></button>
-                                <button class="ctrl-btn" onclick="setAlign('box-txt1', 'right', this)"><span class="material-icons-round" style="font-size:18px">format_align_right</span></button>
+                                <button class="ctrl-btn active" onclick="setAlign('box-txt1', 'left', this)"><span class="material-icons-round" style="font-size:16px">format_align_left</span></button>
+                                <button class="ctrl-btn" onclick="setAlign('box-txt1', 'center', this)"><span class="material-icons-round" style="font-size:16px">format_align_center</span></button>
+                                <button class="ctrl-btn" onclick="setAlign('box-txt1', 'right', this)"><span class="material-icons-round" style="font-size:16px">format_align_right</span></button>
                                 <div style="width:1px; background:#555; margin:0 4px;"></div>
                                 <button class="ctrl-btn btn-del" onclick="deleteBox('box-txt1')"><span class="material-icons-round" style="font-size:18px">delete</span></button>
                             </div>
@@ -283,9 +283,9 @@
                             <div class="box-inner-text" style="justify-content: flex-start;">Sub-Header</div>
                             <div class="resize-handle" style="background:#ea4335;"></div>
                             <div class="box-controls">
-                                <button class="ctrl-btn active" onclick="setAlign('box-txt2', 'left', this)"><span class="material-icons-round" style="font-size:18px">format_align_left</span></button>
-                                <button class="ctrl-btn" onclick="setAlign('box-txt2', 'center', this)"><span class="material-icons-round" style="font-size:18px">format_align_center</span></button>
-                                <button class="ctrl-btn" onclick="setAlign('box-txt2', 'right', this)"><span class="material-icons-round" style="font-size:18px">format_align_right</span></button>
+                                <button class="ctrl-btn active" onclick="setAlign('box-txt2', 'left', this)"><span class="material-icons-round" style="font-size:16px">format_align_left</span></button>
+                                <button class="ctrl-btn" onclick="setAlign('box-txt2', 'center', this)"><span class="material-icons-round" style="font-size:16px">format_align_center</span></button>
+                                <button class="ctrl-btn" onclick="setAlign('box-txt2', 'right', this)"><span class="material-icons-round" style="font-size:16px">format_align_right</span></button>
                                 <div style="width:1px; background:#555; margin:0 4px;"></div>
                                 <button class="ctrl-btn btn-del" onclick="deleteBox('box-txt2')"><span class="material-icons-round" style="font-size:18px">delete</span></button>
                             </div>
@@ -440,6 +440,7 @@
     </script>
 </body>
 </html>
+
 
 
 
