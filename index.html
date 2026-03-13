@@ -27,40 +27,35 @@
             --shadow-hover: 0 8px 18px rgba(60,64,67,0.2);
         }
         * { box-sizing: border-box; }
-        body { font-family: 'Sarabun', 'Roboto', sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: var(--text-main); padding: 20px; overflow-x: hidden; }
-
-        /* --- MASCOT V9.2 (Fixed Layers) --- */
-        .bg-mascot {
-            position: fixed;
-            width: 700px;
-            height: auto;
-            z-index: 0; /* Layer ล่างสุด (เดิน) */
-            pointer-events: none;
-            opacity: 0.04; 
-            
-            --face-dir: 1; 
-            transform: scaleX(var(--face-dir)); 
-            
-            transition: left 4s linear;
-            will-change: left, transform, margin-top;
-            
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
-        }
-
-        @keyframes mascot-jump-high {
-            0%   { transform: scaleX(var(--face-dir)) translateY(0); }
-            50%  { transform: scaleX(var(--face-dir)) translateY(-200px); }
-            100% { transform: scaleX(var(--face-dir)) translateY(0); }
-        }
-
-        .bg-mascot.jumping {
-            animation: mascot-jump-high 0.7s ease-in-out;
-            z-index: 1; /* ✅ Layer กลาง (กระโดด) สูงกว่าเดิน แต่ต่ำกว่า Card */
+        
+        /* ปรับปรุงพื้นหลังให้ดูเป็นทางการ (Professional Background) */
+        body { 
+            font-family: 'Sarabun', 'Roboto', sans-serif; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            color: var(--text-main); 
+            padding: 20px; 
+            overflow-x: hidden; 
         }
 
         /* --- UI COMPONENTS --- */
-        /* ✅ ปรับ Card ให้ Layer สูงขึ้นเป็น 10 เพื่อทับ Mascot ทุกกรณี */
-        .app-card { background: white; width: 100%; max-width: 500px; border-radius: 16px; box-shadow: var(--shadow-card); overflow: hidden; position: relative; z-index: 10; margin-bottom: 20px; transition: transform 0.3s; }
+        .app-card { 
+            background: white; 
+            width: 100%; 
+            max-width: 500px; 
+            border-radius: 16px; 
+            box-shadow: var(--shadow-card); 
+            overflow: hidden; 
+            position: relative; 
+            z-index: 10; 
+            margin-bottom: 20px; 
+            transition: transform 0.3s; 
+        }
         
         .header { background: var(--primary); padding: 24px 32px; color: white; position: relative; overflow: hidden; }
         .header h1 { margin: 0; font-size: 22px; font-weight: 600; position: relative; z-index: 1; letter-spacing: 0.5px; }
@@ -73,7 +68,6 @@
         .input-group { margin-bottom: 24px; }
         .label-title { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-main); margin-bottom: 12px; font-size: 15px; }
         
-        /* Drag & Drop Enhancement */
         .file-drop-zone { 
             border: 2px dashed var(--border); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; background: #fff; position: relative; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
         }
@@ -96,8 +90,7 @@
         .btn:disabled { background: #f1f3f4; border-color: transparent; color: #bdc1c6; cursor: not-allowed; transform: none; box-shadow: none; }
         .btn-small { padding: 6px 16px; font-size: 13px; flex: initial; border-radius: 6px; }
 
-        /* --- FOOTER --- */
-        .app-footer { text-align: center; font-size: 11px; color: #9aa0a6; margin-top: 20px; line-height: 1.6; position: relative; z-index: 10; /* Footer ก็ควรอยู่หน้า */ }
+        .app-footer { text-align: center; font-size: 11px; color: #9aa0a6; margin-top: 20px; line-height: 1.6; position: relative; z-index: 10; }
         .app-footer strong { font-weight: 600; color: #5f6368; }
 
         /* --- MODAL --- */
@@ -112,7 +105,6 @@
         .modal-body { padding: 0; overflow-y: auto; background: #fff; flex: 1; }
         .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: #fff; border-radius: 0 0 12px 12px; }
 
-        /* --- TOAST NOTIFICATION --- */
         .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .toast { 
             background: #323232; color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; 
@@ -123,7 +115,6 @@
         .toast.error { background: #ea4335; }
         .toast.success { background: #34a853; }
 
-        /* --- DATA LIST --- */
         .dm-container { padding: 20px 0; background: #fff; }
         .dm-group { margin: 0 24px 20px 24px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; transition: box-shadow 0.2s; }
         .dm-group:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-color: #bdc1c6; }
@@ -135,7 +126,6 @@
         .mat-input { width: 100%; border: none; border-bottom: 2px solid transparent; background: transparent; font-family: inherit; font-size: 15px; padding: 6px 0; color: var(--text-main); transition: all 0.2s; }
         .mat-input:focus { outline: none; border-bottom-color: var(--primary); background: rgba(26, 115, 232, 0.04); padding-left: 8px; border-radius: 4px 4px 0 0; }
 
-        /* --- EDITOR --- */
         .editor-toolbar { padding: 12px 24px; display: flex; gap: 12px; align-items: center; background: #f8f9fa; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
         .editor-container {
             position: relative; margin: 24px auto; background-color: white; box-shadow: 0 0 0 1px #e0e0e0;
@@ -162,7 +152,6 @@
         .ctrl-btn.active { background: var(--primary); color: white; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
 
-        /* --- LOADING --- */
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
         .custom-loader-icon {
             width: 150px; 
@@ -178,7 +167,6 @@
         .loading-text { font-size: 18px; font-weight: 600; color: var(--text-main); }
         .loading-sub { font-size: 14px; color: var(--text-sub); margin-top: 8px; }
 
-        /* --- PREVIEW --- */
         .slide-preview { width: 100%; height: 0; padding-bottom: 75%; background: white; border: 1px solid #e0e0e0; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .slide-preview img, .slide-preview div { position: absolute; }
     </style>
@@ -344,88 +332,6 @@
             custom: []
         };
         const SNAP_SIZE = 20;
-
-        // --- MASCOT SYSTEM V9.2 (Fixed Layers) ---
-        let mascotList = [];
-
-        function createMascot(imgSrc, startDelay) {
-            const img = document.createElement('img');
-            img.src = imgSrc; 
-            img.className = 'bg-mascot';
-            img.style.left = '50%';
-            img.style.visibility = 'hidden'; 
-            document.body.appendChild(img);
-
-            const mascotObj = { el: img, isJumping: false };
-            mascotList.push(mascotObj);
-
-            function move() {
-                const card = document.querySelector('.app-card');
-                if(!card) return;
-                
-                const rect = card.getBoundingClientRect();
-                img.style.top = (rect.bottom - 500) + 'px';
-                img.style.visibility = 'visible';
-
-                // 1. เดิน (Random Walk)
-                const w = window.innerWidth;
-                const newX = Math.random() * (w - 200);
-                
-                // หันหน้า (Mirror)
-                const currentX = parseFloat(img.style.left) || 0;
-                img.style.setProperty('--face-dir', newX < currentX ? -1 : 1);
-                
-                img.style.left = newX + 'px';
-
-                // 2. สุ่มกระโดดเล่นๆ (Random Jump) - 30%
-                if (Math.random() > 0.7) {
-                    setTimeout(() => triggerJump(mascotObj), 300 + Math.random() * 1000);
-                }
-
-                // วนลูปเดินต่อไป (สุ่มเวลา 2-4.5 วินาที)
-                setTimeout(move, 3000 + Math.random() * 3000); 
-            }
-            
-            setTimeout(move, startDelay);
-        }
-
-        // ฟังก์ชันสั่งกระโดด (ใช้ร่วมกันทั้งสุ่มกระโดด และกระโดดหลบ)
-        function triggerJump(mascot) {
-            if (mascot.isJumping) return;
-            mascot.isJumping = true;
-            mascot.el.classList.add('jumping');
-            // จบ Animation 0.7s แล้วเอาคลาสออก
-            setTimeout(() => {
-                mascot.el.classList.remove('jumping');
-                mascot.isJumping = false;
-            }, 700);
-        }
-
-        // --- COLLISION DETECTION LOOP ---
-        // เช็คการชนทุกๆ 0.1 วินาที
-        setInterval(() => {
-            if (mascotList.length < 2) return;
-            
-            const m1 = mascotList[0];
-            const m2 = mascotList[1];
-
-            // หาตำแหน่งตรงกลางของแต่ละตัว
-            const rect1 = m1.el.getBoundingClientRect();
-            const rect2 = m2.el.getBoundingClientRect();
-            const center1 = rect1.left + (rect1.width / 2);
-            const center2 = rect2.left + (rect2.width / 2);
-
-            // คำนวณระยะห่างแนวนอน
-            const dist = Math.abs(center1 - center2);
-
-            // ⚠️ ถ้าระยะห่างน้อยกว่า 120px และยังไม่มีใครกระโดด
-            if (dist < 120 && !m1.isJumping && !m2.isJumping) {
-                // ให้ตัวใดตัวหนึ่งกระโดดข้าม (สุ่ม)
-                const jumper = Math.random() > 0.5 ? m1 : m2;
-                triggerJump(jumper);
-            }
-        }, 100);
-
 
         // --- DRAG DROP VISUALS ---
         ['zone-bg', 'zone-folder'].forEach(id => {
@@ -653,12 +559,6 @@
         function fileToDataURL(f) { return new Promise((r,j)=>{ const rd=new FileReader(); rd.onload=()=>r(rd.result); rd.onerror=j; rd.readAsDataURL(f); }); }
         
         updateEditorRatio();
-        
-        // --- START MASCOTS ---
-        // ⚠️ อย่าลืมเตรียมรูป mascot1.png และ mascot2.png ไว้ด้วยนะครับ
-        createMascot('mascot1.png', 100);  
-        // createMascot('mascot2.png', 2000); // 👈 ใส่ // ข้างหน้าเพื่อปิดตัวที่ 2
     </script>
 </body>
 </html>
-
