@@ -1,564 +1,1970 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Presentation Generator Tool for Syntec Construction PCL.">
-    <meta name="author" content="Pongpipatt.">
-    <title>Presentation Generator by CCT Department</title>
-    
+    <title>Presentation Generator · CCT Department</title>
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    
+
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        /* --- THEME --- */
-        :root {
-            --primary: #1a73e8; --primary-light: #e8f0fe;
-            --text-main: #202124; --text-sub: #5f6368;
-            --border: #dadce0; --success: #34a853; --danger: #ea4335;
-            --warning: #fbbc04;
-            --shadow-card: 0 4px 12px rgba(60,64,67,0.15);
-            --shadow-hover: 0 8px 18px rgba(60,64,67,0.2);
-        }
-        * { box-sizing: border-box; }
-        
-        /* ปรับปรุงพื้นหลังให้ดูเป็นทางการ (Professional Background) */
-        body { 
-            font-family: 'Sarabun', 'Roboto', sans-serif; 
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            color: var(--text-main); 
-            padding: 20px; 
-            overflow-x: hidden; 
-        }
+    /* ═══════════════════════════════════════════════════════
+       DESIGN TOKENS — INDUSTRIAL / TECH
+    ═══════════════════════════════════════════════════════ */
+    :root {
+        color-scheme: light;
+        /* Surfaces */
+        --bg:          #e8ebf2;
+        --surface:     #ffffff;
+        --surface-2:   #f4f5f8;
+        --surface-3:   #edf0f4;
+        --surface-4:   #e2e6ed;
+        /* Borders */
+        --border:      #ced2dc;
+        --border-strong: #9ba4b8;
+        /* Text */
+        --text:        #0e1119;
+        --text-sub:    #535f78;
+        --text-dim:    #8f9ab0;
+        /* Mode 1 — Blue */
+        --accent-1:       #1a4fd6;
+        --accent-1-muted: rgba(26,79,214,0.07);
+        --accent-1-glow:  rgba(26,79,214,0.20);
+        /* Mode 2 — Green */
+        --accent-2:       #0c7539;
+        --accent-2-muted: rgba(12,117,57,0.07);
+        --accent-2-glow:  rgba(12,117,57,0.20);
+        /* Compat aliases used in JS-generated markup */
+        --primary:       var(--accent-1);
+        --primary-light: var(--accent-1-muted);
+        --mode2:         var(--accent-2);
+        /* Status */
+        --success:  #0c7539;
+        --danger:   #b91c1c;
+        --warning:  #a16207;
+        /* Shape */
+        --r-xs: 2px;
+        --r-sm: 3px;
+        --r:    5px;
+        --r-lg: 6px;
+        --t:    150ms ease;
+    }
 
-        /* --- UI COMPONENTS --- */
-        .app-card { 
-            background: white; 
-            width: 100%; 
-            max-width: 500px; 
-            border-radius: 16px; 
-            box-shadow: var(--shadow-card); 
-            overflow: hidden; 
-            position: relative; 
-            z-index: 10; 
-            margin-bottom: 20px; 
-            transition: transform 0.3s; 
-        }
-        
-        .header { background: var(--primary); padding: 24px 32px; color: white; position: relative; overflow: hidden; }
-        .header h1 { margin: 0; font-size: 22px; font-weight: 600; position: relative; z-index: 1; letter-spacing: 0.5px; }
-        .header p { margin: 6px 0 0; opacity: 0.9; font-size: 14px; position: relative; z-index: 1; font-weight: 300; }
-        .header::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); animation: rotateBg 25s linear infinite; }
-        @keyframes rotateBg { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    [data-theme="dark"] {
+        color-scheme: dark;
+        --bg:          #0b0c11;
+        --surface:     #111420;
+        --surface-2:   #181c2a;
+        --surface-3:   #1f2438;
+        --surface-4:   #272e45;
+        --border:      #252d42;
+        --border-strong: #363f5a;
+        --text:        #dde2ef;
+        --text-sub:    #7f8ba8;
+        --text-dim:    #404d68;
+        --accent-1:       #4a7df5;
+        --accent-1-muted: rgba(74,125,245,0.09);
+        --accent-1-glow:  rgba(74,125,245,0.25);
+        --accent-2:       #27b56a;
+        --accent-2-muted: rgba(39,181,106,0.09);
+        --accent-2-glow:  rgba(39,181,106,0.25);
+        --primary:       var(--accent-1);
+        --primary-light: var(--accent-1-muted);
+        --mode2:         var(--accent-2);
+        --success:  #27b56a;
+        --danger:   #f06060;
+        --warning:  #f5a623;
+    }
 
-        .body-content { padding: 32px; }
+    *, *::before, *::after { box-sizing: border-box; }
 
-        .input-group { margin-bottom: 24px; }
-        .label-title { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-main); margin-bottom: 12px; font-size: 15px; }
-        
-        .file-drop-zone { 
-            border: 2px dashed var(--border); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; background: #fff; position: relative; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        .file-drop-zone:hover { border-color: var(--primary); background: #f8fbff; }
-        .file-drop-zone.drag-over { border-color: var(--primary); background: var(--primary-light); transform: scale(1.02); }
-        .file-drop-zone.has-file { border-style: solid; border-color: var(--success); background: #f0f9f4; }
-        
-        .file-drop-zone input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-        .zone-content { pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .zone-icon { font-size: 36px; color: var(--text-sub); transition: color 0.3s; }
-        .file-drop-zone.has-file .zone-icon { color: var(--success); }
-        .zone-text { font-size: 13px; color: var(--text-sub); font-weight: 500; }
+    body {
+        font-family: 'Sarabun', 'Space Grotesk', sans-serif;
+        background-color: var(--bg);
+        /* Subtle engineering grid */
+        background-image:
+            linear-gradient(var(--border) 1px, transparent 1px),
+            linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: -1px -1px;
+        min-height: 100vh;
+        margin: 0;
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px 48px;
+        overflow-x: hidden;
+        transition: background-color var(--t), color var(--t);
+    }
 
-        .btn-group { display: flex; gap: 12px; margin-top: 24px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.3px; transition: all 0.2s; }
-        .btn-main { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(26, 115, 232, 0.25); }
-        .btn-main:hover { background: #1557b0; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(26, 115, 232, 0.35); }
-        .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-outline:hover { background: #f8f9fa; border-color: #bdc1c6; }
-        .btn:disabled { background: #f1f3f4; border-color: transparent; color: #bdc1c6; cursor: not-allowed; transform: none; box-shadow: none; }
-        .btn-small { padding: 6px 16px; font-size: 13px; flex: initial; border-radius: 6px; }
+    /* ── TOP BAR ─────────────────────────────────────────── */
+    .app-topbar {
+        width: 100%;
+        max-width: 520px;
+        display: flex;
+        align-items: center;
+        padding: 22px 0 14px;
+        gap: 12px;
+    }
+    .brand-logo {
+        width: 30px; height: 30px;
+        object-fit: contain;
+        flex-shrink: 0;
+        filter: drop-shadow(0 0 8px var(--accent-1-glow));
+    }
+    .brand-block { flex: 1; min-width: 0; }
+    .brand-name {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text);
+        display: block;
+    }
+    .brand-sub {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9.5px;
+        font-weight: 400;
+        color: var(--text-dim);
+        letter-spacing: 0.06em;
+        display: block;
+        margin-top: 2px;
+    }
+    .theme-toggle {
+        width: 32px; height: 32px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        color: var(--text-sub);
+        border-radius: var(--r);
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: all var(--t);
+        flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+        border-color: var(--accent-1);
+        color: var(--accent-1);
+        background: var(--accent-1-muted);
+        box-shadow: 0 0 8px var(--accent-1-glow);
+    }
+    .theme-toggle .material-icons-round { font-size: 17px; }
 
-        .app-footer { text-align: center; font-size: 11px; color: #9aa0a6; margin-top: 20px; line-height: 1.6; position: relative; z-index: 10; }
-        .app-footer strong { font-weight: 600; color: #5f6368; }
+    /* ── MODE SWITCHER ───────────────────────────────────── */
+    .mode-switcher {
+        display: flex;
+        width: 100%; max-width: 520px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-bottom: none;
+        border-radius: var(--r-lg) var(--r-lg) 0 0;
+        overflow: hidden;
+    }
+    .mode-btn {
+        flex: 1;
+        padding: 11px 14px;
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-dim);
+        background: var(--surface-2);
+        display: flex; align-items: center; justify-content: center;
+        gap: 7px;
+        transition: all var(--t);
+    }
+    .mode-btn + .mode-btn { border-left: 1px solid var(--border); }
+    .mode-btn:hover { color: var(--text); background: var(--surface); }
+    .mode-btn.active-m1 {
+        background: var(--surface); color: var(--accent-1);
+        border-bottom-color: var(--accent-1);
+    }
+    .mode-btn.active-m2 {
+        background: var(--surface); color: var(--accent-2);
+        border-bottom-color: var(--accent-2);
+    }
+    .mode-btn .material-icons-round { font-size: 17px; }
+    .mode-badge {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px; font-weight: 600;
+        padding: 2px 6px; border-radius: var(--r-xs);
+        letter-spacing: 0.04em;
+    }
+    .badge-m1 { background: var(--accent-1-muted); color: var(--accent-1); }
+    .badge-m2 { background: var(--accent-2-muted); color: var(--accent-2); }
 
-        /* --- MODAL --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-out; }
-        .modal-overlay.show { opacity: 1; }
-        .modal-card { background: white; width: 95%; max-width: 900px; max-height: 90vh; border-radius: 12px; box-shadow: 0 24px 48px rgba(0,0,0,0.18); display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.2s ease-out; }
-        .modal-overlay.show .modal-card { transform: scale(1); }
-        .modal-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 12px 12px 0 0; }
-        .modal-header h2 { margin: 0; font-size: 18px; color: var(--text-main); font-weight: 600; }
-        .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-sub); border-radius: 50%; padding: 4px; display: flex; transition: background 0.2s; }
-        .close-btn:hover { background: #f1f3f4; color: var(--danger); }
-        .modal-body { padding: 0; overflow-y: auto; background: #fff; flex: 1; }
-        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: #fff; border-radius: 0 0 12px 12px; }
+    /* ── APP CARD ────────────────────────────────────────── */
+    .app-card {
+        width: 100%; max-width: 520px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-top: none;
+        border-radius: 0 0 var(--r-lg) var(--r-lg);
+        overflow: hidden;
+    }
 
-        .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .toast { 
-            background: #323232; color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px;
-            opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .toast.show { opacity: 1; transform: translateY(0); }
-        .toast.error { background: #ea4335; }
-        .toast.success { background: #34a853; }
+    /* ── MODE HEADER ─────────────────────────────────────── */
+    .header {
+        padding: 18px 24px 16px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        border-left: 3px solid var(--accent-1);
+        position: relative;
+    }
+    .header.header-m2 { border-left-color: var(--accent-2); }
+    .header-eyebrow {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9.5px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent-1);
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .header.header-m2 .header-eyebrow { color: var(--accent-2); }
+    .header-eyebrow::before {
+        content: '';
+        display: inline-block;
+        width: 12px; height: 1px;
+        background: currentColor;
+        opacity: 0.6;
+    }
+    .header h1 {
+        margin: 0;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 17px; font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--text);
+    }
+    .header p {
+        margin: 4px 0 0;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px; font-weight: 400;
+        color: var(--text-dim);
+        letter-spacing: 0.04em;
+    }
+    .header-status {
+        position: absolute; right: 20px; top: 50%;
+        transform: translateY(-50%);
+        display: flex; align-items: center; gap: 6px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px; font-weight: 600;
+        color: var(--text-dim);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+    .status-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 5px var(--success);
+        animation: statusPulse 3s ease-in-out infinite;
+    }
+    @keyframes statusPulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.4; }
+    }
 
-        .dm-container { padding: 20px 0; background: #fff; }
-        .dm-group { margin: 0 24px 20px 24px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; transition: box-shadow 0.2s; }
-        .dm-group:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-color: #bdc1c6; }
-        .dm-header-row { background: #f8f9fa; padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
-        .dm-icon-l1 { color: var(--primary); font-size: 24px; }
-        .dm-list-row { padding: 10px 16px 10px 52px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f1f3f4; background: white; }
-        .dm-list-row:last-child { border-bottom: none; }
-        .dm-icon-l2 { color: var(--text-sub); font-size: 20px; }
-        .mat-input { width: 100%; border: none; border-bottom: 2px solid transparent; background: transparent; font-family: inherit; font-size: 15px; padding: 6px 0; color: var(--text-main); transition: all 0.2s; }
-        .mat-input:focus { outline: none; border-bottom-color: var(--primary); background: rgba(26, 115, 232, 0.04); padding-left: 8px; border-radius: 4px 4px 0 0; }
+    /* ── BODY CONTENT ────────────────────────────────────── */
+    .body-content { padding: 22px 24px 24px; }
+    .input-group { margin-bottom: 18px; }
+    .label-title {
+        display: flex; align-items: center; gap: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10.5px; font-weight: 600;
+        letter-spacing: 0.09em; text-transform: uppercase;
+        color: var(--text-sub);
+        margin-bottom: 9px;
+    }
+    .label-title .material-icons-round { font-size: 15px; }
+    .step-num {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px; font-weight: 700;
+        color: var(--text-dim);
+        border: 1px solid var(--border-strong);
+        width: 19px; height: 19px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: var(--r-xs);
+        flex-shrink: 0;
+        letter-spacing: 0;
+    }
 
-        .editor-toolbar { padding: 12px 24px; display: flex; gap: 12px; align-items: center; background: #f8f9fa; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-        .editor-container {
-            position: relative; margin: 24px auto; background-color: white; box-shadow: 0 0 0 1px #e0e0e0;
-            background-size: cover; background-position: center; width: 800px; height: 600px; overflow: hidden; user-select: none;
-        }
-        .editor-container.show-grid::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: 20px 20px;
-            background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
-            pointer-events: none; z-index: 0;
-        }
-        .draggable-box {
-            position: absolute; border: 2px dashed var(--primary); background: rgba(26, 115, 232, 0.05); cursor: move;
-            display: flex; justify-content: center; align-items: center; font-weight: 500; color: var(--primary); font-size: 14px; transform: translateZ(0); z-index: 10;
-        }
-        .draggable-box:hover { background: rgba(26, 115, 232, 0.15); z-index: 100; border-style: solid; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .draggable-box.custom-text { border-color: #333; color: #000; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(2px); }
-        .box-inner-text { width: 100%; height: 100%; display: flex; align-items: center; padding: 0 12px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .resize-handle { width: 16px; height: 16px; background: var(--primary); position: absolute; bottom: 0; right: 0; cursor: nwse-resize; border-radius: 4px 0 0 0; display: none; }
-        .draggable-box:hover .resize-handle { display: block; }
-        .box-controls { position: absolute; top: -42px; left: 0; background: #202124; border-radius: 4px; padding: 4px; display: none; gap: 4px; z-index: 200; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
-        .draggable-box:hover .box-controls { display: flex; animation: fadeIn 0.15s; }
-        .ctrl-btn { color: #e8eaed; background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 4px; display: flex; transition: background 0.1s; }
-        .ctrl-btn:hover { background: rgba(255,255,255,0.2); }
-        .ctrl-btn.active { background: var(--primary); color: white; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+    /* ── DROP ZONE ───────────────────────────────────────── */
+    .file-drop-zone {
+        border: 1px dashed var(--border-strong);
+        border-radius: var(--r);
+        padding: 18px 16px;
+        text-align: center;
+        cursor: pointer;
+        background: var(--surface-2);
+        position: relative;
+        transition: all var(--t);
+    }
+    /* Engineering corner brackets */
+    .file-drop-zone::before, .file-drop-zone::after {
+        content: '';
+        position: absolute;
+        width: 10px; height: 10px;
+        border-color: var(--border-strong);
+        border-style: solid;
+        transition: border-color var(--t);
+        pointer-events: none;
+    }
+    .file-drop-zone::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-radius: var(--r-xs) 0 0 0; }
+    .file-drop-zone::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-radius: 0 0 var(--r-xs) 0; }
+    .file-drop-zone:hover {
+        border-color: var(--accent-1);
+        background: var(--accent-1-muted);
+    }
+    .file-drop-zone:hover::before, .file-drop-zone:hover::after { border-color: var(--accent-1); }
+    .file-drop-zone.drag-over {
+        border-color: var(--accent-1); border-style: solid;
+        background: var(--accent-1-muted);
+        transform: scale(1.01);
+    }
+    .file-drop-zone.drag-over::before, .file-drop-zone.drag-over::after { border-color: var(--accent-1); }
+    .file-drop-zone.has-file {
+        border-style: solid; border-color: var(--success);
+        background: var(--surface-2);
+    }
+    .file-drop-zone.has-file::before, .file-drop-zone.has-file::after { border-color: var(--success); }
+    .file-drop-zone.m2-style:hover {
+        border-color: var(--accent-2); background: var(--accent-2-muted);
+    }
+    .file-drop-zone.m2-style:hover::before, .file-drop-zone.m2-style:hover::after { border-color: var(--accent-2); }
+    .file-drop-zone.m2-style.drag-over {
+        border-color: var(--accent-2); background: var(--accent-2-muted);
+    }
+    .file-drop-zone.m2-style.drag-over::before, .file-drop-zone.m2-style.drag-over::after { border-color: var(--accent-2); }
+    .file-drop-zone input {
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 100%; opacity: 0; cursor: pointer;
+    }
+    .zone-content {
+        pointer-events: none;
+        display: flex; flex-direction: column;
+        align-items: center; gap: 5px;
+    }
+    .zone-icon { font-size: 26px; color: var(--text-dim); transition: color var(--t); }
+    .file-drop-zone.has-file .zone-icon { color: var(--success); }
+    .zone-text {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10.5px; color: var(--text-sub);
+        letter-spacing: 0.02em; line-height: 1.5;
+    }
 
-        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .custom-loader-icon {
-            width: 150px; 
-            height: auto; 
-            margin-bottom: 24px;
-            animation: pulse 1.5s infinite ease-in-out; 
-        }
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
-        }
-        .loading-text { font-size: 18px; font-weight: 600; color: var(--text-main); }
-        .loading-sub { font-size: 14px; color: var(--text-sub); margin-top: 8px; }
+    /* ── DIVIDER ─────────────────────────────────────────── */
+    .section-divider {
+        height: 1px; background: var(--border);
+        margin: 6px 0 18px;
+    }
 
-        .slide-preview { width: 100%; height: 0; padding-bottom: 75%; background: white; border: 1px solid #e0e0e0; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        .slide-preview img, .slide-preview div { position: absolute; }
+    /* ── BUTTONS ─────────────────────────────────────────── */
+    .btn-group { display: flex; gap: 8px; margin-top: 8px; }
+    .btn {
+        flex: 1; padding: 10px 14px;
+        border-radius: var(--r);
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 11px; font-weight: 700;
+        letter-spacing: 0.07em; text-transform: uppercase;
+        cursor: pointer;
+        display: flex; justify-content: center; align-items: center;
+        gap: 6px;
+        transition: all var(--t);
+        border: 1px solid transparent;
+        white-space: nowrap;
+    }
+    .btn .material-icons-round { font-size: 15px; }
+    .btn-main {
+        background: var(--accent-1); color: #fff;
+        border-color: var(--accent-1);
+    }
+    .btn-main:not(:disabled):hover {
+        filter: brightness(1.12);
+        box-shadow: 0 0 14px var(--accent-1-glow);
+    }
+    .btn-main-green {
+        background: var(--accent-2); color: #fff;
+        border-color: var(--accent-2);
+    }
+    .btn-main-green:not(:disabled):hover {
+        filter: brightness(1.12);
+        box-shadow: 0 0 14px var(--accent-2-glow);
+    }
+    .btn-outline {
+        background: var(--surface);
+        border-color: var(--border-strong);
+        color: var(--text-sub);
+    }
+    .btn-outline:not(:disabled):hover {
+        border-color: var(--accent-1);
+        color: var(--accent-1);
+        background: var(--accent-1-muted);
+    }
+    .btn:disabled {
+        opacity: 0.32; cursor: not-allowed;
+        box-shadow: none; filter: none;
+    }
+    .btn-small { padding: 7px 14px; flex: initial; font-size: 10.5px; }
+
+    /* ── INFO BOX ────────────────────────────────────────── */
+    .info-box {
+        background: var(--accent-1-muted);
+        border: 1px solid rgba(26,79,214,0.18);
+        border-left: 2px solid var(--accent-1);
+        border-radius: var(--r);
+        padding: 10px 13px;
+        font-size: 12px; color: var(--accent-1);
+        margin-bottom: 16px;
+        display: flex; align-items: flex-start;
+        gap: 8px; line-height: 1.6;
+    }
+    .info-box.green {
+        background: var(--accent-2-muted);
+        border-color: rgba(12,117,57,0.18);
+        border-left-color: var(--accent-2);
+        color: var(--accent-2);
+    }
+    .info-box .material-icons-round { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .info-box strong { font-weight: 700; }
+
+    /* ── PANEL WRAP + SHADOW VARIANTS ───────────────────── */
+    .panel-wrap {
+        width: 100%; max-width: 520px;
+        border-radius: var(--r-lg);
+        transition: box-shadow 0.35s ease, max-width 0.3s ease;
+    }
+    /* Override inner width constraints so they fill the wrap */
+    .panel-wrap .mode-switcher,
+    .panel-wrap .app-card { max-width: none; }
+    .shadow-none   { box-shadow: none; }
+    .shadow-border { box-shadow: 0 0 0 1px var(--border-strong); }
+    .shadow-depth  {
+        box-shadow:
+            0 1px 3px rgba(0,0,0,0.08),
+            0 6px 20px rgba(0,0,0,0.14),
+            0 20px 56px rgba(0,0,0,0.10);
+    }
+    .shadow-glow   {
+        box-shadow:
+            0 0 0 1px var(--accent-1),
+            0 0 28px var(--accent-1-glow),
+            0 8px 32px rgba(0,0,0,0.14);
+    }
+
+    /* ── TWEAKS PANEL ────────────────────────────────────── */
+    #tweaksPanel {
+        position: fixed; bottom: 24px; right: 24px;
+        width: 216px;
+        background: var(--surface);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--r-lg);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+        z-index: 4000;
+        overflow: hidden;
+        animation: tpIn 0.15s ease;
+    }
+    @keyframes tpIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .tp-header {
+        background: var(--surface-2);
+        border-bottom: 1px solid var(--border);
+        padding: 9px 12px;
+        display: flex; align-items: center; justify-content: space-between;
+        border-left: 3px solid var(--accent-1);
+    }
+    .tp-title {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px; font-weight: 700;
+        letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--text-sub);
+    }
+    .tp-close {
+        background: none; border: none; cursor: pointer;
+        color: var(--text-dim); padding: 2px; display: flex;
+        border-radius: var(--r-xs); transition: all var(--t);
+    }
+    .tp-close:hover { color: var(--danger); background: var(--surface-4); }
+    .tp-close .material-icons-round { font-size: 14px; }
+    .tp-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 13px; }
+    .tp-section { display: flex; flex-direction: column; gap: 7px; }
+    .tp-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px; font-weight: 600;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--text-dim);
+    }
+    .tp-segmented {
+        display: flex;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--r-sm); overflow: hidden;
+    }
+    .tp-seg {
+        flex: 1; padding: 5px 3px;
+        border: none; background: var(--surface-2);
+        color: var(--text-sub);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px; font-weight: 600; letter-spacing: 0.03em;
+        cursor: pointer; transition: all var(--t);
+        border-right: 1px solid var(--border);
+    }
+    .tp-seg:last-child { border-right: none; }
+    .tp-seg:hover { background: var(--surface-3); color: var(--text); }
+    .tp-seg.active { background: var(--accent-1); color: #fff; }
+    .tp-toggle-row {
+        display: flex; align-items: center;
+        justify-content: space-between;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px; color: var(--text-sub);
+    }
+    .tp-toggle-switch {
+        position: relative; display: inline-block;
+        width: 28px; height: 16px; cursor: pointer;
+    }
+    .tp-toggle-switch input { display: none; }
+    .tp-sw-track {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--border-strong); border-radius: 8px;
+        transition: background 0.2s;
+    }
+    .tp-sw-track::before {
+        content: ''; position: absolute;
+        width: 10px; height: 10px;
+        left: 3px; top: 3px;
+        background: #fff; border-radius: 50%;
+        transition: transform 0.2s;
+    }
+    .tp-toggle-switch input:checked + .tp-sw-track { background: var(--accent-1); }
+    .tp-toggle-switch input:checked + .tp-sw-track::before { transform: translateX(12px); }
+    .tp-range-row { display: flex; flex-direction: column; gap: 5px; }
+    .tp-range-val {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9.5px; color: var(--accent-1);
+        text-align: right; letter-spacing: 0.04em;
+    }
+    input[type="range"].tp-range {
+        -webkit-appearance: none; appearance: none;
+        width: 100%; height: 2px;
+        background: var(--border-strong); border-radius: 1px;
+        outline: none; cursor: pointer;
+    }
+    input[type="range"].tp-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 12px; height: 12px; border-radius: var(--r-xs);
+        background: var(--accent-1); cursor: pointer;
+    }
+    .tp-divider { height: 1px; background: var(--border); margin: 0 -14px; }
+
+    /* ── FOOTER (inside card) ─────────────────────────────── */
+    .app-footer-inside {
+        padding: 12px 24px 14px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9.5px; color: var(--text-dim);
+        letter-spacing: 0.05em; line-height: 1.8;
+        background: var(--surface-2);
+        border-radius: 0 0 var(--r-lg) var(--r-lg);
+    }
+    .app-footer-inside strong { color: var(--text-sub); font-weight: 600; }
+
+    /* ── MODAL ───────────────────────────────────────────── */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.65);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+        display: none; justify-content: center; align-items: center;
+        opacity: 0; transition: opacity 0.18s ease;
+    }
+    .modal-overlay.show { opacity: 1; }
+    .modal-card {
+        background: var(--surface);
+        border: 1px solid var(--border-strong);
+        width: 95%; max-width: 900px; max-height: 90vh;
+        border-radius: var(--r-lg);
+        box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+        display: flex; flex-direction: column;
+        transform: scale(0.97) translateY(10px);
+        transition: transform 0.18s ease;
+    }
+    .modal-overlay.show .modal-card { transform: scale(1) translateY(0); }
+    .modal-header {
+        padding: 13px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex; justify-content: space-between; align-items: center;
+        background: var(--surface-2);
+        border-radius: var(--r-lg) var(--r-lg) 0 0;
+    }
+    .modal-header h2 {
+        margin: 0;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 12px; font-weight: 700;
+        letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--text);
+    }
+    .close-btn {
+        background: none; border: 1px solid transparent;
+        cursor: pointer; color: var(--text-dim);
+        border-radius: var(--r-sm); padding: 3px;
+        display: flex; transition: all var(--t); line-height: 1;
+    }
+    .close-btn:hover {
+        background: var(--surface-4); color: var(--danger);
+        border-color: var(--border);
+    }
+    .close-btn .material-icons-round { font-size: 17px; }
+    .modal-body {
+        padding: 0; overflow-y: auto;
+        background: var(--surface); flex: 1;
+    }
+    .modal-footer {
+        padding: 11px 20px;
+        border-top: 1px solid var(--border);
+        display: flex; justify-content: flex-end; gap: 8px;
+        background: var(--surface-2);
+        border-radius: 0 0 var(--r-lg) var(--r-lg);
+    }
+
+    /* ── TOAST ───────────────────────────────────────────── */
+    .toast-container {
+        position: fixed; bottom: 24px; left: 50%;
+        transform: translateX(-50%);
+        z-index: 3000; display: flex; flex-direction: column;
+        gap: 8px; pointer-events: none;
+    }
+    .toast {
+        background: var(--surface-3);
+        border: 1px solid var(--border-strong);
+        color: var(--text);
+        padding: 9px 18px;
+        border-radius: var(--r);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+        display: flex; align-items: center; gap: 8px;
+        opacity: 0; transform: translateY(10px);
+        transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+        letter-spacing: 0.02em;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error  { background: rgba(185,28,28,0.1); border-color: var(--danger); color: var(--danger); }
+    .toast.success{ background: rgba(12,117,57,0.1); border-color: var(--success); color: var(--success); }
+    .toast .material-icons-round { font-size: 15px; }
+
+    /* ── DATA MODAL ──────────────────────────────────────── */
+    .dm-container { padding: 14px 0; background: var(--surface); }
+    .dm-group {
+        margin: 0 18px 14px;
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        overflow: hidden; background: var(--surface);
+        transition: border-color var(--t);
+    }
+    .dm-group:hover { border-color: var(--border-strong); }
+    .dm-header-row {
+        background: var(--surface-2);
+        padding: 9px 13px;
+        display: flex; align-items: center; gap: 9px;
+        border-bottom: 1px solid var(--border);
+    }
+    .dm-icon-l1 { color: var(--accent-1); font-size: 18px; }
+    .dm-list-row {
+        padding: 7px 13px 7px 40px;
+        display: flex; align-items: center; gap: 9px;
+        border-bottom: 1px solid var(--surface-3);
+        background: var(--surface);
+    }
+    .dm-list-row:last-child { border-bottom: none; }
+    .dm-icon-l2 { color: var(--text-dim); font-size: 17px; }
+    .mat-input {
+        width: 100%; border: none;
+        border-bottom: 1px solid transparent;
+        background: transparent;
+        font-family: 'Sarabun', sans-serif;
+        font-size: 14px; padding: 3px 0; color: var(--text);
+        transition: all var(--t);
+    }
+    .mat-input:focus {
+        outline: none;
+        border-bottom-color: var(--accent-1);
+        background: var(--accent-1-muted);
+        padding-left: 6px;
+        border-radius: var(--r-xs) var(--r-xs) 0 0;
+    }
+
+    /* ── LAYOUT EDITOR TOOLBAR ───────────────────────────── */
+    .editor-toolbar {
+        padding: 9px 18px;
+        display: flex; gap: 10px; align-items: center;
+        background: var(--surface-2);
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+    }
+    /* Custom select — no browser default arrow */
+    .editor-toolbar select {
+        -webkit-appearance: none;
+        appearance: none;
+        padding: 5px 24px 5px 9px;
+        border-radius: var(--r-sm);
+        border: 1px solid var(--border-strong);
+        background-color: var(--surface);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%238f9ab0'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        color: var(--text);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10.5px; cursor: pointer;
+        transition: border-color var(--t);
+    }
+    .editor-toolbar select:hover  { border-color: var(--accent-1); }
+    .editor-toolbar select:focus  { outline: none; border-color: var(--accent-1); box-shadow: 0 0 0 2px var(--accent-1-glow); }
+    /* Custom checkbox */
+    .editor-toolbar input[type="checkbox"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px; height: 14px; flex-shrink: 0;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--r-xs);
+        background: var(--surface);
+        cursor: pointer; position: relative;
+        transition: all var(--t);
+    }
+    .editor-toolbar input[type="checkbox"]:hover  { border-color: var(--accent-1); }
+    .editor-toolbar input[type="checkbox"]:checked {
+        background: var(--accent-1); border-color: var(--accent-1);
+    }
+    .editor-toolbar input[type="checkbox"]:checked::after {
+        content: '';
+        position: absolute; left: 3px; top: 0px;
+        width: 5px; height: 8px;
+        border: 2px solid #fff; border-top: none; border-left: none;
+        transform: rotate(42deg) scale(0.85);
+    }
+    .editor-toolbar label {
+        display: flex; align-items: center; gap: 6px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10.5px; color: var(--text-sub); cursor: pointer;
+        user-select: none;
+    }
+
+    /* ── MODAL HEADER — accent variants ─────────────────── */
+    .modal-header-m1 { border-left: 3px solid var(--accent-1); padding-left: 17px; }
+    .modal-header-m2 { border-left: 3px solid var(--accent-2); padding-left: 17px; }
+    .modal-header-text { display: flex; flex-direction: column; gap: 1px; }
+    .modal-eyebrow {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        color: var(--accent-1);
+        display: flex; align-items: center; gap: 6px;
+    }
+    .modal-eyebrow::before {
+        content: '';
+        display: inline-block; width: 10px; height: 1px;
+        background: currentColor; opacity: 0.5;
+    }
+    .modal-header-m2 .modal-eyebrow { color: var(--accent-2); }
+
+    /* ── EDITOR CANVAS WRAPPER ───────────────────────────── */
+    .editor-canvas-wrap {
+        padding: 20px 24px;
+        overflow-x: auto;
+        display: flex;
+        justify-content: flex-start;
+    }
+    .editor-canvas-wrap-center {
+        padding: 16px 24px 20px;
+        overflow-x: auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* ── MODE 1 LAYOUT CANVAS ────────────────────────────── */
+    .editor-container {
+        position: relative;
+        margin: 0 auto;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 1px var(--border-strong), 0 8px 24px rgba(0,0,0,0.14);
+        background-size: cover; background-position: center;
+        width: 800px; height: 600px;
+        overflow: hidden; user-select: none;
+        flex-shrink: 0;
+    }
+    .editor-container.show-grid::before, .editor-container-a4.show-grid::before {
+        content: '';
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-size: 20px 20px;
+        background-image:
+            linear-gradient(to right, rgba(128,128,128,0.07) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(128,128,128,0.07) 1px, transparent 1px);
+        pointer-events: none; z-index: 0;
+    }
+    /* ── INDUSTRIAL DRAG BOXES ─────────────────────────────── */
+    .draggable-box {
+        position: absolute;
+        border: 1px solid var(--accent-1);
+        background: var(--accent-1-muted);
+        cursor: move;
+        transform: translateZ(0); z-index: 10;
+        transition: background var(--t), box-shadow var(--t);
+    }
+    /* Corner L-brackets */
+    .draggable-box::before, .draggable-box::after {
+        content: ''; position: absolute;
+        width: 12px; height: 12px;
+        border-color: var(--accent-1); border-style: solid;
+        pointer-events: none; z-index: 1;
+        transition: border-color var(--t);
+    }
+    .draggable-box::before { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+    .draggable-box::after  { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+    .draggable-box:hover {
+        background: color-mix(in srgb, var(--accent-1) 13%, transparent);
+        box-shadow: 0 0 0 1px var(--accent-1-glow) inset;
+        z-index: 100;
+    }
+    /* Custom text box */
+    .draggable-box.custom-text {
+        border-color: var(--border-strong);
+        background: rgba(255,255,255,0.55); backdrop-filter: blur(2px);
+    }
+    .draggable-box.custom-text::before,
+    .draggable-box.custom-text::after { border-color: var(--border-strong); }
+
+    /* Corner label chip */
+    .box-tag {
+        position: absolute; top: 4px; left: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 8px; font-weight: 700; letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent-1);
+        background: var(--surface);
+        border: 1px solid var(--accent-1);
+        padding: 1px 5px;
+        border-radius: var(--r-xs);
+        pointer-events: none; z-index: 2; line-height: 1.5;
+    }
+    .draggable-box.custom-text .box-tag { color: var(--text-sub); border-color: var(--border-strong); }
+
+    /* Inner text for txt/custom boxes */
+    .box-inner-text {
+        position: absolute; inset: 0;
+        display: flex; align-items: center;
+        padding: 0 10px; pointer-events: none;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px; font-weight: 500;
+    }
+
+    /* Resize handle — L-bracket grip, always faintly visible */
+    .resize-handle {
+        position: absolute; bottom: 0; right: 0;
+        width: 14px; height: 14px;
+        cursor: nwse-resize;
+        border-right: 2px solid var(--accent-1);
+        border-bottom: 2px solid var(--accent-1);
+        display: block; background: none;
+        opacity: 0.4; transition: opacity var(--t);
+    }
+    .draggable-box:hover .resize-handle { opacity: 1; }
+
+    /* Floating align/delete toolbar */
+    .box-controls {
+        position: absolute; top: -34px; left: 0;
+        background: var(--surface);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--r-sm); padding: 3px;
+        display: none; gap: 2px; z-index: 200;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .draggable-box:hover .box-controls { display: flex; animation: fadeIn 0.12s; }
+    .ctrl-btn {
+        color: var(--text-sub); background: transparent; border: none;
+        cursor: pointer; padding: 4px; border-radius: var(--r-xs);
+        display: flex; transition: background var(--t);
+    }
+    .ctrl-btn:hover { background: var(--surface-3); color: var(--text); }
+    .ctrl-btn.active { background: var(--accent-1); color: #fff; }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(3px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MODE 2 LAYOUT CANVAS (A4) ───────────────────────── */
+    .editor-container-a4 {
+        position: relative;
+        margin: 0 auto;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 1px var(--border-strong), 0 8px 24px rgba(0,0,0,0.14);
+        background-size: cover; background-position: center;
+        width: 420px; height: 607px;
+        overflow: hidden; user-select: none; flex-shrink: 0;
+    }
+    .draggable-box-a4 {
+        position: absolute;
+        border: 1px solid var(--mode2);
+        background: var(--accent-2-muted);
+        cursor: move;
+        transform: translateZ(0); z-index: 10;
+        transition: background var(--t);
+    }
+    .draggable-box-a4::before, .draggable-box-a4::after {
+        content: ''; position: absolute;
+        width: 10px; height: 10px;
+        border-color: var(--mode2); border-style: solid;
+        pointer-events: none; z-index: 1;
+    }
+    .draggable-box-a4::before { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+    .draggable-box-a4::after  { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+    .draggable-box-a4:hover {
+        background: color-mix(in srgb, var(--accent-2) 13%, transparent);
+        z-index: 100;
+    }
+    .draggable-box-a4 .box-tag {
+        color: var(--mode2); border-color: var(--mode2);
+    }
+    .resize-handle-a4 {
+        position: absolute; bottom: 0; right: 0;
+        width: 12px; height: 12px;
+        cursor: nwse-resize;
+        border-right: 2px solid var(--mode2);
+        border-bottom: 2px solid var(--mode2);
+        opacity: 0.45; transition: opacity var(--t);
+        background: none;
+        display: block;
+    }
+    .draggable-box-a4:hover .resize-handle-a4 { opacity: 1; }
+    .a4-cap-ind {
+        position: absolute;
+        background: rgba(251,188,4,0.15);
+        border: 1px dashed #a16207;
+        pointer-events: none; z-index: 5;
+        font-size: 7px; color: #7a5100;
+        display: flex; align-items: center;
+        justify-content: center; overflow: hidden;
+    }
+    .a4-item-ind {
+        position: absolute;
+        background: rgba(185,28,28,0.12);
+        border: 1px solid var(--danger);
+        pointer-events: none; z-index: 5;
+        font-size: 7px; color: var(--danger);
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'JetBrains Mono', monospace; font-weight: 700;
+    }
+
+    /* ── LOADING OVERLAY ─────────────────────────────────── */
+    .loading-overlay {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(5,6,10,0.88);
+        backdrop-filter: blur(6px);
+        z-index: 2000; display: none;
+        flex-direction: column; justify-content: center; align-items: center;
+        gap: 0;
+    }
+    .loading-scanline {
+        position: absolute; top: 0; left: 0;
+        height: 2px; width: 60%;
+        background: linear-gradient(90deg, transparent, var(--accent-1) 50%, transparent);
+        animation: scanline 2.2s ease-in-out infinite;
+    }
+    @keyframes scanline {
+        0%   { transform: translateX(-100%); width: 60%; }
+        100% { transform: translateX(200%); width: 60%; }
+    }
+    .custom-loader-icon {
+        width: 56px; height: auto;
+        margin-bottom: 20px;
+        animation: loaderPulse 1.6s ease-in-out infinite;
+        border-radius: 8px;
+    }
+    @keyframes loaderPulse {
+        0%, 100% { transform: scale(0.94); opacity: 0.7; }
+        50%       { transform: scale(1.04); opacity: 1; }
+    }
+    .loading-text {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 15px; font-weight: 700;
+        color: #dde2ef; letter-spacing: 0.04em;
+    }
+    .loading-sub {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px; color: #4d5a75; margin-top: 5px;
+        letter-spacing: 0.06em;
+    }
+    .loading-track {
+        width: 180px; height: 1px;
+        background: rgba(255,255,255,0.08);
+        margin-top: 22px; overflow: hidden;
+    }
+    .loading-track-bar {
+        height: 100%; width: 45%;
+        background: var(--accent-1);
+        animation: trackBar 1.8s ease-in-out infinite;
+    }
+    @keyframes trackBar {
+        0%   { transform: translateX(-100%); }
+        100% { transform: translateX(300%); }
+    }
+
+    /* ── SLIDE PREVIEWS ──────────────────────────────────── */
+    .slide-preview {
+        width: 100%; height: 0; padding-bottom: 75%;
+        background: #fff; border: 1px solid var(--border);
+        margin-bottom: 20px; position: relative; overflow: hidden;
+    }
+    .slide-preview img, .slide-preview div { position: absolute; }
+    .slide-preview-a4 {
+        width: 100%; height: 0; padding-bottom: 141.4%;
+        background: #fff; border: 1px solid var(--border);
+        margin-bottom: 8px; position: relative; overflow: hidden;
+    }
+    .slide-label {
+        text-align: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9.5px; color: var(--text-dim);
+        margin-bottom: 16px; letter-spacing: 0.06em;
+    }
+    /* Legend */
+    .legend {
+        display: flex; gap: 10px; flex-wrap: wrap;
+        padding: 9px 18px; border-bottom: 1px solid var(--border);
+        background: var(--surface-2);
+    }
+    .legend-chip {
+        display: flex; align-items: center; gap: 5px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9.5px; color: var(--text-sub);
+    }
+    .legend-dot { width: 12px; height: 12px; border-radius: var(--r-xs); flex-shrink: 0; }
     </style>
 </head>
 <body>
 
-    <div class="toast-container" id="toastContainer"></div>
+<div class="toast-container" id="toastContainer"></div>
 
-    <div class="loading-overlay" id="loadingOverlay">
-        <img src="logo.png" class="custom-loader-icon"> 
-        <div class="loading-text" id="loadingTitle">กำลังประมวลผล...</div>
-        <div class="loading-sub" id="loadingSub">กรุณารอสักครู่</div>
+<!-- ── LOADING ──────────────────────────────────────────────── -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-scanline"></div>
+    <img src="logo.png" class="custom-loader-icon" alt="Processing">
+    <div class="loading-text" id="loadingTitle">กำลังประมวลผล...</div>
+    <div class="loading-sub" id="loadingSub">กรุณารอสักครู่</div>
+    <div class="loading-track"><div class="loading-track-bar"></div></div>
+</div>
+
+<!-- ── TOP BAR ──────────────────────────────────────────────── -->
+<div class="app-topbar">
+    <img src="logo.png" class="brand-logo" alt="Logo">
+    <div class="brand-block">
+        <span class="brand-name">Presentation Generator</span>
+        <span class="brand-sub">CCT DEPT · SYNTEC CONSTRUCTION PCL · v6</span>
     </div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
+        <span class="material-icons-round" id="themeIcon">dark_mode</span>
+    </button>
+</div>
 
-    <div class="app-card">
+<!-- ── PANEL WRAP ──────────────────────────────────────────── -->
+<div class="panel-wrap shadow-depth" id="panelWrap">
+
+<!-- ── MODE SWITCHER ────────────────────────────────────────── -->
+<div class="mode-switcher">
+    <button class="mode-btn active-m1" id="btnMode1" onclick="switchMode(1)">
+        <span class="material-icons-round">slideshow</span>
+        Presentation
+        <span class="mode-badge badge-m1">2 รูป/สไลด์</span>
+    </button>
+    <button class="mode-btn" id="btnMode2" onclick="switchMode(2)">
+        <span class="material-icons-round">grid_view</span>
+        Payment A4
+        <span class="mode-badge badge-m2">8 รูป/สไลด์</span>
+    </button>
+</div>
+
+<!-- ── APP CARD ─────────────────────────────────────────────── -->
+<div class="app-card">
+
+    <!-- ══════ MODE 1 — PRESENTATION ══════ -->
+    <div id="mode1-panel">
         <div class="header">
+            <div class="header-eyebrow">Mode 01 — Presentation</div>
             <h1>Presentation Generator</h1>
-            <p>Developed by CCT Department</p>
+            <p>Developed by CCT Department · 2 photos/slide · 4:3 or 16:9</p>
+            <div class="header-status">
+                <div class="status-dot"></div>READY
+            </div>
         </div>
-
         <div class="body-content">
+            <div class="info-box">
+                <span class="material-icons-round">folder_open</span>
+                <div>โครงสร้างโฟลเดอร์: <strong>MainFolder / 01_Activity / 01_Sub / img.jpg</strong><br>
+                ชื่อโฟลเดอร์ L1 = Header &nbsp;·&nbsp; L2 = Sub-Header &nbsp;·&nbsp; 2 รูปต่อสไลด์</div>
+            </div>
             <div class="input-group">
-                <div class="label-title"><span class="material-icons-round" style="color: #fbbc04;">image</span> 1. Template Slide</div>
+                <div class="label-title">
+                    <span class="step-num">01</span>
+                    <span class="material-icons-round" style="color:var(--warning);">image</span>
+                    Template Slide
+                </div>
                 <div class="file-drop-zone" id="zone-bg">
-                    <input type="file" id="bgFile" accept=".jpg, .jpeg, .png" onchange="handleBgSelect()">
+                    <input type="file" id="bgFile" accept=".jpg,.jpeg,.png" onchange="handleBgSelect()">
                     <div class="zone-content">
                         <span class="material-icons-round zone-icon" id="icon-bg">cloud_upload</span>
-                        <div class="zone-text" id="text-bg">ลากไฟล์รูปภาพมาวาง หรือคลิกเพื่อเลือก (.jpg/.png)</div>
+                        <div class="zone-text" id="text-bg">Drag file or click to select · .jpg / .png</div>
                     </div>
                 </div>
             </div>
-
             <div class="input-group">
-                <div class="label-title"><span class="material-icons-round" style="color: #ea4335;">folder_open</span> 2. โฟลเดอร์รูป</div>
+                <div class="label-title">
+                    <span class="step-num">02</span>
+                    <span class="material-icons-round" style="color:var(--danger);">folder_open</span>
+                    Photo Folder
+                </div>
                 <div class="file-drop-zone" id="zone-folder">
                     <input type="file" id="photoFolder" webkitdirectory multiple onchange="handleFolderSelect()">
                     <div class="zone-content">
                         <span class="material-icons-round zone-icon" id="icon-folder">create_new_folder</span>
-                        <div class="zone-text" id="text-folder">คลิกเลือกโฟลเดอร์หลัก</div>
+                        <div class="zone-text" id="text-folder">Select main folder · L1 / L2 / images</div>
                     </div>
                 </div>
             </div>
-
+            <div class="section-divider"></div>
             <div class="btn-group">
                 <button class="btn btn-outline" id="btnEditData" onclick="openDataModal()" disabled>
-                    <span class="material-icons-round" style="color:var(--primary)">edit</span> แก้ไขชื่อ
+                    <span class="material-icons-round" style="color:var(--accent-1)">edit</span> แก้ไขชื่อ
                 </button>
                 <button class="btn btn-outline" onclick="openLayoutModal()">
-                    <span class="material-icons-round" style="color:#fbbc04">dashboard_customize</span> ปรับ Layout
+                    <span class="material-icons-round" style="color:var(--warning)">dashboard_customize</span> ปรับ Layout
                 </button>
             </div>
-
             <div class="btn-group">
                 <button class="btn btn-main" id="btnGen" onclick="generatePPT()" disabled>
                     <span class="material-icons-round">bolt</span> สร้าง PowerPoint
                 </button>
                 <button class="btn btn-outline" id="btnPreview" onclick="openPreviewModal()" disabled>
-                    <span class="material-icons-round" style="color:#ea4335">visibility</span> PDF Preview
+                    <span class="material-icons-round" style="color:var(--danger)">visibility</span> PDF Preview
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="app-footer">
-        We recommend using <strong>Microsoft Edge</strong> or <strong>Google Chrome</strong>.<br>
-        © Pongpipatt. - CCT Department Syntec Construction PCL.
-    </div>
-
-    <div class="modal-overlay" id="modalData">
-        <div class="modal-card">
-            <div class="modal-header"><h2>📝 แก้ไขชื่อ</h2><button class="close-btn" onclick="closeModal('modalData')"><span class="material-icons-round">close</span></button></div>
-            <div class="modal-body"><div id="dataListContainer" class="dm-container"></div></div>
-            <div class="modal-footer"><button class="btn btn-main btn-small" onclick="closeModal('modalData'); showToast('บันทึกข้อมูลเรียบร้อย', 'success');">บันทึก</button></div>
+    <!-- ══════ MODE 2 — PAYMENT A4 ══════ -->
+    <div id="mode2-panel" style="display:none;">
+        <div class="header header-m2">
+            <div class="header-eyebrow">MODE 02 — PAYMENT</div>
+            <h1>Payment Document Generator</h1>
+            <p>8 รูป/สไลด์ · แนวตั้ง A4 · พร้อมหมายเลขและ Caption</p>
+            <div class="header-status">
+                <div class="status-dot" style="background:var(--accent-2);box-shadow:0 0 5px var(--accent-2);"></div>READY
+            </div>
+        </div>
+        <div class="body-content">
+            <div class="info-box green">
+                <span class="material-icons-round">info</span>
+                <div>โครงสร้างโฟลเดอร์: <strong>MainFolder / 01_ActivityA / img.jpg</strong><br>
+                ชื่อโฟลเดอร์ย่อยจะกลายเป็น Caption ใต้แต่ละรูป</div>
+            </div>
+            <div class="input-group">
+                <div class="label-title">
+                    <span class="step-num">01</span>
+                    <span class="material-icons-round" style="color:var(--warning);">image</span>
+                    Template Slide (PNG/JPG)
+                </div>
+                <div class="file-drop-zone m2-style" id="zone-bg-a4">
+                    <input type="file" id="bgFileA4" accept=".jpg,.jpeg,.png" onchange="handleBgSelectA4()">
+                    <div class="zone-content">
+                        <span class="material-icons-round zone-icon" id="icon-bg-a4">cloud_upload</span>
+                        <div class="zone-text" id="text-bg-a4">Drag A4 background or click · Portrait</div>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="label-title">
+                    <span class="step-num">02</span>
+                    <span class="material-icons-round" style="color:var(--accent-2);">folder_open</span>
+                    Photo Folder (1 ระดับ)
+                </div>
+                <div class="file-drop-zone m2-style" id="zone-folder-a4">
+                    <input type="file" id="photoFolderA4" webkitdirectory multiple onchange="handleFolderSelectA4()">
+                    <div class="zone-content">
+                        <span class="material-icons-round zone-icon" id="icon-folder-a4">create_new_folder</span>
+                        <div class="zone-text" id="text-folder-a4">Select Input_Photo folder</div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-divider"></div>
+            <div class="btn-group">
+                <button class="btn btn-outline" id="btnEditDataA4" onclick="openDataModalA4()" disabled>
+                    <span class="material-icons-round" style="color:var(--accent-2)">edit</span> แก้ไข Caption
+                </button>
+                <button class="btn btn-outline" onclick="openLayoutModalA4()">
+                    <span class="material-icons-round" style="color:var(--warning)">dashboard_customize</span> ปรับ Layout
+                </button>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-main-green" id="btnGenA4" onclick="generatePPT_A4()" disabled>
+                    <span class="material-icons-round">bolt</span> สร้าง PowerPoint A4
+                </button>
+                <button class="btn btn-outline" id="btnPreviewA4" onclick="openPreviewModalA4()" disabled>
+                    <span class="material-icons-round" style="color:var(--danger)">visibility</span> PDF Preview
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalLayout">
-        <div class="modal-card" style="max-width: 900px;">
-            <div class="modal-header">
-                <h2>📐 ปรับแต่ง Layout</h2>
-                <button class="close-btn" onclick="closeModal('modalLayout')"><span class="material-icons-round">close</span></button>
+    <!-- Shared footer inside card -->
+    <div class="app-footer-inside">
+        Recommended: <strong>Microsoft Edge</strong> or <strong>Google Chrome</strong><br>
+        © Pongpipatt. · CCT Department · Syntec Construction PCL
+    </div>
+
+</div><!-- /app-card -->
+
+</div><!-- /panel-wrap -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODALS — MODE 1
+══════════════════════════════════════════════════════════════ -->
+<!-- ── TWEAKS PANEL ──────────────────────────────────────────── -->
+<div id="tweaksPanel" style="display:none;">
+    <div class="tp-header">
+        <span class="tp-title">Tweaks</span>
+        <button class="tp-close" onclick="hideTweaksPanel()">
+            <span class="material-icons-round">close</span>
+        </button>
+    </div>
+    <div class="tp-body">
+        <div class="tp-section">
+            <div class="tp-label">Container Shadow</div>
+            <div class="tp-segmented">
+                <button class="tp-seg" data-key="shadow" data-val="none">None</button>
+                <button class="tp-seg" data-key="shadow" data-val="border">Line</button>
+                <button class="tp-seg active" data-key="shadow" data-val="depth">Depth</button>
+                <button class="tp-seg" data-key="shadow" data-val="glow">Glow</button>
             </div>
-            <div class="modal-body" style="background:#f8f9fa;">
-                <div class="editor-toolbar">
-                    <select id="aspectRatio" onchange="updateEditorRatio()" style="padding:6px; border-radius:4px; border:1px solid #dadce0;">
-                        <option value="4:3">Size 4:3</option>
-                        <option value="16:9">Size 16:9</option>
-                    </select>
-                    
-                    <select id="imgFitMode" onchange="updateImageFit()" style="padding:6px; border-radius:4px; border:1px solid #dadce0;">
-                        <option value="contain">รูป: สัดส่วนจริง</option>
-                        <option value="cover">รูป: เต็มช่อง (Crop)</option>
-                    </select>
+        </div>
+        <div class="tp-divider"></div>
+        <div class="tp-section">
+            <div class="tp-label">Background Grid</div>
+            <div class="tp-toggle-row">
+                <span>Show grid</span>
+                <label class="tp-toggle-switch">
+                    <input type="checkbox" id="twkGrid" checked onchange="setTweak('showGrid', this.checked)">
+                    <span class="tp-sw-track"></span>
+                </label>
+            </div>
+        </div>
+        <div class="tp-divider"></div>
+        <div class="tp-section">
+            <div class="tp-label">Card Width — <span id="twkWidthVal">520px</span></div>
+            <div class="tp-range-row">
+                <input type="range" class="tp-range" id="twkWidth"
+                    min="440" max="600" step="10" value="520"
+                    oninput="setTweak('cardWidth', +this.value)">
+            </div>
+        </div>
+    </div>
+</div>
 
-                    <label style="display:flex; align-items:center; gap:6px; font-size:14px; margin-left:10px; cursor:pointer;">
-                        <input type="checkbox" id="checkGrid" onchange="toggleGrid()" checked>
-                        <span>Snap Grid</span>
-                    </label>
+<div class="modal-overlay" id="modalData">
+    <div class="modal-card">
+        <div class="modal-header modal-header-m1">
+            <div class="modal-header-text">
+                <div class="modal-eyebrow">Mode 01 — Presentation</div>
+                <h2>Edit Names</h2>
+            </div>
+            <button class="close-btn" onclick="closeModal('modalData')"><span class="material-icons-round">close</span></button>
+        </div>
+        <div class="modal-body"><div id="dataListContainer" class="dm-container"></div></div>
+        <div class="modal-footer">
+            <button class="btn btn-main btn-small" onclick="closeModal('modalData');showToast('บันทึกข้อมูลเรียบร้อย','success');">Save</button>
+        </div>
+    </div>
+</div>
 
-                    <div style="width:1px; height:20px; background:#ddd; margin:0 8px;"></div>
-                    <button class="btn btn-outline btn-small" onclick="addCustomTextBox()"><span class="material-icons-round" style="font-size:16px; color:#333;">add_circle</span> เพิ่มข้อความ</button>
-                    <div style="flex:1;"></div>
-                    <button class="btn btn-outline btn-small" onclick="resetLayout()">รีเซ็ต</button>
-                </div>
-                
-                <div style="padding: 0 24px;">
-                    <div id="editorCanvas" class="editor-container show-grid">
-                        <div id="box-img1" class="draggable-box" style="top:29%; left:3%; width:44%; height:42%;">IMG 1 <div class="resize-handle"></div></div>
-                        <div id="box-img2" class="draggable-box" style="top:29%; left:52%; width:44%; height:42%;">IMG 2 <div class="resize-handle"></div></div>
-                        <div id="box-txt1" class="draggable-box" style="top:81%; left:16%; width:70%; height:6%; border-color:#ea4335; color:#ea4335;">
-                            <div class="box-inner-text" style="justify-content: flex-start;">Header</div>
-                            <div class="resize-handle" style="background:#ea4335;"></div>
-                            <div class="box-controls">
-                                <button class="ctrl-btn active" onclick="setAlign('box-txt1', 'left', this)"><span class="material-icons-round" style="font-size:16px">format_align_left</span></button>
-                                <button class="ctrl-btn" onclick="setAlign('box-txt1', 'center', this)"><span class="material-icons-round" style="font-size:16px">format_align_center</span></button>
-                                <button class="ctrl-btn" onclick="setAlign('box-txt1', 'right', this)"><span class="material-icons-round" style="font-size:16px">format_align_right</span></button>
-                                <div style="width:1px; background:#555; margin:0 4px;"></div>
-                                <button class="ctrl-btn btn-del" onclick="deleteBox('box-txt1')"><span class="material-icons-round" style="font-size:18px">delete</span></button>
-                            </div>
+<div class="modal-overlay" id="modalLayout">
+    <div class="modal-card" style="max-width:900px;">
+        <div class="modal-header modal-header-m1">
+            <div class="modal-header-text">
+                <div class="modal-eyebrow">Mode 01 — Presentation</div>
+                <h2>Layout Editor</h2>
+            </div>
+            <button class="close-btn" onclick="closeModal('modalLayout')"><span class="material-icons-round">close</span></button>
+        </div>
+        <div class="modal-body" style="background:var(--surface-2);">
+            <div class="editor-toolbar">
+                <select id="aspectRatio" onchange="updateEditorRatio()">
+                    <option value="4:3">Ratio 4:3</option>
+                    <option value="16:9">Ratio 16:9</option>
+                </select>
+                <select id="imgFitMode" onchange="updateImageFit()">
+                    <option value="contain">Fit: Contain</option>
+                    <option value="cover">Fit: Cover (Crop)</option>
+                </select>
+                <label>
+                    <input type="checkbox" id="checkGrid" onchange="toggleGrid()" checked>
+                    Snap Grid
+                </label>
+                <div style="width:1px;height:14px;background:var(--border);margin:0 4px;"></div>
+                <button class="btn btn-outline btn-small" onclick="addCustomTextBox()">
+                    <span class="material-icons-round" style="font-size:13px;">add_circle</span> Add Text
+                </button>
+                <div style="flex:1;"></div>
+                <button class="btn btn-outline btn-small" onclick="resetLayout()">Reset</button>
+            </div>
+            <div class="editor-canvas-wrap">
+                <div id="editorCanvas" class="editor-container show-grid">
+                    <div id="box-img1" class="draggable-box" style="top:29%;left:3%;width:44%;height:42%;"><span class="box-tag">IMG 1</span><div class="resize-handle"></div></div>
+                    <div id="box-img2" class="draggable-box" style="top:29%;left:52%;width:44%;height:42%;"><span class="box-tag">IMG 2</span><div class="resize-handle"></div></div>
+                    <div id="box-txt1" class="draggable-box" style="top:81%;left:16%;width:70%;height:6%;border-color:var(--danger);color:var(--danger);">
+                        <span class="box-tag" style="color:var(--danger);border-color:var(--danger);">HDR</span>
+                        <div class="box-inner-text" style="justify-content:flex-start;color:var(--danger);">Header</div>
+                        <div class="resize-handle" style="border-color:var(--danger);"></div>
+                        <div class="box-controls">
+                            <button class="ctrl-btn active" onclick="setAlign('box-txt1','left',this)"><span class="material-icons-round" style="font-size:14px">format_align_left</span></button>
+                            <button class="ctrl-btn" onclick="setAlign('box-txt1','center',this)"><span class="material-icons-round" style="font-size:14px">format_align_center</span></button>
+                            <button class="ctrl-btn" onclick="setAlign('box-txt1','right',this)"><span class="material-icons-round" style="font-size:14px">format_align_right</span></button>
+                            <div style="width:1px;background:var(--border);margin:0 2px;"></div>
+                            <button class="ctrl-btn" onclick="deleteBox('box-txt1')"><span class="material-icons-round" style="font-size:14px">delete</span></button>
                         </div>
-                        <div id="box-txt2" class="draggable-box" style="top:87%; left:16%; width:70%; height:6%; border-color:#ea4335; color:#ea4335;">
-                            <div class="box-inner-text" style="justify-content: flex-start;">Sub-Header</div>
-                            <div class="resize-handle" style="background:#ea4335;"></div>
-                            <div class="box-controls">
-                                <button class="ctrl-btn active" onclick="setAlign('box-txt2', 'left', this)"><span class="material-icons-round" style="font-size:16px">format_align_left</span></button>
-                                <button class="ctrl-btn" onclick="setAlign('box-txt2', 'center', this)"><span class="material-icons-round" style="font-size:16px">format_align_center</span></button>
-                                <button class="ctrl-btn" onclick="setAlign('box-txt2', 'right', this)"><span class="material-icons-round" style="font-size:16px">format_align_right</span></button>
-                                <div style="width:1px; background:#555; margin:0 4px;"></div>
-                                <button class="ctrl-btn btn-del" onclick="deleteBox('box-txt2')"><span class="material-icons-round" style="font-size:18px">delete</span></button>
-                            </div>
+                    </div>
+                    <div id="box-txt2" class="draggable-box" style="top:87%;left:16%;width:70%;height:6%;border-color:var(--danger);color:var(--danger);">
+                        <span class="box-tag" style="color:var(--danger);border-color:var(--danger);">SUB</span>
+                        <div class="box-inner-text" style="justify-content:flex-start;color:var(--danger);">Sub-Header</div>
+                        <div class="resize-handle" style="border-color:var(--danger);"></div>
+                        <div class="box-controls">
+                            <button class="ctrl-btn active" onclick="setAlign('box-txt2','left',this)"><span class="material-icons-round" style="font-size:14px">format_align_left</span></button>
+                            <button class="ctrl-btn" onclick="setAlign('box-txt2','center',this)"><span class="material-icons-round" style="font-size:14px">format_align_center</span></button>
+                            <button class="ctrl-btn" onclick="setAlign('box-txt2','right',this)"><span class="material-icons-round" style="font-size:14px">format_align_right</span></button>
+                            <div style="width:1px;background:var(--border);margin:0 2px;"></div>
+                            <button class="ctrl-btn" onclick="deleteBox('box-txt2')"><span class="material-icons-round" style="font-size:14px">delete</span></button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer"><button class="btn btn-main btn-small" onclick="closeModal('modalLayout'); showToast('บันทึก Layout เรียบร้อย', 'success');">บันทึก Layout</button></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-main btn-small" onclick="closeModal('modalLayout');showToast('บันทึก Layout เรียบร้อย','success');">Save Layout</button>
         </div>
     </div>
+</div>
 
-    <div class="modal-overlay" id="modalPreview">
-        <div class="modal-card" style="max-width:800px;">
-            <div class="modal-header"><h2>👁️ ดูตัวอย่าง (Preview)</h2><button class="close-btn" onclick="closeModal('modalPreview')"><span class="material-icons-round">close</span></button></div>
-            <div class="modal-body" style="background:#f8f9fa; padding: 24px;"><div id="previewContainer"></div></div>
-            <div class="modal-footer">
-                <button class="btn btn-outline btn-small" onclick="saveAsPDF()"><span class="material-icons-round" style="font-size:16px; margin-right:4px; color:#ea4335;">picture_as_pdf</span> Save as PDF</button>
-                <button class="btn btn-main btn-small" onclick="closeModal('modalPreview')">ปิด</button>
+<div class="modal-overlay" id="modalPreview">
+    <div class="modal-card" style="max-width:800px;">
+        <div class="modal-header modal-header-m1">
+            <div class="modal-header-text">
+                <div class="modal-eyebrow">Mode 01 — Presentation</div>
+                <h2>Slide Preview</h2>
+            </div>
+            <button class="close-btn" onclick="closeModal('modalPreview')"><span class="material-icons-round">close</span></button>
+        </div>
+        <div class="modal-body" style="background:var(--surface-2);padding:24px;">
+            <div id="previewContainer"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline btn-small" onclick="saveAsPDF()">
+                <span class="material-icons-round" style="font-size:14px;color:var(--danger);">picture_as_pdf</span> Save as PDF
+            </button>
+            <button class="btn btn-main btn-small" onclick="closeModal('modalPreview')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODALS — MODE 2 (A4)
+══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalDataA4">
+    <div class="modal-card">
+        <div class="modal-header modal-header-m2">
+            <div class="modal-header-text">
+                <div class="modal-eyebrow">Mode 02 — Payment A4</div>
+                <h2>Edit Captions</h2>
+            </div>
+            <button class="close-btn" onclick="closeModal('modalDataA4')"><span class="material-icons-round">close</span></button>
+        </div>
+        <div class="modal-body"><div id="dataListContainerA4" class="dm-container"></div></div>
+        <div class="modal-footer">
+            <button class="btn btn-main-green btn-small" onclick="closeModal('modalDataA4');showToast('บันทึก Caption เรียบร้อย','success');">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalLayoutA4">
+    <div class="modal-card" style="max-width:560px;">
+        <div class="modal-header modal-header-m2">
+            <div class="modal-header-text">
+                <div class="modal-eyebrow">Mode 02 — Payment A4</div>
+                <h2>Layout Editor — A4</h2>
+            </div>
+            <button class="close-btn" onclick="closeModal('modalLayoutA4')"><span class="material-icons-round">close</span></button>
+        </div>
+        <div class="modal-body" style="background:var(--surface-2);">
+            <div class="editor-toolbar" style="flex-wrap:wrap;gap:10px;">
+                <select id="imgFitModeA4" onchange="updateImageFitA4()">
+                    <option value="contain">Fit: Contain</option>
+                    <option value="cover">Fit: Cover (Crop)</option>
+                </select>
+                <label><input type="checkbox" id="checkGridA4" checked> Snap Grid</label>
+                <label>
+                    <input type="checkbox" id="checkCaptionA4" checked onchange="toggleA4Indicators('cap')">
+                    <span style="display:flex;align-items:center;gap:4px;">
+                        <span style="width:9px;height:9px;background:rgba(251,188,4,0.35);border:1px dashed #a16207;display:inline-block;border-radius:1px;"></span>Caption
+                    </span>
+                </label>
+                <label>
+                    <input type="checkbox" id="checkItemA4" checked onchange="toggleA4Indicators('item')">
+                    <span style="display:flex;align-items:center;gap:4px;">
+                        <span style="width:9px;height:9px;background:rgba(185,28,28,0.25);border:1px solid #b91c1c;display:inline-block;border-radius:1px;"></span>Item No.
+                    </span>
+                </label>
+                <div style="flex:1;"></div>
+                <button class="btn btn-outline btn-small" onclick="resetA4Layout()">Reset</button>
+            </div>
+            <div class="editor-canvas-wrap-center">
+                <div id="editorCanvasA4" class="editor-container-a4 show-grid"></div>
+            </div>
+            <div class="legend">
+                <span class="legend-chip"><span class="legend-dot" style="background:rgba(12,117,57,0.12);border:2px dashed var(--mode2);"></span> Photo (drag / resize)</span>
+                <span class="legend-chip"><span class="legend-dot" style="background:rgba(251,188,4,0.28);border:1px dashed #a16207;"></span> Caption</span>
+                <span class="legend-chip"><span class="legend-dot" style="background:rgba(185,28,28,0.18);border:1px solid #b91c1c;"></span> Item No.</span>
             </div>
         </div>
+        <div class="modal-footer">
+            <button class="btn btn-main-green btn-small" onclick="closeModal('modalLayoutA4');showToast('บันทึก Layout A4 เรียบร้อย','success');">Save Layout</button>
+        </div>
     </div>
+</div>
 
-    <script>
-        let APP_DATA = {};
-        let BG_DATA = null;
+<div class="modal-overlay" id="modalPreviewA4">
+    <div class="modal-card" style="max-width:520px;">
+        <div class="modal-header modal-header-m2">
+            <div class="modal-header-text">
+                <div class="modal-eyebrow">Mode 02 — Payment A4</div>
+                <h2>PDF Preview — A4</h2>
+            </div>
+            <button class="close-btn" onclick="closeModal('modalPreviewA4')"><span class="material-icons-round">close</span></button>
+        </div>
+        <div class="modal-body" style="background:var(--surface-2);padding:24px;">
+            <div id="previewContainerA4"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline btn-small" onclick="saveAsPDF_A4()">
+                <span class="material-icons-round" style="font-size:14px;color:var(--danger);">picture_as_pdf</span> Save as PDF
+            </button>
+            <button class="btn btn-main-green btn-small" onclick="closeModal('modalPreviewA4')">Close</button>
+        </div>
+    </div>
+</div>
 
-        let LAYOUT_CONFIG = {
-            ratio: "4:3", widthInches: 10, heightInches: 7.5,
-            imageFit: "contain",
-            elements: { 
-                'box-img1': { visible: true, x: 0.03, y: 0.29, w: 0.44, h: 0.42 }, 
-                'box-img2': { visible: true, x: 0.52, y: 0.29, w: 0.44, h: 0.42 }, 
-                'box-txt1': { visible: true, x: 0.16, y: 0.81, w: 0.70, h: 0.06, align: 'left' }, 
-                'box-txt2': { visible: true, x: 0.16, y: 0.87, w: 0.70, h: 0.06, align: 'left' } 
-            },
-            custom: []
-        };
-        const SNAP_SIZE = 20;
+<!-- ══════════════════════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════════════════ -->
+<script>
+// ── THEME ────────────────────────────────────────────────────
+function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('themeIcon').textContent = isDark ? 'dark_mode' : 'light_mode';
+}
 
-        // --- DRAG DROP VISUALS ---
-        ['zone-bg', 'zone-folder'].forEach(id => {
-            const el = document.getElementById(id);
-            el.addEventListener('dragover', (e) => { e.preventDefault(); el.classList.add('drag-over'); });
-            el.addEventListener('dragleave', (e) => { el.classList.remove('drag-over'); });
-            el.addEventListener('drop', (e) => { el.classList.remove('drag-over'); });
+// ── SHARED ────────────────────────────────────────────────────
+let currentMode = 1;
+function switchMode(m) {
+    currentMode = m;
+    document.getElementById('mode1-panel').style.display = (m===1)?'block':'none';
+    document.getElementById('mode2-panel').style.display = (m===2)?'block':'none';
+    document.getElementById('btnMode1').className = 'mode-btn'+(m===1?' active-m1':'');
+    document.getElementById('btnMode2').className = 'mode-btn'+(m===2?' active-m2':'');
+}
+
+function showToast(msg, type='normal') {
+    const c=document.getElementById('toastContainer'), t=document.createElement('div');
+    t.className=`toast ${type}`;
+    const ico=type==='success'?'check_circle':(type==='error'?'error':'info');
+    t.innerHTML=`<span class="material-icons-round">${ico}</span><span>${msg}</span>`;
+    c.appendChild(t);
+    requestAnimationFrame(()=>t.classList.add('show'));
+    setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000);
+}
+function showLoading(t,s){document.getElementById('loadingTitle').innerText=t;document.getElementById('loadingSub').innerText=s;document.getElementById('loadingOverlay').style.display='flex';}
+function updateLoading(t,s){document.getElementById('loadingTitle').innerText=t;document.getElementById('loadingSub').innerText=s;}
+function hideLoading(){document.getElementById('loadingOverlay').style.display='none';}
+function openModal(id){const m=document.getElementById(id);m.style.display='flex';setTimeout(()=>m.classList.add('show'),10);}
+function closeModal(id){const m=document.getElementById(id);m.classList.remove('show');setTimeout(()=>m.style.display='none',200);}
+function fileToDataURL(f){return new Promise((r,j)=>{const rd=new FileReader();rd.onload=()=>r(rd.result);rd.onerror=j;rd.readAsDataURL(f);});}
+
+// drag-zone visuals (Mode 1)
+['zone-bg','zone-folder'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag-over');});
+    el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));
+    el.addEventListener('drop',()=>el.classList.remove('drag-over'));
+});
+// drag-zone visuals (Mode 2)
+['zone-bg-a4','zone-folder-a4'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag-over');});
+    el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));
+    el.addEventListener('drop',()=>el.classList.remove('drag-over'));
+});
+
+// ── MODE 1 ────────────────────────────────────────────────────
+let APP_DATA={}, BG_DATA=null;
+let LAYOUT_CONFIG={
+    ratio:"4:3",widthInches:10,heightInches:7.5,imageFit:"contain",
+    elements:{
+        'box-img1':{visible:true,x:0.03,y:0.29,w:0.44,h:0.42},
+        'box-img2':{visible:true,x:0.52,y:0.29,w:0.44,h:0.42},
+        'box-txt1':{visible:true,x:0.16,y:0.81,w:0.70,h:0.06,align:'left'},
+        'box-txt2':{visible:true,x:0.16,y:0.87,w:0.70,h:0.06,align:'left'}
+    },
+    custom:[]
+};
+const SNAP_SIZE=20;
+
+function toggleGrid(){const c=document.getElementById('editorCanvas');document.getElementById('checkGrid').checked?c.classList.add('show-grid'):c.classList.remove('show-grid');}
+function updateImageFit(){LAYOUT_CONFIG.imageFit=document.getElementById('imgFitMode').value;}
+function initDraggables(){document.querySelectorAll('.draggable-box').forEach(e=>bindDragEvents(e));}
+
+function bindDragEvents(elm){
+    let dragging=false,resizing=false,sx,sy,sl,st,sw,sh;
+    const handle=elm.querySelector('.resize-handle');
+    const snap=v=>document.getElementById('checkGrid').checked?Math.round(v/SNAP_SIZE)*SNAP_SIZE:v;
+    if(handle)handle.onmousedown=e=>{resizing=true;sx=e.clientX;sy=e.clientY;sw=elm.offsetWidth;sh=elm.offsetHeight;e.stopPropagation();e.preventDefault();};
+    elm.onmousedown=e=>{
+        if(e.target.closest('.ctrl-btn')||e.target.closest('.resize-handle'))return;
+        if(elm.classList.contains('custom-text')&&e.detail===2){editCustomText(elm);return;}
+        dragging=true;sx=e.clientX;sy=e.clientY;sl=elm.offsetLeft;st=elm.offsetTop;e.preventDefault();
+    };
+    const onMove=e=>{
+        if(!dragging&&!resizing)return;
+        requestAnimationFrame(()=>{
+            const dx=e.clientX-sx,dy=e.clientY-sy,p=elm.offsetParent;
+            if(dragging){let l=snap(sl+dx),t=snap(st+dy);l=Math.max(0,Math.min(l,p.clientWidth-elm.offsetWidth));t=Math.max(0,Math.min(t,p.clientHeight-elm.offsetHeight));elm.style.left=l+'px';elm.style.top=t+'px';}
+            else if(resizing){let w=snap(sw+dx),h=snap(sh+dy);w=Math.max(20,w);h=Math.max(20,h);if(elm.offsetLeft+w>p.clientWidth)w=p.clientWidth-elm.offsetLeft;if(elm.offsetTop+h>p.clientHeight)h=p.clientHeight-elm.offsetTop;elm.style.width=w+'px';elm.style.height=h+'px';}
         });
+    };
+    const onUp=()=>{if(dragging||resizing){dragging=false;resizing=false;window.removeEventListener('mousemove',onMove);window.removeEventListener('mouseup',onUp);captureLayout();}};
+    if(handle)handle.addEventListener('mousedown',()=>{window.addEventListener('mousemove',onMove);window.addEventListener('mouseup',onUp);});
+    elm.addEventListener('mousedown',e=>{if(!e.target.closest('.ctrl-btn')&&!e.target.closest('.resize-handle')){window.addEventListener('mousemove',onMove);window.addEventListener('mouseup',onUp);}});
+}
 
-        // --- TOAST SYSTEM ---
-        function showToast(msg, type = 'normal') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            let icon = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : 'info');
-            toast.innerHTML = `<span class="material-icons-round">${icon}</span> <span>${msg}</span>`;
-            container.appendChild(toast);
-            
-            requestAnimationFrame(() => toast.classList.add('show'));
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
+function captureLayout(){
+    const c=document.getElementById('editorCanvas');if(c.offsetParent===null)return;
+    const cw=c.offsetWidth,ch=c.offsetHeight;
+    ['box-img1','box-img2','box-txt1','box-txt2'].forEach(id=>{const el=document.getElementById(id);if(!LAYOUT_CONFIG.elements[id])LAYOUT_CONFIG.elements[id]={};Object.assign(LAYOUT_CONFIG.elements[id],{x:el.offsetLeft/cw,y:el.offsetTop/ch,w:el.offsetWidth/cw,h:el.offsetHeight/ch,visible:el.style.display!=='none'});});
+    LAYOUT_CONFIG.custom.forEach((c2,i)=>{const el=document.getElementById(c2.id);if(el){LAYOUT_CONFIG.custom[i].x=el.offsetLeft/cw;LAYOUT_CONFIG.custom[i].y=el.offsetTop/ch;LAYOUT_CONFIG.custom[i].w=el.offsetWidth/cw;LAYOUT_CONFIG.custom[i].h=el.offsetHeight/ch;LAYOUT_CONFIG.custom[i].text=el.querySelector('.box-inner-text').innerText;}});
+}
+function setAlign(id,align,btn){
+    const box=document.getElementById(id);
+    box.querySelector('.box-inner-text').style.justifyContent=(align==='left'?'flex-start':(align==='right'?'flex-end':'center'));
+    box.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+    if(id.startsWith('custom-')){const i=LAYOUT_CONFIG.custom.find(x=>x.id===id);if(i)i.align=align;}
+    else{if(!LAYOUT_CONFIG.elements[id])LAYOUT_CONFIG.elements[id]={};LAYOUT_CONFIG.elements[id].align=align;}
+}
+function deleteBox(id){document.getElementById(id).style.display='none';LAYOUT_CONFIG.elements[id].visible=false;}
+function addCustomTextBox(){
+    const id='custom-'+Date.now();const canvas=document.getElementById('editorCanvas');
+    const div=document.createElement('div');div.id=id;div.className='draggable-box custom-text';div.style.cssText="top:50%;left:50%;width:30%;height:8%;";
+    div.innerHTML=`<span class="box-tag">TXT</span><div class="box-inner-text" style="justify-content:center;">ข้อความใหม่ (คลิกแก้)</div><div class="resize-handle"></div><div class="box-controls"><button class="ctrl-btn active" onclick="setAlign('${id}','center',this)"><span class="material-icons-round" style="font-size:14px">format_align_center</span></button><button class="ctrl-btn" onclick="setAlign('${id}','left',this)"><span class="material-icons-round" style="font-size:14px">format_align_left</span></button><button class="ctrl-btn" onclick="setAlign('${id}','right',this)"><span class="material-icons-round" style="font-size:14px">format_align_right</span></button><div style="width:1px;background:var(--border);margin:0 2px;"></div><button class="ctrl-btn" onclick="removeCustomBox('${id}')"><span class="material-icons-round" style="font-size:14px">delete</span></button></div>`;
+    canvas.appendChild(div);bindDragEvents(div);LAYOUT_CONFIG.custom.push({id,text:"ข้อความใหม่ (คลิกแก้)",align:"center"});captureLayout();
+}
+function removeCustomBox(id){document.getElementById(id).remove();LAYOUT_CONFIG.custom=LAYOUT_CONFIG.custom.filter(x=>x.id!==id);}
+function editCustomText(elm){const t=prompt("แก้ไขข้อความ:",elm.querySelector('.box-inner-text').innerText);if(t!==null){elm.querySelector('.box-inner-text').innerText=t;captureLayout();}}
 
-        // --- CORE FUNCTIONS ---
-        function toggleGrid() { const c = document.getElementById('editorCanvas'); if(document.getElementById('checkGrid').checked) c.classList.add('show-grid'); else c.classList.remove('show-grid'); }
-        function updateImageFit() { LAYOUT_CONFIG.imageFit = document.getElementById('imgFitMode').value; }
+function resetLayout(){
+    document.querySelectorAll('.custom-text').forEach(e=>e.remove());LAYOUT_CONFIG.custom=[];
+    ['box-txt1','box-txt2'].forEach(id=>{document.getElementById(id).style.display='flex';LAYOUT_CONFIG.elements[id].visible=true;});
+    const defs={'box-img1':"top:29%;left:3%;width:44%;height:42%;",'box-img2':"top:29%;left:52%;width:44%;height:42%;",'box-txt1':"top:81%;left:16%;width:70%;height:6%;",'box-txt2':"top:87%;left:16%;width:70%;height:6%;"};
+    for(let id in defs)document.getElementById(id).style.cssText=defs[id];
+    ['box-txt1','box-txt2'].forEach(id=>{document.getElementById(id).querySelector('.box-inner-text').style.justifyContent='flex-start';LAYOUT_CONFIG.elements[id].align='left';});
+    LAYOUT_CONFIG.elements['box-img1']={visible:true,x:0.03,y:0.29,w:0.44,h:0.42};
+    LAYOUT_CONFIG.elements['box-img2']={visible:true,x:0.52,y:0.29,w:0.44,h:0.42};
+    LAYOUT_CONFIG.elements['box-txt1']={visible:true,x:0.16,y:0.81,w:0.70,h:0.06,align:'left'};
+    LAYOUT_CONFIG.elements['box-txt2']={visible:true,x:0.16,y:0.87,w:0.70,h:0.06,align:'left'};
+    showToast("รีเซ็ต Layout แล้ว");
+}
+function updateEditorRatio(){
+    const r=document.getElementById('aspectRatio').value;const c=document.getElementById('editorCanvas');
+    c.style.height=(r==="16:9")?'450px':'600px';
+    LAYOUT_CONFIG.widthInches=10;LAYOUT_CONFIG.heightInches=(r==="16:9")?5.625:7.5;LAYOUT_CONFIG.ratio=r;
+}
+function renderDataList(){
+    const l=document.getElementById('dataListContainer');l.innerHTML='';
+    const nSort=(a,b)=>a.localeCompare(b,undefined,{numeric:true});
+    Object.keys(APP_DATA).sort(nSort).forEach(f1=>{
+        const g=document.createElement('div');g.className='dm-group';
+        g.innerHTML=`<div class="dm-header-row"><span class="material-icons-round dm-icon-l1">folder</span><input type="text" class="mat-input" value="${f1}" onchange="renameKey(APP_DATA,'${f1}',this.value)"></div>`;
+        Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2=>{const r=document.createElement('div');r.className='dm-list-row';r.innerHTML=`<span class="material-icons-round dm-icon-l2">subdirectory_arrow_right</span><input type="text" class="mat-input" value="${f2}" onchange="renameKey(APP_DATA['${f1}'],'${f2}',this.value)">`;g.appendChild(r);});
+        l.appendChild(g);
+    });
+}
+function renameKey(o,oldK,newK){if(oldK===newK||!newK)return;if(o[newK]){showToast('ชื่อซ้ำ','error');renderDataList();return;}Object.defineProperty(o,newK,Object.getOwnPropertyDescriptor(o,oldK));delete o[oldK];renderDataList();}
 
-        function initDraggables() { document.querySelectorAll('.draggable-box').forEach(elm => bindDragEvents(elm)); }
-        
-        function bindDragEvents(elm) {
-            let isDragging = false, isResizing = false, startX, startY, startLeft, startTop, startW, startH;
-            const handle = elm.querySelector('.resize-handle');
-            const snap = (val) => document.getElementById('checkGrid').checked ? Math.round(val/SNAP_SIZE)*SNAP_SIZE : val;
-
-            if(handle) {
-                handle.onmousedown = (e) => { isResizing = true; startX = e.clientX; startY = e.clientY; startW = elm.offsetWidth; startH = elm.offsetHeight; e.stopPropagation(); e.preventDefault(); };
+function handleBgSelect(){
+    const i=document.getElementById('bgFile');
+    if(i.files[0]){const r=new FileReader();r.onload=e=>{BG_DATA=e.target.result;document.getElementById('zone-bg').classList.add('has-file');document.getElementById('text-bg').innerText=i.files[0].name;document.getElementById('editorCanvas').style.backgroundImage=`url(${BG_DATA})`;showToast("อัปโหลดพื้นหลังสำเร็จ","success");};r.readAsDataURL(i.files[0]);}
+}
+async function handleFolderSelect(){
+    const i=document.getElementById('photoFolder');const f=Array.from(i.files);if(!f.length)return;APP_DATA={};
+    for(let file of f){if(!file.name.match(/\.(jpg|jpeg|png)$/i))continue;let p=file.webkitRelativePath.split('/');if(p.length>=3){let f1=p[p.length-3],f2=p[p.length-2];if(!APP_DATA[f1])APP_DATA[f1]={};if(!APP_DATA[f1][f2])APP_DATA[f1][f2]=[];APP_DATA[f1][f2].push({fileObj:file,name:file.name});}}
+    document.getElementById('zone-folder').classList.add('has-file');document.getElementById('text-folder').innerText=`Ready — ${f.length} files loaded`;
+    document.getElementById('btnEditData').disabled=false;document.getElementById('btnPreview').disabled=false;document.getElementById('btnGen').disabled=false;
+    showToast(`Loaded ${f.length} photos`,"success");
+}
+function renderPreviewHTML(cid){
+    const c=document.getElementById(cid);c.innerHTML='';
+    const nSort=(a,b)=>a.localeCompare(b,undefined,{numeric:true});
+    const L=LAYOUT_CONFIG.elements,C=LAYOUT_CONFIG.custom,isWide=LAYOUT_CONFIG.ratio==="16:9";
+    Object.keys(APP_DATA).sort(nSort).forEach(f1=>{
+        let f1Txt=f1.replace(/^\d+[._-]?/,'');
+        Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2=>{
+            let f2Txt=f2.replace(/^\d+[._-]?/,'');
+            let images=APP_DATA[f1][f2].sort((a,b)=>nSort(a.name,b.name));
+            for(let i=0;i<images.length;i+=2){
+                let s=document.createElement('div');s.className='slide-preview';s.style.paddingBottom=isWide?"56.25%":"75%";
+                if(BG_DATA)s.innerHTML+=`<img src="${BG_DATA}" style="width:100%;height:100%;object-fit:cover;z-index:0;">`;
+                const pct=v=>(v*100)+'%';const fit=LAYOUT_CONFIG.imageFit||'contain';const is=`width:100%;height:100%;object-fit:${fit};z-index:1;`;
+                if(L['box-img1'].visible!==false){let u=URL.createObjectURL(images[i].fileObj);s.innerHTML+=`<div style="position:absolute;top:${pct(L['box-img1'].y)};left:${pct(L['box-img1'].x)};width:${pct(L['box-img1'].w)};height:${pct(L['box-img1'].h)};"><img src="${u}" style="${is}"></div>`;}
+                if(i+1<images.length&&L['box-img2'].visible!==false){let u=URL.createObjectURL(images[i+1].fileObj);s.innerHTML+=`<div style="position:absolute;top:${pct(L['box-img2'].y)};left:${pct(L['box-img2'].x)};width:${pct(L['box-img2'].w)};height:${pct(L['box-img2'].h)};"><img src="${u}" style="${is}"></div>`;}
+                if(L['box-txt1'].visible!==false)s.innerHTML+=`<div style="position:absolute;top:${pct(L['box-txt1'].y)};left:${pct(L['box-txt1'].x)};width:${pct(L['box-txt1'].w)};text-align:${L['box-txt1'].align||'left'};font-size:16px;font-weight:bold;z-index:2;">${f1Txt}</div>`;
+                if(L['box-txt2'].visible!==false)s.innerHTML+=`<div style="position:absolute;top:${pct(L['box-txt2'].y)};left:${pct(L['box-txt2'].x)};width:${pct(L['box-txt2'].w)};text-align:${L['box-txt2'].align||'left'};font-size:16px;font-weight:bold;z-index:2;">${f2Txt}</div>`;
+                C.forEach(cx=>{s.innerHTML+=`<div style="position:absolute;top:${pct(cx.y)};left:${pct(cx.x)};width:${pct(cx.w)};text-align:${cx.align||'left'};font-size:16px;font-weight:bold;z-index:2;color:#000;">${cx.text}</div>`;});
+                c.appendChild(s);
             }
-            elm.onmousedown = (e) => {
-                if(e.target.closest('.ctrl-btn') || e.target.closest('.resize-handle')) return;
-                if(elm.classList.contains('custom-text') && e.detail === 2) { editCustomText(elm); return; }
-                isDragging = true; startX = e.clientX; startY = e.clientY; startLeft = elm.offsetLeft; startTop = elm.offsetTop; e.preventDefault();
-            };
-            
-            const onMove = (e) => {
-                if(!isDragging && !isResizing) return;
-                requestAnimationFrame(() => {
-                    const dx = e.clientX - startX, dy = e.clientY - startY;
-                    const container = elm.offsetParent;
-                    
-                    if(isDragging) { 
-                        let newL = snap(startLeft + dx);
-                        let newT = snap(startTop + dy);
-                        const maxL = container.clientWidth - elm.offsetWidth;
-                        const maxT = container.clientHeight - elm.offsetHeight;
-                        if (newL < 0) newL = 0;
-                        if (newL > maxL) newL = maxL;
-                        if (newT < 0) newT = 0;
-                        if (newT > maxT) newT = maxT;
-                        elm.style.left = newL + 'px'; 
-                        elm.style.top = newT + 'px'; 
+        });
+    });
+}
+async function generatePPT(){
+    showLoading("กำลังสร้าง PowerPoint...","กรุณารอสักครู่");
+    setTimeout(async()=>{
+        try{
+            let pres=new PptxGenJS();pres.layout=(LAYOUT_CONFIG.ratio==="16:9")?'LAYOUT_16x9':'LAYOUT_4x3';
+            const W=LAYOUT_CONFIG.widthInches,H=LAYOUT_CONFIG.heightInches,L=LAYOUT_CONFIG.elements,C=LAYOUT_CONFIG.custom;
+            const nSort=(a,b)=>a.localeCompare(b,undefined,{numeric:true});const fit=LAYOUT_CONFIG.imageFit==='cover'?'cover':'contain';
+            for(let f1 of Object.keys(APP_DATA).sort(nSort)){
+                let f1Txt=f1.replace(/^\d+[._-]?/,'');
+                for(let f2 of Object.keys(APP_DATA[f1]).sort(nSort)){
+                    let f2Txt=f2.replace(/^\d+[._-]?/,'');
+                    let images=APP_DATA[f1][f2].sort((a,b)=>nSort(a.name,b.name));
+                    for(let i=0;i<images.length;i+=2){
+                        let s=pres.addSlide();if(BG_DATA)s.background={data:BG_DATA};
+                        if(L['box-img1'].visible!==false){let d=await fileToDataURL(images[i].fileObj);s.addImage({data:d,x:L['box-img1'].x*W,y:L['box-img1'].y*H,w:L['box-img1'].w*W,h:L['box-img1'].h*H,sizing:{type:fit,w:L['box-img1'].w*W,h:L['box-img1'].h*H}});}
+                        if(i+1<images.length&&L['box-img2'].visible!==false){let d=await fileToDataURL(images[i+1].fileObj);s.addImage({data:d,x:L['box-img2'].x*W,y:L['box-img2'].y*H,w:L['box-img2'].w*W,h:L['box-img2'].h*H,sizing:{type:fit,w:L['box-img2'].w*W,h:L['box-img2'].h*H}});}
+                        if(L['box-txt1'].visible!==false)s.addText(f1Txt,{x:L['box-txt1'].x*W,y:L['box-txt1'].y*H,w:L['box-txt1'].w*W,h:L['box-txt1'].h*H,fontSize:16,fontFace:"Leelawadee",align:L['box-txt1'].align||'left'});
+                        if(L['box-txt2'].visible!==false)s.addText(f2Txt,{x:L['box-txt2'].x*W,y:L['box-txt2'].y*H,w:L['box-txt2'].w*W,h:L['box-txt2'].h*H,fontSize:16,fontFace:"Leelawadee",align:L['box-txt2'].align||'left'});
+                        C.forEach(cx=>{s.addText(cx.text,{x:cx.x*W,y:cx.y*H,w:cx.w*W,h:cx.h*H,fontSize:16,fontFace:"Leelawadee",align:cx.align||'left',color:"000000"});});
                     }
-                    else if(isResizing) { 
-                        let newW = snap(startW + dx);
-                        let newH = snap(startH + dy);
-                        if (newW < 20) newW = 20;
-                        if (newH < 20) newH = 20;
-                        if (elm.offsetLeft + newW > container.clientWidth) newW = container.clientWidth - elm.offsetLeft;
-                        if (elm.offsetTop + newH > container.clientHeight) newH = container.clientHeight - elm.offsetTop;
-                        elm.style.width = newW + 'px'; 
-                        elm.style.height = newH + 'px'; 
-                    }
-                });
-            };
-            
-            const onUp = () => { if(isDragging || isResizing) { isDragging = false; isResizing = false; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); captureLayout(); } };
-            if(handle) handle.addEventListener('mousedown', () => { window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp); });
-            elm.addEventListener('mousedown', (e) => { if(!e.target.closest('.ctrl-btn') && !e.target.closest('.resize-handle')) { window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp); } });
+                }
+            }
+            await pres.writeFile({fileName:"Presentation_Auto.pptx"});hideLoading();showToast("สร้าง PowerPoint สำเร็จ!","success");
+        }catch(err){showToast("Error: "+err,"error");hideLoading();}
+    },100);
+}
+async function saveAsPDF(){
+    const{jsPDF}=window.jspdf;showLoading("กำลังสร้างไฟล์ PDF...","กำลังประมวลผลรูปภาพ");
+    setTimeout(async()=>{
+        try{
+            const slides=document.querySelectorAll('.slide-preview');if(!slides.length){showToast("ไม่พบสไลด์","error");hideLoading();return;}
+            const doc=new jsPDF({orientation:'landscape',unit:'px',format:[slides[0].offsetWidth,slides[0].offsetHeight]});
+            for(let i=0;i<slides.length;i++){updateLoading("กำลังแปลง PDF...",`หน้า ${i+1} จาก ${slides.length}`);const cv=await html2canvas(slides[i],{scale:2,useCORS:true});if(i>0)doc.addPage();doc.addImage(cv.toDataURL('image/jpeg',0.8),'JPEG',0,0,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());}
+            doc.save('Presentation_Auto.pdf');hideLoading();showToast("สร้างไฟล์ PDF สำเร็จ!","success");
+        }catch(e){showToast("เกิดข้อผิดพลาด: "+e.message,"error");hideLoading();}
+    },100);
+}
+function openLayoutModal(){initDraggables();openModal('modalLayout');setTimeout(()=>captureLayout(),200);}
+function openDataModal(){renderDataList();openModal('modalData');}
+function openPreviewModal(){renderPreviewHTML('previewContainer');openModal('modalPreview');}
+
+// ── MODE 2 — PAYMENT A4 ───────────────────────────────────────
+const A4_W=7.5, A4_H=10.83;
+const A4_CW=420, A4_CH=607;
+const A4_SNAP=10;
+
+const A4_DEFAULT_PHOTOS=[
+    {x:3.45/19.05, y:4.65/27.52,  w:5.8/19.05, h:4.35/27.52},
+    {x:11.73/19.05,y:4.65/27.52,  w:5.8/19.05, h:4.35/27.52},
+    {x:3.45/19.05, y:10.09/27.52, w:5.8/19.05, h:4.35/27.52},
+    {x:11.73/19.05,y:10.09/27.52, w:5.8/19.05, h:4.35/27.52},
+    {x:3.45/19.05, y:15.46/27.52, w:5.8/19.05, h:4.35/27.52},
+    {x:11.73/19.05,y:15.46/27.52, w:5.8/19.05, h:4.35/27.52},
+    {x:3.45/19.05, y:20.9/27.52,  w:5.8/19.05, h:4.35/27.52},
+    {x:11.73/19.05,y:20.9/27.52,  w:5.8/19.05, h:4.35/27.52}
+];
+const A4_CAP_REL ={dx:-0.27/19.05, dyFromBottom:0.03/27.52, w:6.48/19.05, h:0.94/27.52};
+const A4_ITEM_REL={dx:-1.76/19.05, dy:1.66/27.52, w:1.2/19.05, h:1.2/27.52};
+
+let A4_LAYOUT_CONFIG={imageFit:'contain',showCaption:true,showItemNo:true,photos:A4_DEFAULT_PHOTOS.map(p=>({...p}))};
+let APP_DATA_A4={}, BG_DATA_A4=null;
+
+function handleBgSelectA4(){
+    const i=document.getElementById('bgFileA4');
+    if(i.files[0]){const r=new FileReader();r.onload=e=>{BG_DATA_A4=e.target.result;document.getElementById('zone-bg-a4').classList.add('has-file');document.getElementById('text-bg-a4').innerText=i.files[0].name;const cv=document.getElementById('editorCanvasA4');if(cv)cv.style.backgroundImage=`url(${BG_DATA_A4})`;showToast("อัปโหลดพื้นหลัง A4 สำเร็จ","success");};r.readAsDataURL(i.files[0]);}
+}
+function handleFolderSelectA4(){
+    const i=document.getElementById('photoFolderA4');const files=Array.from(i.files);if(!files.length)return;
+    APP_DATA_A4={};
+    for(let file of files){
+        if(!file.name.match(/\.(jpg|jpeg|png)$/i))continue;
+        let parts=file.webkitRelativePath.split('/');
+        if(parts.length>=3){let raw=parts[parts.length-2];if(raw===parts[0])continue;let clean=raw.replace(/^\d+[._-]?/,'');if(!APP_DATA_A4[clean])APP_DATA_A4[clean]=[];APP_DATA_A4[clean].push({fileObj:file,name:file.name});}
+    }
+    const tf=Object.keys(APP_DATA_A4).length;const ti=Object.values(APP_DATA_A4).reduce((s,v)=>s+v.length,0);
+    document.getElementById('zone-folder-a4').classList.add('has-file');document.getElementById('text-folder-a4').innerText=`${tf} activities · ${ti} photos`;
+    document.getElementById('btnEditDataA4').disabled=false;document.getElementById('btnPreviewA4').disabled=false;document.getElementById('btnGenA4').disabled=false;
+    showToast(`Loaded ${ti} photos from ${tf} activities`,"success");
+}
+
+function initA4Editor(){
+    const canvas=document.getElementById('editorCanvasA4');
+    canvas.querySelectorAll('.draggable-box-a4,.a4-cap-ind,.a4-item-ind').forEach(e=>e.remove());
+    if(BG_DATA_A4)canvas.style.backgroundImage=`url(${BG_DATA_A4})`;
+    A4_LAYOUT_CONFIG.photos.forEach((ph,idx)=>{
+        const box=document.createElement('div');box.id=`a4-box-${idx}`;box.className='draggable-box-a4';
+        box.style.left=(ph.x*A4_CW)+'px';box.style.top=(ph.y*A4_CH)+'px';
+        box.style.width=(ph.w*A4_CW)+'px';box.style.height=(ph.h*A4_CH)+'px';
+        box.innerHTML=`<span class="box-tag">${idx+1}</span><div class="resize-handle-a4"></div>`;
+        canvas.appendChild(box);bindA4DragEvents(box,idx);
+        const cap=document.createElement('div');cap.id=`a4-cap-${idx}`;cap.className='a4-cap-ind';
+        cap.innerHTML=`<span style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 2px;">Caption ${idx+1}</span>`;
+        positionA4Cap(cap,ph);canvas.appendChild(cap);
+        if(!A4_LAYOUT_CONFIG.showCaption)cap.style.display='none';
+        const itm=document.createElement('div');itm.id=`a4-item-${idx}`;itm.className='a4-item-ind';
+        itm.innerText=idx+1;positionA4Item(itm,ph);canvas.appendChild(itm);
+        if(!A4_LAYOUT_CONFIG.showItemNo)itm.style.display='none';
+    });
+}
+function positionA4Cap(el,ph){
+    el.style.left=((ph.x+A4_CAP_REL.dx)*A4_CW)+'px';
+    el.style.top=((ph.y+ph.h+A4_CAP_REL.dyFromBottom)*A4_CH)+'px';
+    el.style.width=(A4_CAP_REL.w*A4_CW)+'px';el.style.height=(A4_CAP_REL.h*A4_CH)+'px';
+}
+function positionA4Item(el,ph){
+    el.style.left=((ph.x+A4_ITEM_REL.dx)*A4_CW)+'px';
+    el.style.top=((ph.y+A4_ITEM_REL.dy)*A4_CH)+'px';
+    el.style.width=(A4_ITEM_REL.w*A4_CW)+'px';el.style.height=(A4_ITEM_REL.h*A4_CH)+'px';
+}
+function updateA4Indicators(idx){
+    const ph=A4_LAYOUT_CONFIG.photos[idx];
+    const cap=document.getElementById(`a4-cap-${idx}`);if(cap)positionA4Cap(cap,ph);
+    const itm=document.getElementById(`a4-item-${idx}`);if(itm)positionA4Item(itm,ph);
+}
+function toggleA4Indicators(type){
+    const show=(type==='cap')?document.getElementById('checkCaptionA4').checked:document.getElementById('checkItemA4').checked;
+    if(type==='cap'){A4_LAYOUT_CONFIG.showCaption=show;document.querySelectorAll('.a4-cap-ind').forEach(e=>e.style.display=show?'flex':'none');}
+    else{A4_LAYOUT_CONFIG.showItemNo=show;document.querySelectorAll('.a4-item-ind').forEach(e=>e.style.display=show?'flex':'none');}
+}
+function captureA4Layout(){
+    A4_LAYOUT_CONFIG.photos.forEach((ph,idx)=>{
+        const el=document.getElementById(`a4-box-${idx}`);
+        if(el){A4_LAYOUT_CONFIG.photos[idx]={x:el.offsetLeft/A4_CW,y:el.offsetTop/A4_CH,w:el.offsetWidth/A4_CW,h:el.offsetHeight/A4_CH};}
+    });
+}
+function bindA4DragEvents(elm,idx){
+    let dragging=false,resizing=false,sx,sy,sl,st,sw,sh;
+    const handle=elm.querySelector('.resize-handle-a4');
+    const snap=v=>document.getElementById('checkGridA4').checked?Math.round(v/A4_SNAP)*A4_SNAP:v;
+    if(handle)handle.onmousedown=e=>{resizing=true;sx=e.clientX;sy=e.clientY;sw=elm.offsetWidth;sh=elm.offsetHeight;e.stopPropagation();e.preventDefault();};
+    elm.onmousedown=e=>{if(e.target.closest('.resize-handle-a4'))return;dragging=true;sx=e.clientX;sy=e.clientY;sl=elm.offsetLeft;st=elm.offsetTop;e.preventDefault();};
+    const onMove=e=>{
+        if(!dragging&&!resizing)return;
+        requestAnimationFrame(()=>{
+            const dx=e.clientX-sx,dy=e.clientY-sy,p=elm.offsetParent;
+            if(dragging){let l=snap(sl+dx),t=snap(st+dy);l=Math.max(0,Math.min(l,p.clientWidth-elm.offsetWidth));t=Math.max(0,Math.min(t,p.clientHeight-elm.offsetHeight));elm.style.left=l+'px';elm.style.top=t+'px';}
+            else if(resizing){let w=snap(sw+dx),h=snap(sh+dy);w=Math.max(20,w);h=Math.max(20,h);if(elm.offsetLeft+w>p.clientWidth)w=p.clientWidth-elm.offsetLeft;if(elm.offsetTop+h>p.clientHeight)h=p.clientHeight-elm.offsetTop;elm.style.width=w+'px';elm.style.height=h+'px';}
+            captureA4Layout();updateA4Indicators(idx);
+        });
+    };
+    const onUp=()=>{if(dragging||resizing){dragging=false;resizing=false;window.removeEventListener('mousemove',onMove);window.removeEventListener('mouseup',onUp);captureA4Layout();}};
+    if(handle)handle.addEventListener('mousedown',()=>{window.addEventListener('mousemove',onMove);window.addEventListener('mouseup',onUp);});
+    elm.addEventListener('mousedown',e=>{if(!e.target.closest('.resize-handle-a4')){window.addEventListener('mousemove',onMove);window.addEventListener('mouseup',onUp);}});
+}
+function resetA4Layout(){
+    A4_LAYOUT_CONFIG.photos=A4_DEFAULT_PHOTOS.map(p=>({...p}));
+    A4_LAYOUT_CONFIG.showCaption=true;A4_LAYOUT_CONFIG.showItemNo=true;
+    document.getElementById('checkCaptionA4').checked=true;document.getElementById('checkItemA4').checked=true;
+    initA4Editor();showToast("รีเซ็ต Layout A4 แล้ว");
+}
+function updateImageFitA4(){A4_LAYOUT_CONFIG.imageFit=document.getElementById('imgFitModeA4').value;}
+function openLayoutModalA4(){openModal('modalLayoutA4');setTimeout(()=>initA4Editor(),50);}
+
+function renderDataListA4(){
+    const l=document.getElementById('dataListContainerA4');l.innerHTML='';
+    const nSort=(a,b)=>a.localeCompare(b,undefined,{numeric:true});
+    Object.keys(APP_DATA_A4).sort(nSort).forEach(fn=>{
+        const cnt=APP_DATA_A4[fn].length;
+        const g=document.createElement('div');g.className='dm-group';
+        g.innerHTML=`<div class="dm-header-row"><span class="material-icons-round dm-icon-l1" style="color:var(--mode2)">folder</span><input type="text" class="mat-input" value="${fn}" onchange="renameA4Key('${fn}',this.value)"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);white-space:nowrap;">${cnt} photos</span></div>`;
+        l.appendChild(g);
+    });
+}
+function renameA4Key(ok,nk){if(ok===nk||!nk)return;if(APP_DATA_A4[nk]){showToast('ชื่อซ้ำ','error');renderDataListA4();return;}Object.defineProperty(APP_DATA_A4,nk,Object.getOwnPropertyDescriptor(APP_DATA_A4,ok));delete APP_DATA_A4[ok];renderDataListA4();}
+
+function collectA4Images(){
+    const nSort=(a,b)=>a.localeCompare(b,undefined,{numeric:true});
+    let all=[],n=1;
+    for(let folder of Object.keys(APP_DATA_A4).sort(nSort)){
+        for(let img of APP_DATA_A4[folder].slice().sort((a,b)=>nSort(a.name,b.name))){
+            all.push({fileObj:img.fileObj,name:img.name,caption:folder,itemNo:n++});
         }
+    }
+    return all;
+}
 
-        async function saveAsPDF() {
-            const { jsPDF } = window.jspdf;
-            showLoading("กำลังสร้างไฟล์ PDF...", "กำลังประมวลผลรูปภาพ");
-            setTimeout(async () => {
-                try {
-                    const slides = document.querySelectorAll('.slide-preview');
-                    if(slides.length === 0) { showToast("ไม่พบข้อมูลสไลด์", "error"); hideLoading(); return; }
-                    const doc = new jsPDF({ orientation: 'landscape', unit: 'px', format: [slides[0].offsetWidth, slides[0].offsetHeight] });
-                    for (let i = 0; i < slides.length; i++) {
-                        updateLoading("กำลังแปลงหน้า PDF...", `หน้า ${i+1} จาก ${slides.length}`);
-                        const canvas = await html2canvas(slides[i], { scale: 2, useCORS: true });
-                        if (i > 0) doc.addPage();
-                        doc.addImage(canvas.toDataURL('image/jpeg', 0.8), 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
-                    }
-                    doc.save('Presentation_Auto.pdf'); hideLoading(); showToast("สร้างไฟล์ PDF สำเร็จ!", "success");
-                } catch (e) { showToast("เกิดข้อผิดพลาด: " + e.message, "error"); hideLoading(); }
-            }, 100);
+function renderPreviewA4(){
+    const c=document.getElementById('previewContainerA4');c.innerHTML='';
+    const all=collectA4Images();
+    if(!all.length){c.innerHTML='<p style="text-align:center;color:var(--text-dim);padding:20px;font-family:JetBrains Mono,monospace;font-size:11px;">No images</p>';return;}
+    const cfg=A4_LAYOUT_CONFIG;
+    const pct=v=>(v*100)+'%';const fit=cfg.imageFit||'contain';
+    const total=Math.ceil(all.length/8);
+    for(let i=0;i<all.length;i+=8){
+        const slide=document.createElement('div');slide.className='slide-preview-a4';
+        if(BG_DATA_A4)slide.innerHTML+=`<img src="${BG_DATA_A4}" style="width:100%;height:100%;object-fit:cover;z-index:0;position:absolute;">`;
+        for(let j=0;j<8;j++){
+            const idx=i+j;if(idx>=all.length)break;
+            const img=all[idx];const ph=cfg.photos[j];
+            const u=URL.createObjectURL(img.fileObj);
+            slide.innerHTML+=`<div style="position:absolute;left:${pct(ph.x)};top:${pct(ph.y)};width:${pct(ph.w)};height:${pct(ph.h)};z-index:1;overflow:hidden;"><img src="${u}" style="width:100%;height:100%;object-fit:${fit};"></div>`;
+            if(cfg.showCaption){const cx=ph.x+A4_CAP_REL.dx,cy=ph.y+ph.h+A4_CAP_REL.dyFromBottom;slide.innerHTML+=`<div style="position:absolute;left:${pct(cx)};top:${pct(cy)};width:${pct(A4_CAP_REL.w)};height:${pct(A4_CAP_REL.h)};z-index:2;text-align:center;font-size:9px;font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${img.caption}</div>`;}
+            if(cfg.showItemNo){const ix=ph.x+A4_ITEM_REL.dx,iy=ph.y+A4_ITEM_REL.dy;slide.innerHTML+=`<div style="position:absolute;left:${pct(ix)};top:${pct(iy)};width:${pct(A4_ITEM_REL.w)};height:${pct(A4_ITEM_REL.h)};z-index:3;text-align:center;font-size:10px;font-weight:700;color:#1a1a1a;">${img.itemNo}</div>`;}
         }
+        c.appendChild(slide);
+        const lbl=document.createElement('div');lbl.className='slide-label';lbl.innerText=`PAGE ${Math.floor(i/8)+1} / ${total}`;c.appendChild(lbl);
+    }
+}
 
-        function showLoading(t, s) { document.getElementById('loadingTitle').innerText = t; document.getElementById('loadingSub').innerText = s; document.getElementById('loadingOverlay').style.display = 'flex'; }
-        function updateLoading(t, s) { document.getElementById('loadingTitle').innerText = t; document.getElementById('loadingSub').innerText = s; }
-        function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
+async function saveAsPDF_A4(){
+    const{jsPDF}=window.jspdf;
+    showLoading("กำลังสร้าง PDF A4...","กรุณารอสักครู่");
+    setTimeout(async()=>{
+        try{
+            const slides=document.querySelectorAll('#previewContainerA4 .slide-preview-a4');
+            if(!slides.length){showToast("ไม่พบสไลด์","error");hideLoading();return;}
+            const sw=slides[0].offsetWidth,sh=slides[0].offsetHeight;
+            const doc=new jsPDF({orientation:'portrait',unit:'px',format:[sw,sh]});
+            for(let i=0;i<slides.length;i++){
+                updateLoading("กำลังแปลง PDF...",`หน้า ${i+1} จาก ${slides.length}`);
+                const cv=await html2canvas(slides[i],{scale:2,useCORS:true,allowTaint:true});
+                if(i>0)doc.addPage([sw,sh],'portrait');
+                doc.addImage(cv.toDataURL('image/jpeg',0.85),'JPEG',0,0,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());
+            }
+            doc.save('Payment_A4_Preview.pdf');hideLoading();showToast("สร้าง PDF สำเร็จ!","success");
+        }catch(e){showToast("เกิดข้อผิดพลาด: "+e.message,"error");hideLoading();}
+    },100);
+}
 
-        function addCustomTextBox() {
-            const id = 'custom-' + Date.now();
-            const canvas = document.getElementById('editorCanvas');
-            const div = document.createElement('div'); div.id = id; div.className = 'draggable-box custom-text';
-            div.style.cssText = "top:50%; left:50%; width:30%; height:8%;";
-            div.innerHTML = `<div class="box-inner-text" style="justify-content:center;">ข้อความใหม่ (คลิกแก้)</div><div class="resize-handle"></div><div class="box-controls"><button class="ctrl-btn active" onclick="setAlign('${id}', 'center', this)"><span class="material-icons-round" style="font-size:18px">format_align_center</span></button><button class="ctrl-btn" onclick="setAlign('${id}', 'left', this)"><span class="material-icons-round" style="font-size:18px">format_align_left</span></button><button class="ctrl-btn" onclick="setAlign('${id}', 'right', this)"><span class="material-icons-round" style="font-size:18px">format_align_right</span></button><div style="width:1px; background:#555; margin:0 4px;"></div><button class="ctrl-btn btn-del" onclick="removeCustomBox('${id}')"><span class="material-icons-round" style="font-size:18px">delete</span></button></div>`;
-            canvas.appendChild(div); bindDragEvents(div);
-            LAYOUT_CONFIG.custom.push({ id: id, text: "ข้อความใหม่ (คลิกแก้)", align: "center" }); captureLayout();
+async function generatePPT_A4(){
+    showLoading("กำลังสร้าง Payment A4...","กรุณารอสักครู่");
+    await new Promise(r=>setTimeout(r,100));
+    try{
+        let pres=new PptxGenJS();
+        pres.defineLayout({name:'A4_PORTRAIT',width:A4_W,height:A4_H});
+        pres.layout='A4_PORTRAIT';
+        const all=collectA4Images();const total=all.length;
+        const cfg=A4_LAYOUT_CONFIG;const fit=cfg.imageFit==='cover'?'cover':'contain';
+        for(let i=0;i<total;i+=8){
+            let slide=pres.addSlide();if(BG_DATA_A4)slide.background={data:BG_DATA_A4};
+            for(let j=0;j<8;j++){
+                const idx=i+j;if(idx>=total)break;
+                const img=all[idx];const ph=cfg.photos[j];
+                updateLoading("กำลังสร้าง Payment A4...",`รูปที่ ${idx+1} จาก ${total}`);
+                const d=await fileToDataURL(img.fileObj);
+                slide.addImage({data:d,x:ph.x*A4_W,y:ph.y*A4_H,w:ph.w*A4_W,h:ph.h*A4_H,sizing:{type:fit,w:ph.w*A4_W,h:ph.h*A4_H}});
+                if(cfg.showCaption){const cx=(ph.x+A4_CAP_REL.dx)*A4_W;const cy=(ph.y+ph.h+A4_CAP_REL.dyFromBottom)*A4_H;slide.addText(img.caption,{x:cx,y:cy,w:A4_CAP_REL.w*A4_W,h:A4_CAP_REL.h*A4_H,fontSize:14,fontFace:'Browallia New',align:'center',color:'000000'});}
+                if(cfg.showItemNo){const ix=(ph.x+A4_ITEM_REL.dx)*A4_W;const iy=(ph.y+A4_ITEM_REL.dy)*A4_H;slide.addText(String(img.itemNo),{x:ix,y:iy,w:A4_ITEM_REL.w*A4_W,h:A4_ITEM_REL.h*A4_H,fontSize:14,fontFace:'Browallia New',align:'center',color:'000000'});}
+            }
         }
-        function removeCustomBox(id) { document.getElementById(id).remove(); LAYOUT_CONFIG.custom = LAYOUT_CONFIG.custom.filter(x => x.id !== id); }
-        function editCustomText(elm) { const t = prompt("แก้ไขข้อความ:", elm.querySelector('.box-inner-text').innerText); if(t!==null) { elm.querySelector('.box-inner-text').innerText = t; captureLayout(); } }
+        await pres.writeFile({fileName:'Payment_A4_Auto.pptx'});
+        hideLoading();showToast(`สร้าง Payment A4 สำเร็จ! (${total} photos)`,"success");
+    }catch(err){showToast("Error: "+err,"error");hideLoading();}
+}
 
-        function captureLayout() {
-            const canvas = document.getElementById('editorCanvas'); 
-            if (canvas.offsetParent === null) return;
+function openDataModalA4(){renderDataListA4();openModal('modalDataA4');}
+function openPreviewModalA4(){renderPreviewA4();openModal('modalPreviewA4');}
 
-            const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
-            ['box-img1', 'box-img2', 'box-txt1', 'box-txt2'].forEach(id => { const el = document.getElementById(id); if (!LAYOUT_CONFIG.elements[id]) LAYOUT_CONFIG.elements[id] = {}; Object.assign(LAYOUT_CONFIG.elements[id], { x: el.offsetLeft/cw, y: el.offsetTop/ch, w: el.offsetWidth/cw, h: el.offsetHeight/ch, visible: (el.style.display !== 'none') }); });
-            LAYOUT_CONFIG.custom.forEach((c, idx) => { const el = document.getElementById(c.id); if(el) { LAYOUT_CONFIG.custom[idx].x = el.offsetLeft/cw; LAYOUT_CONFIG.custom[idx].y = el.offsetTop/ch; LAYOUT_CONFIG.custom[idx].w = el.offsetWidth/cw; LAYOUT_CONFIG.custom[idx].h = el.offsetHeight/ch; LAYOUT_CONFIG.custom[idx].text = el.querySelector('.box-inner-text').innerText; } });
-        }
-        
-        function setAlign(id, align, btn) { const box = document.getElementById(id); box.querySelector('.box-inner-text').style.justifyContent = (align==='left'?'flex-start':(align==='right'?'flex-end':'center')); box.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(id.startsWith('custom-')) { const i = LAYOUT_CONFIG.custom.find(x => x.id === id); if(i) i.align = align; } else { if (!LAYOUT_CONFIG.elements[id]) LAYOUT_CONFIG.elements[id] = {}; LAYOUT_CONFIG.elements[id].align = align; } }
-        function deleteBox(id) { document.getElementById(id).style.display = 'none'; LAYOUT_CONFIG.elements[id].visible = false; }
-        
-        function resetLayout() { 
-            document.querySelectorAll('.custom-text').forEach(e => e.remove()); 
-            LAYOUT_CONFIG.custom = []; 
-            ['box-txt1', 'box-txt2'].forEach(id => { 
-                document.getElementById(id).style.display = 'flex'; 
-                LAYOUT_CONFIG.elements[id].visible = true;
-            });
+// ── INIT ──────────────────────────────────────────────────────
+updateEditorRatio();
 
-            const defs = { 
-                'box-img1': "top:29%; left:3%; width:44%; height:42%;", 
-                'box-img2': "top:29%; left:52%; width:44%; height:42%;", 
-                'box-txt1': "top:81%; left:16%; width:70%; height:6%;", 
-                'box-txt2': "top:87%; left:16%; width:70%; height:6%;" 
-            }; 
-            for(let id in defs) document.getElementById(id).style.cssText = defs[id]; 
-            ['box-txt1', 'box-txt2'].forEach(id => { document.getElementById(id).querySelector('.box-inner-text').style.justifyContent = 'flex-start'; LAYOUT_CONFIG.elements[id].align = 'left'; }); 
-            
-            LAYOUT_CONFIG.elements['box-img1'] = { visible:true, x:0.03, y:0.29, w:0.44, h:0.42 };
-            LAYOUT_CONFIG.elements['box-img2'] = { visible:true, x:0.52, y:0.29, w:0.44, h:0.42 };
-            LAYOUT_CONFIG.elements['box-txt1'] = { visible:true, x:0.16, y:0.81, w:0.70, h:0.06, align:'left' };
-            LAYOUT_CONFIG.elements['box-txt2'] = { visible:true, x:0.16, y:0.87, w:0.70, h:0.06, align:'left' };
+// ─────────────────────────────────────────────────────────────
+//  TWEAKS
+// ─────────────────────────────────────────────────────────────
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "shadow": "depth",
+  "showGrid": true,
+  "cardWidth": 520
+}/*EDITMODE-END*/;
 
-            showToast("รีเซ็ต Layout แล้ว"); 
-        }
+let tweaks = Object.assign({}, TWEAK_DEFAULTS);
 
-        function updateEditorRatio() { const s = document.getElementById('aspectRatio'); const c = document.getElementById('editorCanvas'); const r = s.value; c.style.height = (r === "16:9") ? '450px' : '600px'; if (r === "16:9") { LAYOUT_CONFIG.widthInches = 10; LAYOUT_CONFIG.heightInches = 5.625; } else { LAYOUT_CONFIG.widthInches = 10; LAYOUT_CONFIG.heightInches = 7.5; } LAYOUT_CONFIG.ratio = r; }
+function applyTweaks() {
+    const wrap = document.getElementById('panelWrap');
+    ['shadow-none','shadow-border','shadow-depth','shadow-glow']
+        .forEach(c => wrap.classList.remove(c));
+    wrap.classList.add('shadow-' + tweaks.shadow);
+    document.body.style.backgroundImage = tweaks.showGrid
+        ? 'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)'
+        : 'none';
+    wrap.style.maxWidth = tweaks.cardWidth + 'px';
+    const wv = document.getElementById('twkWidthVal');
+    const wr = document.getElementById('twkWidth');
+    if (wv) wv.textContent = tweaks.cardWidth + 'px';
+    if (wr) wr.value = tweaks.cardWidth;
+    const gc = document.getElementById('twkGrid');
+    if (gc) gc.checked = tweaks.showGrid;
+    document.querySelectorAll('.tp-seg').forEach(btn =>
+        btn.classList.toggle('active', btn.dataset.val === tweaks.shadow)
+    );
+}
 
-        function renderDataList() { const l = document.getElementById('dataListContainer'); l.innerHTML = ''; const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); Object.keys(APP_DATA).sort(nSort).forEach(f1 => { const g = document.createElement('div'); g.className = 'dm-group'; g.innerHTML = `<div class="dm-header-row"><span class="material-icons-round dm-icon-l1">folder</span><input type="text" class="mat-input l1" value="${f1}" onchange="renameKey(APP_DATA, '${f1}', this.value)"></div>`; Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { const r = document.createElement('div'); r.className = 'dm-list-row'; r.innerHTML = `<span class="material-icons-round dm-icon-l2">subdirectory_arrow_right</span><input type="text" class="mat-input" value="${f2}" onchange="renameKey(APP_DATA['${f1}'], '${f2}', this.value)">`; g.appendChild(r); }); l.appendChild(g); }); }
-        function renameKey(o, oldK, newK) { if (oldK === newK || !newK) return; if (o[newK]) { showToast('ชื่อซ้ำ กรุณาใช้ชื่ออื่น', 'error'); renderDataList(); return; } Object.defineProperty(o, newK, Object.getOwnPropertyDescriptor(o, oldK)); delete o[oldK]; renderDataList(); }
-        function handleBgSelect() { const i = document.getElementById('bgFile'); if(i.files[0]) { const r = new FileReader(); r.onload=e=>{BG_DATA=e.target.result; document.getElementById('zone-bg').classList.add('has-file'); document.getElementById('text-bg').innerText=i.files[0].name; document.getElementById('editorCanvas').style.backgroundImage=`url(${BG_DATA})`; showToast("อัปโหลดพื้นหลังสำเร็จ", "success");}; r.readAsDataURL(i.files[0]); } }
-        async function handleFolderSelect() { const i = document.getElementById('photoFolder'); const f = Array.from(i.files); if(f.length===0) return; APP_DATA={}; for(let file of f) { if(!file.name.match(/\.(jpg|jpeg|png)$/i)) continue; let p=file.webkitRelativePath.split('/'); if(p.length>=3) { let f1=p[p.length-3], f2=p[p.length-2]; if(!APP_DATA[f1]) APP_DATA[f1]={}; if(!APP_DATA[f1][f2]) APP_DATA[f1][f2]=[]; APP_DATA[f1][f2].push({fileObj:file, name:file.name}); }} document.getElementById('zone-folder').classList.add('has-file'); document.getElementById('text-folder').innerText=`พร้อมใช้งาน (${f.length} ไฟล์)`; document.getElementById('btnEditData').disabled=false; document.getElementById('btnPreview').disabled=false; document.getElementById('btnGen').disabled=false; showToast(`โหลดรูปภาพ ${f.length} ไฟล์สำเร็จ`, "success"); }
-        
-        function renderPreviewHTML(cid) { 
-            const c = document.getElementById(cid); c.innerHTML = ''; 
-            const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); 
-            const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom, isWide = LAYOUT_CONFIG.ratio === "16:9"; 
-            Object.keys(APP_DATA).sort(nSort).forEach(f1 => { 
-                let f1Txt = f1.replace(/^\d+[._-]?/, ''); 
-                Object.keys(APP_DATA[f1]).sort(nSort).forEach(f2 => { 
-                    let f2Txt = f2.replace(/^\d+[._-]?/, ''); 
-                    let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); 
-                    for (let i = 0; i < images.length; i += 2) { 
-                        let slide = document.createElement('div'); 
-                        slide.className = 'slide-preview'; 
-                        slide.style.paddingBottom = isWide ? "56.25%" : "75%"; 
-                        if (BG_DATA) slide.innerHTML += `<img src="${BG_DATA}" style="width:100%; height:100%; object-fit:cover; z-index:0;">`; 
-                        const pct = (v) => (v * 100) + '%'; const fit = LAYOUT_CONFIG.imageFit || 'contain'; const imgStyle = `width:100%; height:100%; object-fit:${fit}; z-index:1;`; 
-                        if(L['box-img1'].visible !== false) { let img1 = URL.createObjectURL(images[i].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img1'].y)}; left:${pct(L['box-img1'].x)}; width:${pct(L['box-img1'].w)}; height:${pct(L['box-img1'].h)};"><img src="${img1}" style="${imgStyle}"></div>`; } 
-                        if(i+1 < images.length && L['box-img2'].visible !== false) { let img2 = URL.createObjectURL(images[i+1].fileObj); slide.innerHTML += `<div style="position:absolute; top:${pct(L['box-img2'].y)}; left:${pct(L['box-img2'].x)}; width:${pct(L['box-img2'].w)}; height:${pct(L['box-img2'].h)};"><img src="${img2}" style="${imgStyle}"></div>`; } 
-                        if(L['box-txt1'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt1'].y)}; left:${pct(L['box-txt1'].x)}; width:${pct(L['box-txt1'].w)}; text-align:${L['box-txt1'].align||'left'}; font-size:16px; font-weight:bold; z-index:2;">${f1Txt}</div>`; 
-                        if(L['box-txt2'].visible !== false) slide.innerHTML += `<div style="top:${pct(L['box-txt2'].y)}; left:${pct(L['box-txt2'].x)}; width:${pct(L['box-txt2'].w)}; text-align:${L['box-txt2'].align||'left'}; font-size:16px; font-weight:bold; z-index:2;">${f2Txt}</div>`; 
-                        C.forEach(c => { slide.innerHTML += `<div style="top:${pct(c.y)}; left:${pct(c.x)}; width:${pct(c.w)}; text-align:${c.align||'left'}; font-size:16px; font-weight:bold; z-index:2; color:#000;">${c.text}</div>`; }); 
-                        c.appendChild(slide); 
-                    } 
-                }); 
-            }); 
-        }
-        
-        async function generatePPT() { 
-            showLoading("กำลังสร้าง PowerPoint...", "กรุณารอสักครู่"); 
-            setTimeout(async () => { 
-                try { 
-                    let pres = new PptxGenJS(); pres.layout = (LAYOUT_CONFIG.ratio === "16:9") ? 'LAYOUT_16x9' : 'LAYOUT_4x3'; 
-                    const W = LAYOUT_CONFIG.widthInches, H = LAYOUT_CONFIG.heightInches; 
-                    const L = LAYOUT_CONFIG.elements, C = LAYOUT_CONFIG.custom; 
-                    const nSort = (a, b) => a.localeCompare(b, undefined, { numeric: true }); 
-                    const fit = LAYOUT_CONFIG.imageFit === 'cover' ? 'cover' : 'contain'; 
-                    for (let f1 of Object.keys(APP_DATA).sort(nSort)) { 
-                        let f1Txt = f1.replace(/^\d+[._-]?/, ''); 
-                        for (let f2 of Object.keys(APP_DATA[f1]).sort(nSort)) { 
-                            let f2Txt = f2.replace(/^\d+[._-]?/, ''); 
-                            let images = APP_DATA[f1][f2].sort((a,b) => nSort(a.name, b.name)); 
-                            for (let i = 0; i < images.length; i += 2) { 
-                                let slide = pres.addSlide(); if (BG_DATA) slide.background = { data: BG_DATA }; 
-                                if(L['box-img1'].visible !== false) { let d = await fileToDataURL(images[i].fileObj); slide.addImage({ data: d, x: L['box-img1'].x*W, y: L['box-img1'].y*H, w: L['box-img1'].w*W, h: L['box-img1'].h*H, sizing: { type: fit, w: L['box-img1'].w*W, h: L['box-img1'].h*H } }); } 
-                                if(i+1 < images.length && L['box-img2'].visible !== false) { let d = await fileToDataURL(images[i+1].fileObj); slide.addImage({ data: d, x: L['box-img2'].x*W, y: L['box-img2'].y*H, w: L['box-img2'].w*W, h: L['box-img2'].h*H, sizing: { type: fit, w: L['box-img2'].w*W, h: L['box-img2'].h*H } }); } 
-                                if(L['box-txt1'].visible !== false) slide.addText(f1Txt, { x: L['box-txt1'].x*W, y: L['box-txt1'].y*H, w: L['box-txt1'].w*W, h: L['box-txt1'].h*H, fontSize: 16, fontFace: "Leelawadee", align: L['box-txt1'].align || 'left' }); 
-                                if(L['box-txt2'].visible !== false) slide.addText(f2Txt, { x: L['box-txt2'].x*W, y: L['box-txt2'].y*H, w: L['box-txt2'].w*W, h: L['box-txt2'].h*H, fontSize: 16, fontFace: "Leelawadee", align: L['box-txt2'].align || 'left' }); 
-                                C.forEach(c => { slide.addText(c.text, { x: c.x*W, y: c.y*H, w: c.w*W, h: c.h*H, fontSize: 16, fontFace: "Leelawadee", align: c.align || 'left', color: "000000" }); }); 
-                            } 
-                        } 
-                    } 
-                    await pres.writeFile({ fileName: "Presentation_V7.2.pptx" }); hideLoading(); showToast("สร้าง PowerPoint สำเร็จ!", "success"); 
-                } catch (err) { showToast("Error: "+err, "error"); hideLoading(); } 
-            }, 100); 
-        }
+function setTweak(key, val) {
+    tweaks[key] = val;
+    applyTweaks();
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: val } }, '*');
+}
 
-        function openLayoutModal() { 
-            initDraggables(); 
-            openModal('modalLayout'); 
-            setTimeout(() => captureLayout(), 200);
-        }
-        function openDataModal() { renderDataList(); openModal('modalData'); }
-        function openPreviewModal() { renderPreviewHTML('previewContainer'); openModal('modalPreview'); }
-        function openModal(id) { const m = document.getElementById(id); m.style.display = 'flex'; setTimeout(()=>m.classList.add('show'),10); }
-        function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display = 'none',200); }
-        function fileToDataURL(f) { return new Promise((r,j)=>{ const rd=new FileReader(); rd.onload=()=>r(rd.result); rd.onerror=j; rd.readAsDataURL(f); }); }
-        
-        updateEditorRatio();
-    </script>
+function showTweaksPanel() {
+    const p = document.getElementById('tweaksPanel');
+    p.style.display = 'block'; p.style.animation = 'none';
+    requestAnimationFrame(() => { p.style.animation = ''; });
+}
+function hideTweaksPanel() {
+    document.getElementById('tweaksPanel').style.display = 'none';
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+}
+
+window.addEventListener('message', e => {
+    if (e.data && e.data.type === '__activate_edit_mode')   showTweaksPanel();
+    if (e.data && e.data.type === '__deactivate_edit_mode') hideTweaksPanel();
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+document.querySelectorAll('.tp-seg').forEach(btn =>
+    btn.addEventListener('click', () => setTweak(btn.dataset.key, btn.dataset.val))
+);
+
+applyTweaks();
+</script>
 </body>
 </html>
