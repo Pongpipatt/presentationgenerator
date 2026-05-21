@@ -585,7 +585,9 @@
     }
     .app-footer-inside strong { color: var(--text-sub); font-weight: 600; }
 
-    /* ── MODAL ───────────────────────────────────────────── */
+
+
+        /* ── MODAL ───────────────────────────────────────────── */
     .modal-overlay {
         position: fixed; top: 0; left: 0;
         width: 100%; height: 100%;
@@ -1245,6 +1247,7 @@
 <!-- ══════════════════════════════════════════════════════════════
      MODALS — MODE 1
 ══════════════════════════════════════════════════════════════ -->
+
 <!-- ── TWEAKS PANEL ──────────────────────────────────────────── -->
 <div id="tweaksPanel" style="display:none;">
     <div class="tp-header">
@@ -1728,7 +1731,7 @@ function handleFolderSelectA4(){
     for(let file of files){
         if(!file.name.match(/\.(jpg|jpeg|png)$/i))continue;
         let parts=file.webkitRelativePath.split('/');
-        if(parts.length>=3){let raw=parts[parts.length-2];if(raw===parts[0])continue;let clean=raw.replace(/^\d+[._-]?/,'');if(!APP_DATA_A4[clean])APP_DATA_A4[clean]=[];APP_DATA_A4[clean].push({fileObj:file,name:file.name});}
+        if(parts.length>=3){let raw=parts[parts.length-2];if(raw===parts[0])continue;if(!APP_DATA_A4[raw])APP_DATA_A4[raw]=[];APP_DATA_A4[raw].push({fileObj:file,name:file.name});}
     }
     const tf=Object.keys(APP_DATA_A4).length;const ti=Object.values(APP_DATA_A4).reduce((s,v)=>s+v.length,0);
     document.getElementById('zone-folder-a4').classList.add('has-file');document.getElementById('text-folder-a4').innerText=`${tf} activities · ${ti} photos`;
@@ -1826,7 +1829,7 @@ function collectA4Images(){
     let all=[],n=1;
     for(let folder of Object.keys(APP_DATA_A4).sort(nSort)){
         for(let img of APP_DATA_A4[folder].slice().sort((a,b)=>nSort(a.name,b.name))){
-            all.push({fileObj:img.fileObj,name:img.name,caption:folder,itemNo:n++});
+            all.push({fileObj:img.fileObj,name:img.name,caption:folder.replace(/^\d+[._\-\s]*/,''),itemNo:n++});
         }
     }
     return all;
@@ -1903,6 +1906,7 @@ async function generatePPT_A4(){
 
 function openDataModalA4(){renderDataListA4();openModal('modalDataA4');}
 function openPreviewModalA4(){renderPreviewA4();openModal('modalPreviewA4');}
+
 
 // ── INIT ──────────────────────────────────────────────────────
 updateEditorRatio();
